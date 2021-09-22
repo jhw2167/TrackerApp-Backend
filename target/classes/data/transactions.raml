@@ -1,0 +1,39 @@
+title: transactions API
+baseUri: http://localhost:8080
+version: v1
+traits:
+
+
+	/transactions:
+		get:
+			queryParameters:
+				description: |
+					Results all transactions 
+			
+			queryParameters: id
+				description: |
+					Returns transaction by id
+			
+			queryParameters: start, to
+				description: |
+					Returns transaction from date "start" to date "to"
+				
+		post:
+			get:
+				responses:
+					200:
+						body:
+							application/JSON
+								schema: |
+										[
+									{
+										"tId": "210604001",
+										"purchasDate": "06-04-2021",
+										"amount": "5.89"
+									}
+										]
+		/{tId}							
+			delete:
+				description: |
+					deletes individual transaction
+								

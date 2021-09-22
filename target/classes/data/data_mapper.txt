@@ -1,0 +1,24 @@
+	JSON | Java
+
+simple transaction:
+{
+	"t_id": tId,
+	"purchase_date": purchaseDate,
+	"amount": amount
+}
+
+
+transaction:
+{
+	"t_id": tId,
+	"purchase_date": purchaseDate,
+	"amount": amount,
+	"vendor": amount,
+	"pay_method": payMethod,
+	"bought_for": boughtFor,
+	"pay_status": payStatus,
+	"is_income": isIncome,
+	"reimburses": reimburses,
+	"posted_date": postedDate,
+	"notes": notes,
+}
