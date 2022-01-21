@@ -14,6 +14,7 @@ transaction:
 	"purchase_date": purchaseDate,
 	"amount": amount,
 	"vendor": amount,
+	"category": category,
 	"pay_method": payMethod,
 	"bought_for": boughtFor,
 	"pay_status": payStatus,

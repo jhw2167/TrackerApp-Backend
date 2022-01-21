@@ -14,13 +14,12 @@ traits:
 				description: |
 					Returns transaction by id
 			
-			queryParameters: start, to
+			queryParameters: from, to
 				description: |
-					Returns transaction from date "start" to date "to"
+					Returns transactions from date "from" to date "to", inclusive
 				
 		post:
-			get:
-				responses:
+			responses:
 					200:
 						body:
 							application/JSON

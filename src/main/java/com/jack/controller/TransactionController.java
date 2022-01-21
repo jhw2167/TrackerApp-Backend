@@ -76,7 +76,6 @@ public class TransactionController {
 	public ResponseEntity<List<Transaction>> getTransactionsPageanatedById() {
 		return new ResponseEntity<>(new ArrayList<Transaction>(), HttpStatus.OK);
 	}
-	
 	//END GET METHODS
 	
 		/* POST METHODS */
@@ -87,7 +86,7 @@ public class TransactionController {
 		System.out.println(tx);
 		ts.saveTransactions(tx);
 		
-		final StringBuilder body = new StringBuilder("Transactions successfully posted: "); 
+		final StringBuilder body = new StringBuilder("Transactions successfully posted: \n"); 
 		tx.forEach((trans) -> body.append(trans.getTId() + "\n"));
 		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), HttpStatus.OK);
 		return rsp;
@@ -117,7 +116,10 @@ public class TransactionController {
 	}
 	
 	
-	
+	/*
+	 * 
+	 * 
+	 */
 	
 	
 	

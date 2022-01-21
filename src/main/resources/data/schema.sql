@@ -76,6 +76,7 @@ CREATE TABLE transactions (
 	purchase_date VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE,
 	amount NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0),
 	vendor VARCHAR(50) REFERENCES vendors(vendor),
+	category VARCHAR(50) NOT NULL DEFAULT 'Misc',
 	bought_for RECIPIENT NOT NULL DEFAULT 'PERSONAL',
 	pay_method VARCHAR(50) REFERENCES pay_methods(pay_method) NOT NULL DEFAULT 'CASH',
 	pay_status STATUS_TYPE NOT NULL DEFAULT 'COMPLETE', 
