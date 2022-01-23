@@ -29,9 +29,15 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	//FindAll sorted by date YYYY-MM-DD format
 	public List<Transaction> findAllByOrderByPurchaseDateDesc();
 	
+	//findAll transactions with matching purchaseDate
+	public List<Transaction> findAllByPurchaseDate(String purchaseDate);
+	
+	//count transactions with matching purchaseDate
+	public long countByPurchaseDate(String purchaseDate);
 	
 	//find all transactions sorted between start and end
 	@Query(value="SELECT * FROM transactions AS t ORDER BY t.purchaseDate DESC LIMIT :total OFFSET :offset", nativeQuery=true)
 	public List<Transaction> findAllByOrderByPurchaseDateDescPageable( @Param("total") Integer total, @Param("offset") Integer offset);
+	
 	
 }

@@ -92,5 +92,9 @@ SELECT * FROM SIMPLE_TRANSACTIONS;
 SELECT * FROM TRANSACTIONS;
 
 -- Default transaction 0 for referencing reimbursements
-INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR) VALUES (0, 01-01-2000, 0, 'none');
+INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR, category, bought_for, pay_method, pay_status, is_income, reimburses, posted_date, notes) 
+					VALUES (0, 2000-01-01, 0, 		'none',		'none', 'PERSONAL', 'none',		'COMPLETE', FALSE, 		0,			2000-01-01, ''	 );
+
+-- Clears
+TRUNCATE transactions;
 

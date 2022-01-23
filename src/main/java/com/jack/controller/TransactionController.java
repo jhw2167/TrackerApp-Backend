@@ -82,9 +82,12 @@ public class TransactionController {
 	
 	//Post new transactions to the database - data send in will be transaction objects
 	@PostMapping
-	public ResponseEntity<String> postTransactions(@RequestBody final List<Transaction> tx) {
-		System.out.println(tx);
-		ts.saveTransactions(tx);
+	public ResponseEntity<String> postTransactions(@RequestBody final List<Transaction> tx) 
+	{
+		List<Transaction> refined = new ArrayList<>();
+		tx.forEach( (t) -> refined.add(new Transaction(t, ts.countByPurchaseDate(t.getPurchaseDate()))));
+		///System.out.println(tx);
+		ts.saveTransactions(refined);
 		
 		final StringBuilder body = new StringBuilder("Transactions successfully posted: \n"); 
 		tx.forEach((trans) -> body.append(trans.getTId() + "\n"));

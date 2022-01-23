@@ -3,14 +3,16 @@ package com.jack.model;
 //Spring Imports
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import javax.annotation.Resource;
 //JPA Imports
 import javax.persistence.*;
 
 //Lombok Imports
 import lombok.*;
 
+//Project imports
+import com.jack.repository.*;
+import com.jack.service.TransactionService;
 
 
 /* Transaction model class for holding data in each transaction as read from the database
@@ -36,13 +38,18 @@ import lombok.*;
  */
 
 
-@Data @AllArgsConstructor						//We want lombok to write getters and setters
+@Data 									//We want lombok to write getters and setters
 @Entity @Table(name="transactions")		//Want JPA to pick it up
 @Component										//We want spring to pick it up
 public class Transaction {
 	
-	/* PERSISTED  STATE VARIABLES */
+	//Helper vars
+	@Resource
+	@Transient
+	private TransactionService ts;
 	
+	/* PERSISTED  STATE VARIABLES */
+
 	@Id
 	private long tId;
 	
@@ -87,9 +94,55 @@ public class Transaction {
 		//Dummy constr
 	}
 	
+	public Transaction(final Transaction t) {
+		super();
+		this.tId = t.tId;
+		this.purchaseDate = t.purchaseDate;
+		this.amount = t.amount;
+		this.vendor = t.vendor;
+		this.category = t.category;
+		this.boughtFor = t.boughtFor;
+		this.payMethod = t.payMethod;
+		this.payStatus = t.payStatus;
+		this.isIncome = t.isIncome;
+		this.reimburses = t.reimburses;
+		this.postedDate = t.postedDate;
+		this.notes = t.notes;
+	}
 	
+	public Transaction(final Transaction t, long transOnDate) {
+		super();
+		System.out.println("My Constructor");
+		settId(t.purchaseDate, transOnDate);
+		this.purchaseDate = t.purchaseDate;
+		this.amount = t.amount;
+		this.vendor = t.vendor;
+		this.category = t.category;
+		this.boughtFor = t.boughtFor;
+		this.payMethod = t.payMethod;
+		this.payStatus = t.payStatus;
+		this.isIncome = t.isIncome;
+		this.reimburses = t.reimburses;
+		this.postedDate = t.postedDate;
+		this.notes = t.notes;
+	}
+
+	/* END CONSTRUCTORS */
 	
+	public void settId(long tId) {
+		this.tId = tId;
+	}
 	
+	public void settId(String _purchaseDate, long transOnDate) {
+		//parse date string into coherent string
+		String parsedDate = _purchaseDate.replace("-", "");
+		
+		//add above result, buffered by "000"
+		String id = parsedDate + String.format("%03d", transOnDate);
+		this.tId = Long.parseLong(id);
+		System.out.println("Set id is: " + tId);
+	}
 	
+	//Setters
 
 }

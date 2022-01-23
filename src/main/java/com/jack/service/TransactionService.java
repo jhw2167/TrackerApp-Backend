@@ -55,9 +55,19 @@ public class TransactionService
 		return null;
 	}
 	
+	public List<Transaction> getAllTransactionsByPurchaseDate(String purchaseDate) {
+		return repo.findAllByPurchaseDate(purchaseDate);
+	}
+	
+	public long countByPurchaseDate(String purchaseDate) {
+		return repo.countByPurchaseDate(purchaseDate);
+	}
+
+	
+	//########### END GET METHODS ############
 	
 	//Save Data
-	public void saveTransactions(final List<Transaction> tx) {
+	public void saveTransactions(List<Transaction> tx) {
 		repo.saveAll(tx);
 	}
 	
