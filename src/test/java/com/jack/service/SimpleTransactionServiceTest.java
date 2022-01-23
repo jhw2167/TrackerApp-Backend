@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 //Project Imports
 import com.jack.*;
-import com.jack.model.Transaction;
+import com.jack.model.SimpleTransaction;
 import com.jack.repository.*;
 import com.jack.service.*;
 
@@ -30,27 +30,27 @@ import com.jack.service.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TransactionServiceTest {
+public class SimpleTransactionServiceTest {
 
 	
 	/* Variables we need to mock */
 	@Mock
-	TransactionRepo repoMock;
+	SimpleTransactionRepo repoMock;
 	
 	
 	/* Class to Test */
-	TransactionService service;
+	SimpleTransactionService service;
 	
 	@Before
 	void setUp() 
 	{
-		List<Transaction> tsx = new ArrayList<>();
-		tsx.add(new Transaction(10026, "2021-06-17", 14.92));
-		tsx.add(new Transaction(10025, "2020-09-18", 25.02));
-		tsx.add(new Transaction(10024, "2020-09-17", 25.02));
+		List<SimpleTransaction> tsx = new ArrayList<>();
+		tsx.add(new SimpleTransaction(10026, "2021-06-17", 14.92));
+		tsx.add(new SimpleTransaction(10025, "2020-09-18", 25.02));
+		tsx.add(new SimpleTransaction(10024, "2020-09-17", 25.02));
 		
 		when(repoMock.findAll()).thenReturn(tsx);
-		service = new TransactionService(repoMock);
+		service = new SimpleTransactionService(repoMock);
 	}
 	
 	
@@ -58,10 +58,10 @@ public class TransactionServiceTest {
 	@Test
 	void testFindAll() {
 		
-		List<Transaction> tsx = new ArrayList<>();
-		tsx.add(new Transaction(10026, "2021-06-17", 14.92));
-		tsx.add(new Transaction(10025, "2020-09-18", 25.02));
-		tsx.add(new Transaction(10024, "2020-09-17", 25.02));
+		List<SimpleTransaction> tsx = new ArrayList<>();
+		tsx.add(new SimpleTransaction(10026, "2021-06-17", 14.92));
+		tsx.add(new SimpleTransaction(10025, "2020-09-18", 25.02));
+		tsx.add(new SimpleTransaction(10024, "2020-09-17", 25.02));
 		
 		assertEquals(tsx, service.getAllTransactions());
 		

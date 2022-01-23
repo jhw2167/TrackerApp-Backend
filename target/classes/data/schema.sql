@@ -89,5 +89,8 @@ CREATE TABLE transactions (
 
 -- Queries
 SELECT * FROM SIMPLE_TRANSACTIONS;
+SELECT * FROM TRANSACTIONS;
 
+-- Default transaction 0 for referencing reimbursements
+INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR) VALUES (0, 01-01-2000, 0, 'none');
 
