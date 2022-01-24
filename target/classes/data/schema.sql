@@ -93,8 +93,9 @@ SELECT * FROM TRANSACTIONS;
 
 -- Default transaction 0 for referencing reimbursements
 INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR, category, bought_for, pay_method, pay_status, is_income, reimburses, posted_date, notes) 
-					VALUES (0, 2000-01-01, 0, 		'none',		'none', 'PERSONAL', 'none',		'COMPLETE', FALSE, 		0,			2000-01-01, ''	 );
+					VALUES (0, '2000-01-01', 0, 		'none',		'none', 'PERSONAL', 'none',		'COMPLETE', FALSE, 		0,			'2000-01-01', ''	 );
 
 -- Clears
-TRUNCATE transactions;
-
+DELETE FROM TRANSACTIONS;
+DELETE FROM TRANSACTIONS t WHERE t.t_id>210604001;
+SELECT * FROM TRANSACTIONS;
