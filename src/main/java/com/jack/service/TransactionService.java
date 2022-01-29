@@ -67,6 +67,10 @@ public class TransactionService
 	//########### END GET METHODS ############
 	
 	//Save Data
+	public Transaction saveTransaction(Transaction tx) {
+		return repo.save(tx);
+	}
+	
 	public void saveTransactions(List<Transaction> tx) {
 		repo.saveAll(tx);
 	}

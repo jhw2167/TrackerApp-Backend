@@ -85,12 +85,11 @@ public class TransactionController {
 	public ResponseEntity<String> postTransactions(@RequestBody final List<Transaction> tx) 
 	{
 		List<Transaction> refined = new ArrayList<>();
-		tx.forEach( (t) -> refined.add(new Transaction(t, ts.countByPurchaseDate(t.getPurchaseDate()))));
-		///System.out.println(tx);
-		ts.saveTransactions(refined);
+		tx.forEach( (t) -> refined.add( 
+							ts.saveTransaction(new Transaction(t, ts.countByPurchaseDate(t.getPurchaseDate()) ) ) ) );
 		
 		final StringBuilder body = new StringBuilder("Transactions successfully posted: \n"); 
-		tx.forEach((trans) -> body.append(trans.getTId() + "\n"));
+		refined.forEach((trans) -> body.append(trans.getTId() + "\n"));
 		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), HttpStatus.OK);
 		return rsp;
 	}

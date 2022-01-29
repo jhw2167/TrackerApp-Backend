@@ -1,0 +1,482 @@
+[
+{
+"tId": "",
+"purchaseDate": "2021-09-03",
+"vendor": "Jack Box",
+"amount": "8.81",
+"category": "Lunch",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-07",
+"vendor": "Dunkin",
+"amount": "6.95",
+"category": "Breakfast",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-08",
+"vendor": "Taco Bell",
+"amount": "6.55",
+"category": "Lunch",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-09",
+"vendor": "McDonalds",
+"amount": "7.92",
+"category": "Breakfast",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-10",
+"vendor": "Taco bell",
+"amount": "9.60",
+"category": "Lunch",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-10",
+"vendor": "Revature",
+"amount": "976.87",
+"category": "Income",
+"payMethod": "Georgetown",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "true",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-11",
+"vendor": "The Stand",
+"amount": "3.14",
+"category": "Dinner",
+"payMethod": "JB",
+"boughtFor": "Family",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-11",
+"vendor": "Football Concession",
+"amount": "16.00",
+"category": "Dinner",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-12",
+"vendor": "Hello Gelato",
+"amount": "6.95",
+"category": "Breakfast",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-13",
+"vendor": "Chipotle",
+"amount": "6.95",
+"category": "Breakfast",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-15",
+"vendor": "Del Taco",
+"amount": "6.58",
+"category": "Breakfast",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-17",
+"vendor": "Smoothie Stop",
+"amount": "10.00",
+"category": "Snacks",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-17",
+"vendor": "Sports Clips",
+"amount": "30.00",
+"category": "Lifestyle",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-17",
+"vendor": "La Cab",
+"amount": "18.69",
+"category": "Lunch",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-18",
+"vendor": "Target",
+"amount": "33.90",
+"category": "Lifestyle",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-18",
+"vendor": "Only Place SM",
+"amount": "24.40",
+"category": "Breakfast",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-18",
+"vendor": "Chipotle",
+"amount": "10.64",
+"category": "Dinner",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-18",
+"vendor": "Nordstrom Rack",
+"amount": "126.69",
+"category": "Retail",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-20",
+"vendor": "Steam",
+"amount": "58.82",
+"category": "Entertainment",
+"payMethod": "Visa Gift Card",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "Black Ops additional Buy"
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-21",
+"vendor": "McDonalds",
+"amount": "7.36",
+"category": "Breakfast",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-23",
+"vendor": "McDonalds",
+"amount": "8.48",
+"category": "Breakfast",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-24",
+"vendor": "CVS Pharmacy",
+"amount": "13.13",
+"category": "Pharmacy",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-24",
+"vendor": "Jack Box",
+"amount": "9.02",
+"category": "Snack",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-24",
+"vendor": "Taco Bell",
+"amount": "7.64",
+"category": "Dinner",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-24",
+"vendor": "Revature",
+"amount": "1368.67",
+"category": "Income",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "true",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-27",
+"vendor": "MLine Tower",
+"amount": "150.00",
+"category": "Domestic",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-27",
+"vendor": "MLine Tower",
+"amount": "5.00",
+"category": "Domestic",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-27",
+"vendor": "MLine Tower",
+"amount": "340.00",
+"category": "Domestic",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-27",
+"vendor": "ErenterPlan Insurance",
+"amount": "68.50",
+"category": "Domestic",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-29",
+"vendor": "ON3 Media",
+"amount": "10.00",
+"category": "Entertainment",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "We are SC bball subscript"
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-30",
+"vendor": "Spotify",
+"amount": "9.99",
+"category": "Entertainment",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2021-09-30",
+"vendor": "Delta",
+"amount": "73.40",
+"category": "Travel",
+"payMethod": "JB",
+"boughtFor": "",
+"payStatus": "",
+"isIncome": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "One way La"
+},
+
+]

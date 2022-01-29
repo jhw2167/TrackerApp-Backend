@@ -1,0 +1,32 @@
+09/03 - Jack Box - 8.81 - Lunch - JB
+09/07 - Dunkin - 6.95 - Breakfast - JB
+09/08 - Taco Bell - 6.55 - Lunch - JB
+09/09 - McDonalds - 7.92 - Breakfast - JB
+09/10 - Taco bell - 9.60 - Lunch - JB
+09/10 - Revature - 976.87 - Income - Georgetown --- true
+09/11 - The Stand - 3.14 - Dinner - JB - Family
+09/11 - Football Concession - 16.00 - Dinner - JB
+09/12 - Hello Gelato - 6.95 - Breakfast - JB
+09/13 - Chipotle - 6.95 - Breakfast - JB
+09/15 - Del Taco - 6.58 - Breakfast - JB
+09/17 - Smoothie Stop - 10.00 - Snacks - JB
+09/17 - Sports Clips - 30.00 - Lifestyle - JB
+09/17 - La Cab - 18.69 - Lunch - JB
+09/18 - Target - 33.90 - Lifestyle - JB
+09/18 - Only Place SM - 24.40 - Breakfast - JB
+09/18 - Chipotle - 10.64 - Dinner - JB
+09/18 - Nordstrom Rack - 126.69 - Retail - JB
+09/20 - Steam - 58.82 - Entertainment - Visa Gift Card ------ Black Ops additional Buy
+09/21 - McDonalds - 7.36 - Breakfast - JB
+09/23 - McDonalds - 8.48 - Breakfast - JB
+09/24 - CVS Pharmacy - 13.13 - Pharmacy - JB
+09/24 - Jack Box - 9.02 - Snack - JB
+09/24 - Taco Bell - 7.64 - Dinner - JB
+09/24 - Revature - 1368.67 - Income - JB --- true
+09/27 - MLine Tower - 150.00 - Domestic - JB
+09/27 - MLine Tower - 5.00 - Domestic - JB
+09/27 - MLine Tower - 340.00 - Domestic - JB
+09/27 - ErenterPlan Insurance - 68.50 - Domestic - JB
+09/29 - ON3 Media - 10.00 - Entertainment - JB ------ We are SC bball subscript
+09/30 - Spotify - 9.99 - Entertainment - JB
+09/30 - Delta - 73.40 - Travel - JB ------ One way La -> Dallas
