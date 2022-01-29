@@ -62,6 +62,10 @@ public class TransactionService
 	public long countByPurchaseDate(String purchaseDate) {
 		return repo.countByPurchaseDate(purchaseDate);
 	}
+	
+	public List<String> getAllCategories() {
+		return repo.findCategoryGroupByCategory();
+	}
 
 	
 	//########### END GET METHODS ############

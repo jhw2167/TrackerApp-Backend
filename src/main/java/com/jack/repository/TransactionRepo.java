@@ -22,6 +22,9 @@ import com.jack.model.*;
 @Repository
 public interface TransactionRepo extends JpaRepository<Transaction, Long>
 {
+	//Find all categories in transactions table
+	@Query(value="SELECT t.category FROM TRANSACTIONS t GROUP BY CATEGORY", nativeQuery=true)
+	public List<String> findCategoryGroupByCategory();
 	
 	//simple find all transactions
 	public List<Transaction> findAll();

@@ -76,6 +76,17 @@ public class TransactionController {
 	public ResponseEntity<List<Transaction>> getTransactionsPageanatedById() {
 		return new ResponseEntity<>(new ArrayList<Transaction>(), HttpStatus.OK);
 	}
+	
+	
+	@GetMapping
+	@RequestMapping("/categories")
+	public ResponseEntity<List<String>> getCategories() {
+		List<String> cats = ts.getAllCategories();
+		return new ResponseEntity<List<String>>(cats, HttpStatus.OK);
+	}
+	//END GET TRANSACTIONS
+	
+	
 	//END GET METHODS
 	
 		/* POST METHODS */
