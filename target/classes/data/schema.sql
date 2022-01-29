@@ -91,7 +91,13 @@ CREATE TABLE transactions (
 SELECT * FROM SIMPLE_TRANSACTIONS;
 SELECT * FROM TRANSACTIONS;
 
-SELECT t.category from transactions GROUP BY CATEGORY
+SELECT t.category FROM TRANSACTIONS t GROUP BY CATEGORY;
+
+
+-- Updates
+UPDATE TRANSACTIONS
+SET CATEGORY = 'Snacks'
+WHERE CATEGORY = 'Snack';
 
 -- Default transaction 0 for referencing reimbursements
 INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR, category, bought_for, pay_method, pay_status, is_income, reimburses, posted_date, notes) 
