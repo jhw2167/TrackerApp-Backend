@@ -108,7 +108,7 @@ public class Transaction {
 	
 	public Transaction(final Transaction t, long transOnDate) {
 		super();
-		System.out.println("My Constructor");
+		//System.out.println("My Constructor");
 		settId(t.purchaseDate.toString(), transOnDate);
 		this.purchaseDate = t.purchaseDate;
 		this.amount = t.amount;
@@ -138,7 +138,7 @@ public class Transaction {
 		//add above result, buffered by "000"
 		String id = date + String.format("%03d", transOnDate);
 		this.tId = Long.parseLong(id);
-		System.out.println("Set id is: " + tId);
+		//System.out.println("Set id is: " + tId);
 	}
 	
 	

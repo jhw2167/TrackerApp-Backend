@@ -58,25 +58,23 @@ public class TransactionController {
 	 * @return ResponseEntity<List<Transaction>>
 	 */
 	@GetMapping
+	//basic /transactions
 	public ResponseEntity<List<Transaction>> getTransactions() {
-		
-		//get data
-		List<Transaction> tx = ts.getAllTransactions();
-
-		//Build Response entity
-		return new ResponseEntity<List<Transaction>>(tx, HttpStatus.OK);
+		return new ResponseEntity<List<Transaction>>(ts.getAllTransactions(), HttpStatus.OK);
 	}
 	//END GET TRANSACTIONS
 	
 	
-	//Get Transactions pageanated from params start-end inclusive
+	//Get Transactions pageanated from params [start-end)
 	/**
 	 * @return ResponseEntity<List<Transaction>>
 	 */
 	@GetMapping(params = {"start", "to"} )
+	@RequestMapping("/dates")
 	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(@RequestParam final String start,
 			@RequestParam final String to) {
-		return new ResponseEntity<>(new ArrayList<Transaction>(), HttpStatus.OK);
+		List<Transaction> tx = ts.getAllTransactionsBetweenPurchaseDate(Date.valueOf(start), Date.valueOf(to));
+		return new ResponseEntity<>(tx, HttpStatus.OK);
 	}
 	
 	

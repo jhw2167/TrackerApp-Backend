@@ -56,10 +56,10 @@ public class TransactionService
 		return null;
 	}
 	
-//	public List<Transaction> getAllTransactionsBetweenPurchaseDate(Date start, Date end) {
-//		return repo.findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(start, end);
-//	}
-//	
+	public List<Transaction> getAllTransactionsBetweenPurchaseDate(Date start, Date end) {
+		return repo.findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(start, end);
+	}
+	
 	public List<Transaction> getAllTransactionsByPurchaseDate(Date purchaseDate) {
 		return repo.findAllByPurchaseDate(purchaseDate);
 	}

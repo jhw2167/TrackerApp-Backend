@@ -94,6 +94,9 @@ SELECT * FROM TRANSACTIONS2;
 
 SELECT t.category FROM TRANSACTIONS t GROUP BY CATEGORY;
 
+SELECT * FROM transactions AS t 
+WHERE t.purchase_date >= '2021-09-19' AND t.purchase_date < '2021-09-26'
+ORDER BY t.purchaseDate DESC;
 
 -- Updates
 UPDATE TRANSACTIONS

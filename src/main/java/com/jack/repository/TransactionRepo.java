@@ -33,9 +33,9 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	public List<Transaction> findAllByOrderByPurchaseDateDesc();
 	
 	//FindAll between dates sorted by date YYYY-MM-DD format
-	@Query(value="SELECT * FROM transactions AS t ORDER BY t.purchaseDate DESC LIMIT :total OFFSET :offset", nativeQuery=true)
+	@Query(value="SELECT * FROM transactions AS t WHERE t.purchase_date >= :start AND t.purchase_date < :end ORDER BY t.purchase_date DESC", nativeQuery=true)
 	public List<Transaction> findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(
-			@Param("total") Integer total, @Param("offset") Integer offset);
+			@Param("start") Date start, @Param("end") Date end);
 		
 	
 	//findAll transactions with matching purchaseDate
