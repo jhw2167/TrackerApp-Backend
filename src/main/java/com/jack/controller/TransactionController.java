@@ -4,6 +4,7 @@ package com.jack.controller;
 //Spring Imports
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 //Java Imports
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,7 +74,8 @@ public class TransactionController {
 	 * @return ResponseEntity<List<Transaction>>
 	 */
 	@GetMapping(params = {"start", "to"} )
-	public ResponseEntity<List<Transaction>> getTransactionsPageanatedById() {
+	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(@RequestParam final String start,
+			@RequestParam final String to) {
 		return new ResponseEntity<>(new ArrayList<Transaction>(), HttpStatus.OK);
 	}
 	
@@ -96,8 +98,11 @@ public class TransactionController {
 	public ResponseEntity<String> postTransactions(@RequestBody final List<Transaction> tx) 
 	{
 		List<Transaction> refined = new ArrayList<>();
-		tx.forEach( (t) -> refined.add( 
-							ts.saveTransaction(new Transaction(t, ts.countByPurchaseDate(t.getPurchaseDate()) ) ) ) );
+		tx.forEach( (t) -> { 
+			refined.add(
+						ts.saveTransaction( new Transaction(t,
+											ts.countByPurchaseDate(
+											t.getPurchaseDate() ) ) ) ); } ); 
 		
 		final StringBuilder body = new StringBuilder("Transactions successfully posted: \n"); 
 		refined.forEach((trans) -> body.append(trans.getTId() + "\n"));

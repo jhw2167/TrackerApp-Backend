@@ -3,6 +3,8 @@ package com.jack.model;
 //Spring Imports
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
+
 import javax.annotation.Resource;
 //JPA Imports
 import javax.persistence.*;
@@ -47,8 +49,8 @@ public class Transaction {
 	@Id
 	private long tId;
 	
-	@Column(columnDefinition="VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE")
-	private String purchaseDate;
+	@Column(columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
+	private Date purchaseDate;
 	
 	@Column(columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
 	private double amount;
@@ -74,8 +76,8 @@ public class Transaction {
 	@Column(columnDefinition="INTEGER REFERENCES transactions(t_id) DEFAULT 0")
 	private long reimburses;
 	
-	@Column(columnDefinition="VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE")
-	private String postedDate;
+	@Column(columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
+	private Date postedDate;
 	
 	@Column(columnDefinition="VARCHAR(1024) DEFAULT NULL")
 	private String notes;
@@ -107,7 +109,7 @@ public class Transaction {
 	public Transaction(final Transaction t, long transOnDate) {
 		super();
 		System.out.println("My Constructor");
-		settId(t.purchaseDate, transOnDate);
+		settId(t.purchaseDate.toString(), transOnDate);
 		this.purchaseDate = t.purchaseDate;
 		this.amount = t.amount;
 		this.vendor = t.vendor;
@@ -140,8 +142,8 @@ public class Transaction {
 	}
 	
 	
-	private void setPostedDate(String postedDate2) {
-		this.postedDate = postedDate2.equals("") ? this.purchaseDate : postedDate2;		
+	private void setPostedDate(Date postedDate2) {
+		this.postedDate = postedDate2==null ? this.purchaseDate : postedDate2;		
 	}
 
 	private void setIsIncome(Boolean isIncome2) {

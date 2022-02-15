@@ -1,6 +1,7 @@
 package com.jack.repository;
 
 
+import java.sql.Date;
 //JAVA Imports
 import java.util.List;
 
@@ -19,7 +20,6 @@ import com.jack.model.*;
  * - 
  */
 
-@Repository
 public interface TransactionRepo extends JpaRepository<Transaction, Long>
 {
 	//Find all categories in transactions table
@@ -32,11 +32,17 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	//FindAll sorted by date YYYY-MM-DD format
 	public List<Transaction> findAllByOrderByPurchaseDateDesc();
 	
+	//FindAll between dates sorted by date YYYY-MM-DD format
+	@Query(value="SELECT * FROM transactions AS t ORDER BY t.purchaseDate DESC LIMIT :total OFFSET :offset", nativeQuery=true)
+	public List<Transaction> findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(
+			@Param("total") Integer total, @Param("offset") Integer offset);
+		
+	
 	//findAll transactions with matching purchaseDate
-	public List<Transaction> findAllByPurchaseDate(String purchaseDate);
+	public List<Transaction> findAllByPurchaseDate(Date purchaseDate);
 	
 	//count transactions with matching purchaseDate
-	public long countByPurchaseDate(String purchaseDate);
+	public long countByPurchaseDate(Date purchaseDate);
 	
 	//find all transactions sorted between start and end
 	@Query(value="SELECT * FROM transactions AS t ORDER BY t.purchaseDate DESC LIMIT :total OFFSET :offset", nativeQuery=true)
