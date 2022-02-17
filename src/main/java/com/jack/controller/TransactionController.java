@@ -126,7 +126,7 @@ public class TransactionController {
 		System.out.println("ID to delete:  " + id);
 		ts.deleteTransactionById(id);
 		
-		final String body = "Transaction with id: " + id + " deleted";
+		final String body = ""; //"Transaction with id: " + id + " deleted";
 		ResponseEntity<String> rsp = new ResponseEntity<>(body, HttpStatus.OK);
 		return rsp;
 	}
