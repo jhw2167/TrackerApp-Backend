@@ -1,32 +1,31 @@
-09/03 - Jack Box - 8.81 - Lunch - JB
-09/07 - Dunkin - 6.95 - Breakfast - JB
-09/08 - Taco Bell - 6.55 - Lunch - JB
-09/09 - McDonalds - 7.92 - Breakfast - JB
-09/10 - Taco bell - 9.60 - Lunch - JB
-09/10 - Revature - 976.87 - Income - Georgetown --- true
-09/11 - The Stand - 3.14 - Dinner - JB - Family
-09/11 - Football Concession - 16.00 - Dinner - JB
-09/12 - Hello Gelato - 6.95 - Breakfast - JB
-09/13 - Chipotle - 6.95 - Breakfast - JB
-09/15 - Del Taco - 6.58 - Breakfast - JB
-09/17 - Smoothie Stop - 10.00 - Snacks - JB
-09/17 - Sports Clips - 30.00 - Lifestyle - JB
-09/17 - La Cab - 18.69 - Lunch - JB
-09/18 - Target - 33.90 - Lifestyle - JB
-09/18 - Only Place SM - 24.40 - Breakfast - JB
-09/18 - Chipotle - 10.64 - Dinner - JB
-09/18 - Nordstrom Rack - 126.69 - Retail - JB
-09/20 - Steam - 58.82 - Entertainment - Visa Gift Card ------ Black Ops additional Buy
-09/21 - McDonalds - 7.36 - Breakfast - JB
-09/23 - McDonalds - 8.48 - Breakfast - JB
-09/24 - CVS Pharmacy - 13.13 - Pharmacy - JB
-09/24 - Jack Box - 9.02 - Snack - JB
-09/24 - Taco Bell - 7.64 - Dinner - JB
-09/24 - Revature - 1368.67 - Income - JB --- true
-09/27 - MLine Tower - 150.00 - Domestic - JB
-09/27 - MLine Tower - 5.00 - Domestic - JB
-09/27 - MLine Tower - 340.00 - Domestic - JB
-09/27 - ErenterPlan Insurance - 68.50 - Domestic - JB
-09/29 - ON3 Media - 10.00 - Entertainment - JB ------ We are SC bball subscript
-09/30 - Spotify - 9.99 - Entertainment - JB
-09/30 - Delta - 73.40 - Travel - JB ------ One way La -> Dallas
+2/1/22 - Lowes - 8.94 - Groceries - Cap1
+2/1/22 - Trader Joes - 27.78 - Groceries - Cap1
+2/1/22 - M Line Tower - 2054.21 - Domestic - Georgetown
+2/4/22 - Trader Joes - 38.57 - Groceries - Cap1
+2/4/22 - Andres Neighbor - 30.00 - Dinner - Venmo
+2/5/22 - American Airlines - 390.21 - Travel - American
+2/5/22 - SMU Parking - 9.00 - Local Travel - American
+2/5/22 - Whole Foods - 7.51 - Groceries - Cap1
+2/5/22 - Walmart - 17.23 - Groceries - Cap1
+2/5/22 - Blue Chew - 26.70 - Pharmacy - Cap1
+2/6/22 - Macy's - 85.25 - Retail - American
+2/6/22 - Chipotle - 11.31 - Lunch - American
+2/7/22 - Whole Foods - 8.77 - Groceries - American
+2/7/22 - Starbucks - 4.60 - Breakfast - American
+2/7/22 - Chic Fil A - 6.81 - Lunch - Cap1
+2/8/22 - Trader Joes - 25.07 - Groceries - American
+2/8/22  - MLine Tower - 20.00 - Domestic - Georgetown
+2/9/22 - Whole Foods - 10.83 - Groceries - American
+2/11/22 - Krispy Kreme - 4.49 - Breakfast - American
+2/11/22 - Target - 4.32 - Groceries - American
+2/11/22 - Post Office - 11.60 - Misc - American
+2/11/22 - Taco Bell - 9.28 - Dinner - American
+2/11/22 - Revature - 1458.05 - Income - Georgetown --- TRUE
+2/14/22 - Terry Black's - 18.90 - Dinner - American
+2/14/22 - Hooters's - 19.30 - Dinner - American
+2/14/22 - Lyft - 17.98 - Local Travel - JB ------ To and back deep ellum, Cade
+2/14/22 - Starbucks - 9.20 - Snacks - American - Date
+2/14/22 - Target - 5.94 - Groceries - American
+2/15/22 - Yumilicious - 10.61 - Snacks - American - Date
+2/16/22 - Starbucks - 9.20 - Snacks - American
+2/16/22 - Trader Joes - 57.15 - Groceries - American ------ Milk, Juice, turkey, burger, heavy cream
