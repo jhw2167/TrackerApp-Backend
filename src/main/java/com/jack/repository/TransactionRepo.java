@@ -2,6 +2,7 @@ package com.jack.repository;
 
 
 import java.sql.Date;
+import java.time.LocalDate;
 //JAVA Imports
 import java.util.List;
 
@@ -35,14 +36,14 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	//FindAll between dates sorted by date YYYY-MM-DD format
 	@Query(value="SELECT * FROM transactions AS t WHERE t.purchase_date >= :start AND t.purchase_date < :end ORDER BY t.purchase_date DESC", nativeQuery=true)
 	public List<Transaction> findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(
-			@Param("start") Date start, @Param("end") Date end);
+			@Param("start") LocalDate from, @Param("end") LocalDate to);
 		
 	
 	//findAll transactions with matching purchaseDate
-	public List<Transaction> findAllByPurchaseDate(Date purchaseDate);
+	public List<Transaction> findAllByPurchaseDate(LocalDate purchaseDate);
 	
 	//count transactions with matching purchaseDate
-	public long countByPurchaseDate(Date purchaseDate);
+	public long countByPurchaseDate(LocalDate purchaseDate);
 	
 	//find all transactions sorted between start and end
 	@Query(value="SELECT * FROM transactions AS t ORDER BY t.purchaseDate DESC LIMIT :total OFFSET :offset", nativeQuery=true)

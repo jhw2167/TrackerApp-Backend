@@ -1,13 +1,13 @@
 package com.jack.model;
 
+import java.time.LocalDate;
+
 //Spring Imports
-import org.springframework.stereotype.Component;
-
-import java.sql.Date;
-
 import javax.annotation.Resource;
 //JPA Imports
 import javax.persistence.*;
+
+import org.springframework.stereotype.Component;
 
 //Lombok Imports
 import lombok.*;
@@ -50,7 +50,7 @@ public class Transaction {
 	private long tId;
 	
 	@Column(columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
-	private Date purchaseDate;
+	private LocalDate purchaseDate;
 	
 	@Column(columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
 	private double amount;
@@ -77,7 +77,7 @@ public class Transaction {
 	private long reimburses;
 	
 	@Column(columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
-	private Date postedDate;
+	private LocalDate postedDate;
 	
 	@Column(columnDefinition="VARCHAR(1024) DEFAULT NULL")
 	private String notes;
@@ -142,7 +142,7 @@ public class Transaction {
 	}
 	
 	
-	private void setPostedDate(Date postedDate2) {
+	private void setPostedDate(LocalDate postedDate2) {
 		this.postedDate = postedDate2==null ? this.purchaseDate : postedDate2;		
 	}
 

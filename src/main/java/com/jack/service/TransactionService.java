@@ -1,6 +1,7 @@
 package com.jack.service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 //Java Imports
 import java.util.List;
 
@@ -56,15 +57,15 @@ public class TransactionService
 		return null;
 	}
 	
-	public List<Transaction> getAllTransactionsBetweenPurchaseDate(Date start, Date end) {
-		return repo.findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(start, end);
+	public List<Transaction> getAllTransactionsBetweenPurchaseDate(LocalDate from, LocalDate to) {
+		return repo.findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(from, to);
 	}
 	
-	public List<Transaction> getAllTransactionsByPurchaseDate(Date purchaseDate) {
+	public List<Transaction> getAllTransactionsByPurchaseDate(LocalDate purchaseDate) {
 		return repo.findAllByPurchaseDate(purchaseDate);
 	}
 	
-	public long countByPurchaseDate(Date purchaseDate) {		
+	public long countByPurchaseDate(LocalDate purchaseDate) {		
 		return repo.countByPurchaseDate(purchaseDate);
 	}
 	

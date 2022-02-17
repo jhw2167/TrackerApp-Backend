@@ -5,6 +5,7 @@ package com.jack.controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 //Java Imports
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,7 +74,7 @@ public class TransactionController {
 	@RequestMapping("/dates")
 	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(@RequestParam final String start,
 			@RequestParam final String to) {
-		List<Transaction> tx = ts.getAllTransactionsBetweenPurchaseDate(Date.valueOf(start), Date.valueOf(to));
+		List<Transaction> tx = ts.getAllTransactionsBetweenPurchaseDate(LocalDate.parse(start), LocalDate.parse(to));
 		return new ResponseEntity<>(tx, HttpStatus.OK);
 	}
 	
@@ -126,7 +127,7 @@ public class TransactionController {
 		System.out.println("ID to delete:  " + id);
 		ts.deleteTransactionById(id);
 		
-		final String body = ""; //"Transaction with id: " + id + " deleted";
+		final String body = "Transaction with id: " + id + " deleted";
 		ResponseEntity<String> rsp = new ResponseEntity<>(body, HttpStatus.OK);
 		return rsp;
 	}
