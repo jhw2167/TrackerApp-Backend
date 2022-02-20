@@ -103,12 +103,22 @@ public class TransactionController {
 	
 	@GetMapping(params = {"start", "to"} )
 	@RequestMapping("/income")
-	public ResponseEntity<List<IncomeTuple>> getIncomeSummary(@RequestParam final String start,
+	public ResponseEntity<List<SummaryTuple>> getIncomeSummary(@RequestParam final String start,
 			@RequestParam final String to) {
-		List<IncomeTuple> tx = ts.getIncomeAggregatedInDateRange(LocalDate.parse(start), LocalDate.parse(to)) ;
-		return new ResponseEntity<List<IncomeTuple>>(tx, HttpStatus.OK);
+		List<SummaryTuple> tx = ts.getIncomeAggregatedInDateRange(LocalDate.parse(start), LocalDate.parse(to)) ;
+		return new ResponseEntity<List<SummaryTuple>>(tx, HttpStatus.OK);
 	}
-	//END GET Categories
+	//END GET INCOME SUMMARY
+	
+	
+	@GetMapping(params = {"start", "to"} )
+	@RequestMapping("/expenses")
+	public ResponseEntity<List<SummaryTuple>> getExpenseSummary(@RequestParam final String start,
+			@RequestParam final String to) {
+		List<SummaryTuple> tx = ts.getExpensesAggregatedInDateRange(LocalDate.parse(start), LocalDate.parse(to)) ;
+		return new ResponseEntity<List<SummaryTuple>>(tx, HttpStatus.OK);
+	}
+	//END GET INCOME SUMMARY
 	
 	
 	//END GET METHODS

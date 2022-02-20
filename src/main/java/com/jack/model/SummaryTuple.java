@@ -14,21 +14,21 @@ import lombok.Data;
 
 @Data 									//We want lombok to write getters and setters
 @Component	
-public class IncomeTuple {
+public class SummaryTuple {
 
-	private String vendor;
-	private BigDecimal netIncome;
+	private String aggregateCol;
+	private BigDecimal value;
 	private String categories;
 	
 	/* CONSTRUCTORS */
-	public IncomeTuple() {
+	public SummaryTuple() {
 		
 	}
 	
-	public IncomeTuple(String vendor, BigDecimal netIncome, String categories) {
+	public SummaryTuple(String aggregateCol, BigDecimal value, String categories) {
 		super();
-		this.vendor = vendor;
-		this.netIncome = netIncome;
+		this.aggregateCol = aggregateCol;
+		this.value = value;
 		this.categories = categories;
 	}
 	

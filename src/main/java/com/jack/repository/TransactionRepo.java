@@ -54,7 +54,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	//Find income tuple:
 		//Vendor (source) - sum total - Cat1-Cat2...
 		//Takes start and end date (typically a montly basis
-	@Query(value="SELECT v1 as vendor, SUM(sum1) as netIncome, STRING_AGG(cat, '/') as categories FROM\r\n"
+	@Query(value="SELECT v1 as aggregateCol, SUM(sum1) / COUNT(cat) as value, STRING_AGG(cat, '/') as categories FROM\r\n"
 			+ "( SELECT vendor AS v1, SUM(amount) AS sum1 \r\n"
 			+ "FROM TRANSACTIONS t1\r\n"
 			+ "WHERE t1.IS_INCOME=TRUE AND \r\n"
@@ -66,8 +66,30 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 			+ "SELECT DISTINCT t2.VENDOR AS v2, t2.category AS cat \r\n"
 			+ "FROM TRANSACTIONS t2 \r\n"
 			+ "WHERE t2.IS_INCOME =TRUE\r\n"
-			+ ") b ON a.v1=b.v2 GROUP BY v1", nativeQuery=true)
+			+ ") b ON a.v1=b.v2 GROUP BY v1 ORDER BY value DESC", nativeQuery=true)
 	public List<Map<String, Object>> findIncomeAggregatedByVendorAndCategories(
+			@Param("start") LocalDate from, @Param("end") LocalDate to);
+	
+	
+	//Find income tuple:
+		//Vendor (source) - sum total - Cat1-Cat2...
+		//Takes start and end date (typically a montly basis
+	
+	@Query(value="SELECT c1 as aggregateCol, SUM(sum1) / COUNT(BOUGHT_FOR) as value, STRING_AGG(BOUGHT_FOR, '/') as categories"
+			+ " FROM\r\n"
+			+ "( SELECT CATEGORY AS c1, SUM(amount) AS sum1 \r\n"
+			+ "FROM TRANSACTIONS t1\r\n"
+			+ "WHERE t1.IS_INCOME=false AND \r\n"
+			+ "t1.purchase_date >= '2021-01-31' AND\r\n"
+			+ "t1.purchase_date < '2022-03-01'\r\n"
+			+ "GROUP BY t1.CATEGORY ) AS a\r\n"
+			+ "INNER JOIN \r\n"
+			+ "(\r\n"
+			+ "SELECT DISTINCT t2.CATEGORY AS c2, t2.BOUGHT_FOR \r\n"
+			+ "FROM TRANSACTIONS t2 \r\n"
+			+ "WHERE t2.IS_INCOME =false\r\n"
+			+ ") b ON a.c1=b.c2 GROUP BY c1 ORDER BY value DESC", nativeQuery=true)
+	public List<Map<String, Object>> findExpensesAggregatedByCategoryAndBoughtFor(
 			@Param("start") LocalDate from, @Param("end") LocalDate to);
 	
 	

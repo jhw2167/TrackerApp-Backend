@@ -149,19 +149,19 @@ public class Transaction {
 	}
 
 	private void setPayStatus(String payStatus2) {
-		this.payStatus = payStatus2.equals("") ? "COMPLETE" : payStatus2;
+		this.payStatus = payStatus2.equals("") ? "COMPLETE" : payStatus2.toUpperCase();
 	}
 
 	private void setPayMethod(String payMethod2) {
-		this.payMethod = payMethod2.equals("") ? "CASH" : payMethod2;
+		this.payMethod = payMethod2.equals("") ? "CASH" : payMethod2.toUpperCase();
 	}
 
 	private void setBoughtFor(String boughtFor2) {
-		this.boughtFor = boughtFor2.equals("") ? "PERSONAL" : boughtFor2;
+		this.boughtFor = boughtFor2.equals("") ? "PERSONAL" : boughtFor2.toUpperCase();
 	}
 
 	private void setCategory(String category2) {
-		this.category = category2.equals("") ? "MISC" : category2;	
+		this.category = category2.equals("") ? "MISC" : category2.toUpperCase();	
 	}
 	
 	//END SETTERS

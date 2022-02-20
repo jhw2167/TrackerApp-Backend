@@ -75,14 +75,22 @@ public class TransactionService
 	}
 
 	
-	final String col1 = "vendor"; final String col2 = "netIncome"; final String col3 = "categories";  
+	final String col1 = "aggregateCol"; final String col2 = "value"; final String col3 = "categories";  
 	//Get income summary aggregated by vendor (source) and categories
-	public List<IncomeTuple> getIncomeAggregatedInDateRange(LocalDate from, LocalDate to) {
+	public List<SummaryTuple> getIncomeAggregatedInDateRange(LocalDate from, LocalDate to) {
 		List<Map<String, Object>> data = repo.findIncomeAggregatedByVendorAndCategories(from, to);
-		List<IncomeTuple> incs = new ArrayList<>();
-		data.forEach((o) -> incs.add(new IncomeTuple( (String) o.get(col1), 
+		List<SummaryTuple> summary = new ArrayList<>();
+		data.forEach((o) -> summary.add(new SummaryTuple( (String) o.get(col1), 
 				(BigDecimal) o.get(col2), (String) o.get(col3))));
-		return incs;
+		return summary;
+	}
+	
+	public List<SummaryTuple> getExpensesAggregatedInDateRange(LocalDate from, LocalDate to) {
+		List<Map<String, Object>> data = repo.findExpensesAggregatedByCategoryAndBoughtFor(from, to);
+		List<SummaryTuple> summary = new ArrayList<>();
+		data.forEach((o) -> summary.add(new SummaryTuple( (String) o.get(col1), 
+				(BigDecimal) o.get(col2), (String) o.get(col3))));
+		return summary;
 	}
 	
 	//########### END GET METHODS ############
