@@ -1,9 +1,12 @@
 package com.jack.service;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 //Java Imports
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,10 +54,8 @@ public class TransactionService
 	
 	
 	//Return Transactions pageable by start, end
-	public List<Transaction> getAllTransactionsPageable(Integer start, Integer end) {
-		
-		//throw an error if end < start
-		return null;
+	public List<Transaction> getAllTransactionsPageableID(Long limit, Long offset) {
+		return repo.findAllByOrderByTidDescPageable(limit, offset);
 	}
 	
 	public List<Transaction> getAllTransactionsBetweenPurchaseDate(LocalDate from, LocalDate to) {
@@ -73,6 +74,16 @@ public class TransactionService
 		return repo.findCategoryGroupByCategory();
 	}
 
+	
+	final String col1 = "vendor"; final String col2 = "netIncome"; final String col3 = "categories";  
+	//Get income summary aggregated by vendor (source) and categories
+	public List<IncomeTuple> getIncomeAggregatedInDateRange(LocalDate from, LocalDate to) {
+		List<Map<String, Object>> data = repo.findIncomeAggregatedByVendorAndCategories(from, to);
+		List<IncomeTuple> incs = new ArrayList<>();
+		data.forEach((o) -> incs.add(new IncomeTuple( (String) o.get(col1), 
+				(BigDecimal) o.get(col2), (String) o.get(col3))));
+		return incs;
+	}
 	
 	//########### END GET METHODS ############
 	

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 //Lombok Imports
 import lombok.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 //Project imports
 import com.jack.repository.*;
 import com.jack.service.TransactionService;
@@ -71,7 +72,8 @@ public class Transaction {
 	private String payStatus;
 	
 	@Column(columnDefinition="BOOLEAN DEFAULT FALSE")
-	private Boolean isIncome;
+	@JsonProperty
+	private boolean isIncome;
 	
 	@Column(columnDefinition="INTEGER REFERENCES transactions(t_id) DEFAULT 0")
 	private long reimburses;
@@ -118,7 +120,7 @@ public class Transaction {
 		setBoughtFor(t.boughtFor);
 		setPayMethod(t.payMethod);
 		setPayStatus(t.payStatus);
-		setIsIncome(t.isIncome);
+		setIncome(t.isIncome);
 		this.reimburses = t.reimburses;
 		setPostedDate(t.postedDate);
 		this.notes = t.notes;
@@ -144,10 +146,6 @@ public class Transaction {
 	
 	private void setPostedDate(LocalDate postedDate2) {
 		this.postedDate = postedDate2==null ? this.purchaseDate : postedDate2;		
-	}
-
-	private void setIsIncome(Boolean isIncome2) {
-		this.isIncome = (isIncome == null || !isIncome) ? false : true;
 	}
 
 	private void setPayStatus(String payStatus2) {

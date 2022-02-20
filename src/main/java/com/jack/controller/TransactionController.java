@@ -79,13 +79,36 @@ public class TransactionController {
 	}
 	
 	
+	//Get Transactions pageanated from params [offset-limit)
+	/**
+	 * @return ResponseEntity<List<Transaction>>
+	 */
+	@GetMapping(params = {"limit", "offset"} )
+	@RequestMapping("/recent")
+	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(@RequestParam final Long limit,
+			@RequestParam(required=false) final Long offset) {
+		List<Transaction> tx = ts.getAllTransactionsPageableID(limit, (offset != null) ? offset : 0L);
+		return new ResponseEntity<>(tx, HttpStatus.OK);
+	}
+	
+	
 	@GetMapping
 	@RequestMapping("/categories")
 	public ResponseEntity<List<String>> getCategories() {
 		List<String> cats = ts.getAllCategories();
 		return new ResponseEntity<List<String>>(cats, HttpStatus.OK);
 	}
-	//END GET TRANSACTIONS
+	//END GET Categories
+	
+	
+	@GetMapping(params = {"start", "to"} )
+	@RequestMapping("/income")
+	public ResponseEntity<List<IncomeTuple>> getIncomeSummary(@RequestParam final String start,
+			@RequestParam final String to) {
+		List<IncomeTuple> tx = ts.getIncomeAggregatedInDateRange(LocalDate.parse(start), LocalDate.parse(to)) ;
+		return new ResponseEntity<List<IncomeTuple>>(tx, HttpStatus.OK);
+	}
+	//END GET Categories
 	
 	
 	//END GET METHODS
@@ -97,7 +120,7 @@ public class TransactionController {
 	public ResponseEntity<String> postTransactions(@RequestBody final List<Transaction> tx) 
 	{
 		List<Transaction> refined = new ArrayList<>();
-		tx.forEach( (t) -> { 
+		tx.forEach( (t) -> {
 			refined.add(
 						ts.saveTransaction( new Transaction(t,
 											ts.countByPurchaseDate(

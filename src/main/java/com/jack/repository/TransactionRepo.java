@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 //JAVA Imports
 import java.util.List;
+import java.util.Map;
 
 //Spring Imports
 import org.springframework.data.jpa.repository.Query;
@@ -46,8 +47,28 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	public long countByPurchaseDate(LocalDate purchaseDate);
 	
 	//find all transactions sorted between start and end
-	@Query(value="SELECT * FROM transactions AS t ORDER BY t.purchaseDate DESC LIMIT :total OFFSET :offset", nativeQuery=true)
-	public List<Transaction> findAllByOrderByPurchaseDateDescPageable( @Param("total") Integer total, @Param("offset") Integer offset);
+	@Query(value="SELECT * FROM transactions AS t ORDER BY t.t_id DESC LIMIT :limit OFFSET :offset", nativeQuery=true)
+	public List<Transaction> findAllByOrderByTidDescPageable( @Param("limit") Long limit, @Param("offset") Long offset);
+	
+	
+	//Find income tuple:
+		//Vendor (source) - sum total - Cat1-Cat2...
+		//Takes start and end date (typically a montly basis
+	@Query(value="SELECT v1 as vendor, SUM(sum1) as netIncome, STRING_AGG(cat, '/') as categories FROM\r\n"
+			+ "( SELECT vendor AS v1, SUM(amount) AS sum1 \r\n"
+			+ "FROM TRANSACTIONS t1\r\n"
+			+ "WHERE t1.IS_INCOME=TRUE AND \r\n"
+			+ "t1.purchase_date >= :start AND\r\n"
+			+ "t1.purchase_date < :end \r\n"
+			+ "GROUP BY t1.VENDOR ) AS a\r\n"
+			+ "INNER JOIN \r\n"
+			+ "(\r\n"
+			+ "SELECT DISTINCT t2.VENDOR AS v2, t2.category AS cat \r\n"
+			+ "FROM TRANSACTIONS t2 \r\n"
+			+ "WHERE t2.IS_INCOME =TRUE\r\n"
+			+ ") b ON a.v1=b.v2 GROUP BY v1", nativeQuery=true)
+	public List<Map<String, Object>> findIncomeAggregatedByVendorAndCategories(
+			@Param("start") LocalDate from, @Param("end") LocalDate to);
 	
 	
 }

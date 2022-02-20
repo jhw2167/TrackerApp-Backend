@@ -98,10 +98,57 @@ SELECT * FROM transactions AS t
 WHERE t.purchase_date >= '2021-09-19' AND t.purchase_date < '2021-09-26'
 ORDER BY t.purchase_date DESC;
 
+SELECT * FROM transactions AS t ORDER BY t.t_id DESC LIMIT 10 OFFSET 5;
+
+--AGG Queries
+STRING_AGG( UNIQUE(CATEGORY), '-')
+
+SELECT v1, SUM(sum1), STRING_AGG(cat, '/') FROM
+( SELECT vendor AS v1, SUM(amount) AS sum1 
+FROM TRANSACTIONS t1
+WHERE t1.IS_INCOME=TRUE AND 
+t1.purchase_date >= '2021-01-31' AND
+t1.purchase_date < '2022-03-01'
+GROUP BY t1.VENDOR ) AS a
+INNER JOIN 
+(
+SELECT DISTINCT t2.VENDOR AS v2, t2.category AS cat 
+FROM TRANSACTIONS t2 
+WHERE t2.IS_INCOME =TRUE
+) b ON a.v1=b.v2 GROUP BY v1;
+
+
+SELECT * FROM TRANSACTIONS t 
+WHERE t.IS_INCOME=TRUE;
+
+
+SELECT 
+
 -- Updates
 UPDATE TRANSACTIONS
 SET CATEGORY = 'Snacks'
 WHERE CATEGORY = 'Snack';
+
+UPDATE TRANSACTIONS
+SET vendor = 'Walmart'
+WHERE VENDOR = 'Wal Mart';
+
+UPDATE TRANSACTIONS
+SET CATEGORY = 'Returns'
+WHERE CATEGORY = 'Retail' AND IS_INCOME = TRUE;
+
+UPDATE TRANSACTIONS
+SET vendor = 'Venmo', notes='Graces Reimburse'
+WHERE VENDOR = 'Graces Reimburse';
+
+UPDATE TRANSACTIONS
+SET CATEGORY='Reimbursement'
+WHERE VENDOR = 'Venmo' AND IS_INCOME = TRUE;
+
+UPDATE TRANSACTIONS
+SET IS_INCOME =TRUE 
+WHERE CATEGORY = 'Income';
+
 
 -- Clears
 DELETE FROM TRANSACTIONS;

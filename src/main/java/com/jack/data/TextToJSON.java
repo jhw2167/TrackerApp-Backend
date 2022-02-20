@@ -29,7 +29,7 @@ public class TextToJSON {
 		terms.add("payMethod");
 		terms.add("boughtFor");
 		terms.add("payStatus");
-		terms.add("isIncome");
+		terms.add("income");
 		terms.add("reimburses");
 		terms.add("postedDate");
 		terms.add("notes");
@@ -71,6 +71,7 @@ public class TextToJSON {
 			    		//Pack terms into vals array
 			    		if(i < valData.length) {
 			    			//we can put read value in array
+			    			//System.out.println("-- " + valData[i].trim());
 			    			transaction.put(term, valData[i].trim());
 			    		} else {
 			    			transaction.put(term, null);
@@ -101,7 +102,7 @@ public class TextToJSON {
 	private static String convertDate(String inDate) {
 		//parse date string into coherent string
 				String[] date = inDate.split("/");
-				
+				System.out.println("Date: " + date[0]);
 				if(date.length < 3) {
 					date = new String[] {date[0], date[1], "21"};
 				}
@@ -136,7 +137,7 @@ public class TextToJSON {
 					b.append(": ");
 					b.append('"');
 					
-					if( !(val.get(term) == null))
+					if( (val.get(term) != null) && !(term.equals("reimburses")))
 						b.append(val.get(term));
 					b.append('"');
 					
