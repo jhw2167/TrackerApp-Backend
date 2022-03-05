@@ -1,4 +1,4 @@
-package com.jack.data;
+package com.jack.misc;
 
 import java.io.BufferedReader;
 import java.io.File;
