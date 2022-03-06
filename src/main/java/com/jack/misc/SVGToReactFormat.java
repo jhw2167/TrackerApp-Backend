@@ -1,8 +1,60 @@
 package com.jack.misc;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class SVGToReactFormat {
+	
+	private static Set<String> notUpper = new HashSet<>();
+	private static Map<String, String> replacers = new HashMap<>();
+	
+	static {
+		notUpper.addAll( Arrays.asList( "xmlnsSvg", 
+				"xmlnsSodipodi",
+				"xmlnsInkscape",
+				"sodipodiDocname",
+				"inkscapeVersion",
+				"inkscapeLabel",
+				"inkscapeTransform-center-y",
+				"inkscapeTransform-center-x",
+				"inkscapeRandomized",
+				"inkscapeRounded",
+				"sodipodiArg2",
+				"sodipodiArg1",
+				"sodipodiR2",
+				"sodipodiR1",
+				"sodipodiCy",
+				"sodipodiCx",
+				"sodipodiSides",
+				"inkscapeFlatsided",
+				"sodipodiType",
+				"inkscapeCurrent-layer",
+				"inkscapeWindow-maximized",
+				"inkscapeWindow-y",
+				"inkscapeWindow-x",
+				"inkscapeWindow-height",
+				"inkscapeWindow-width",
+				"inkscapeCy",
+				"inkscapeCx",
+				"inkscapeZoom",
+				"inkscapeDocument-units",
+				"inkscapePagecheckerboard",
+				"inkscapePageopacity",
+				"inkscapePageshadow"
+				)
+		);
+		
+		//build map for replacing
+		replacers.put("font-weight:normal", "font-weight:bold");
+		replacers.put("fill:#000000", "fill:current");
+		replacers.put("stroke:#000000", "stroke:current");
+		replacers.put("stroke-width:\\d.\\d{6}", "stroke-width:current");
+	}
 	
 	public static void convert(String filename) {
 		
@@ -13,7 +65,7 @@ public class SVGToReactFormat {
 		
 		try {
 					BufferedReader br = new BufferedReader(new FileReader(inFile), buffSize);
-					FileWriter writer = new FileWriter("output.txt");
+					StringBuilder output = new StringBuilder();
 					
 					//read until we hit EOF
 					int a = '\0';
@@ -24,22 +76,36 @@ public class SVGToReactFormat {
 					{							
 						//if a is a ' " ' - skip until closing
 						if(a == bad1 || a==bad2) {
-							writer.write(a);	//write initial quote
+							output.append( (char) a);	//write initial quote
 							while((a = br.read()) != bad1 && a != bad2) {
-								writer.write(a); //write within quotes
+								output.append( (char) a); //write within quotes
 							}
-							writer.write(a); // write final quote
+							output.append( (char) a); // write final quote
 							continue;
 						}
 						
 						if(a == ':') {
-							writer.write(Character.toUpperCase(br.read()));
+							output.append(Character.toUpperCase(br.read()));
 						} else {
-							writer.write(a);
+							output.append( (char) a);
 						}
 							
 					} //END WHILE
+					
+					//check all namespaces that must be lowercase
+					String s = output.toString();
+					for(String v : notUpper) {
+						s = s.replaceAll(v, v.toLowerCase());
+					}
+					
+					//replace all values with "current" where necessary
+					for(Entry<String, String> v : replacers.entrySet()) {
+						s = s.replaceAll(v.getKey(), v.getValue());
+					}
+					
 					br.close();
+					FileWriter writer = new FileWriter(inFile);
+					writer.write(s);
 					writer.close();
 				
 		}

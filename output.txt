@@ -53,7 +53,7 @@
         <g
            id="g529">
           <rect
-             style="fill:#000000;fill-rule:evenodd;stroke-width:0.280269"
+             style="fill:current;fill-rule:evenodd;stroke-width:0.280269"
              id="rect37"
              width="8"
              height="5"
@@ -61,7 +61,7 @@
              y="20" />
           <path
              sodipodiType="star"
-             style="fill:#000000"
+             style="fill:current"
              id="path369"
              inkscapeFlatsided="false"
              sodipodiSides="3"
