@@ -53,7 +53,7 @@ public class SVGToReactFormat {
 		replacers.put("font-weight:normal", "font-weight:bold");
 		replacers.put("fill:#000000", "fill:current");
 		replacers.put("stroke:#000000", "stroke:current");
-		replacers.put("stroke-width:\\d.\\d{6}", "stroke-width:current");
+		replacers.put("stroke-width:\\d.\\d{6}", "strokeWidth:current");
 	}
 	
 	public static void convert(String filename) {
