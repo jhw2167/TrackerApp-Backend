@@ -140,6 +140,32 @@ WHERE t2.IS_INCOME =false
 ) b ON a.c1=b.c2 GROUP BY c1 ORDER BY value DESC;
  
 
+
+SELECT * FROM TRANSACTIONS T WHERE T_ID = '20211008001';
+SELECT * FROM TRANSACTIONS T WHERE BOUGHT_FOR = 'Books';
+SELECT VENDOR, SUM(amount) FROM TRANSACTIONS T WHERE CATEGORY = 'Lifestyle'
+GROUP BY VENDOR;
+
+SELECT SUM(amount) FROM TRANSACTIONS T WHERE CATEGORY = 'Lifestyle'
+GROUP BY CATEGORY ;
+
+
+
+-- Clears
+DELETE FROM TRANSACTIONS;
+DELETE FROM TRANSACTIONS2;
+DELETE FROM TRANSACTIONS t WHERE t.t_id>210604001;
+SELECT * FROM TRANSACTIONS;
+
+-- Default transaction 0 for referencing reimbursements
+INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR, category, bought_for, pay_method, pay_status, is_income, reimburses, posted_date, notes) 
+					VALUES (0, '2000-01-01', 0, 		'none',		'none', 'PERSONAL', 'none',		'COMPLETE', FALSE, 		0,			'2000-01-01', ''	 );
+
+
+--Deletes
+DELETE FROM TRANSACTIONS t WHERE t.t_id IN ()
+
+
 -- Updates
 UPDATE TRANSACTIONS
 SET CATEGORY = 'Snacks'
@@ -197,26 +223,59 @@ SET BOUGHT_FOR ='PERSONAL'
 WHERE T_ID = '20211227004'; 
 
 
-SELECT * FROM TRANSACTIONS T WHERE T_ID = '20211008001';
-SELECT * FROM TRANSACTIONS T WHERE BOUGHT_FOR = 'Books';
-SELECT VENDOR, SUM(amount) FROM TRANSACTIONS T WHERE CATEGORY = 'Lifestyle'
+---------------------------- VENDOR TABLE TOUR ----------------------------
+
+DROP TABLE Vendor CASCADE;
+
+SELECT * FROM VENDORS V;
+
+INSERT INTO VENDORS (cc_id, cc_name, vendor) VALUES ('test', 'test id', 'test vendor');
+
+
+-- Select Useful Vendor information 
+
+-- MUST BE TWO tables cc_id - name - cc | Name - amt - isIncome - Category
+
+SELECT DISTINCT vendor FROM TRANSACTIONS T;
+
+CREATE VIEW v1 AS SELECT vendor AS vendor, AVG(amount) AS amt, COUNT(*) AS inc FROM TRANSACTIONS T
+WHERE IS_INCOME=true
 GROUP BY VENDOR;
 
-SELECT SUM(amount) FROM TRANSACTIONS T WHERE CATEGORY = 'Lifestyle'
-GROUP BY CATEGORY ;
+CREATE VIEW v2 AS SELECT vendor AS vendor, AVG(amount) AS amt_spnd, COUNT(*) AS no_inc FROM TRANSACTIONS T
+WHERE IS_INCOME=false
+GROUP BY VENDOR;
+
+CREATE VIEW base_inc AS SELECT DISTINCT vendor AS v, 0 AS amt_spent, 0 AS no_inc, 0 AS inc FROM TRANSACTIONS T;
+
+SELECT * FROM v1;
+SELECT * FROM v2;
+
+
+CREATE VIEW v3 AS (SELECT * FROM v1 JOIN v2 ON v1.vendor=v2.vendor);
+
+-- We have:
+	-- list of vendors and amount spent 
+	-- list of vendors and amount received, via income
+
+	-- add all distinct vendors to each list with def. values
+	-- inner join on vendor
+	-- Get most frequently occuring string per vendor 
 
 
 
--- Clears
-DELETE FROM TRANSACTIONS;
-DELETE FROM TRANSACTIONS2;
-DELETE FROM TRANSACTIONS t WHERE t.t_id>210604001;
-SELECT * FROM TRANSACTIONS;
-
--- Default transaction 0 for referencing reimbursements
-INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR, category, bought_for, pay_method, pay_status, is_income, reimburses, posted_date, notes) 
-					VALUES (0, '2000-01-01', 0, 		'none',		'none', 'PERSONAL', 'none',		'COMPLETE', FALSE, 		0,			'2000-01-01', ''	 );
 
 
---Deletes
-DELETE FROM TRANSACTIONS t WHERE t.t_id IN ()
+
+
+
+
+
+
+
+
+
+
+
+
+

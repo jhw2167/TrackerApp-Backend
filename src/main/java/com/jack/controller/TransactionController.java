@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 
 //Project Imports
 import com.jack.model.*;
-import com.jack.service.TransactionService;
+import com.jack.service.*;
 
 
 //
@@ -39,11 +39,14 @@ public class TransactionController {
 	
 	/* State Variables */
 	TransactionService ts;		//autowired with spring
+	VendorService vs;			//auto
 	
 	@Autowired
-	TransactionController(TransactionService ts) {
+	TransactionController(TransactionService ts, VendorService vs) {
 		this.ts = ts;
+		this.vs = vs;
 	}
+	
 	
 	/* End State Variable Declarations */
 //##################################################################
@@ -167,19 +170,54 @@ public class TransactionController {
 	
 	
 	/*
-	 * 
+	 *		/transactions/vendor enpoints 
+	 *
+	 *		GET and POST information on vendors for POST endpoint autofill
 	 * 
 	 */
 	
 	
+	/**
+	 *	Get all transactions, default sorted by date, descending (most recent to oldest) 
+	 * 
+	 * @return ResponseEntity<List<Transaction>>
+	 */
+	@GetMapping
+	//basic /transactions
+	public ResponseEntity<List<Vendor>> getVendors() {
+		return new ResponseEntity<List<Vendor>>(vs.getAllVendors(), HttpStatus.OK);
+	}	
+	//END GET ALL VENDORS
 	
 	
 	
+	//Get vendors by searching vendor nam
+	/**
+	 * @return ResponseEntity<List<Vendor>>
+	 */
+	@GetMapping(params = {"name"} )
+	public ResponseEntity<List<Vendor>> searchVendorsByName(@RequestParam final String name) {
+		return new ResponseEntity<>(vs.searchVendors(name), HttpStatus.OK);
+	}
+	//END GET VENDOR SEARCH
+	
+	
+	//Get vendors by searching vendor nam
+	/**
+	 * @return ResponseEntity<Vendor>
+	 */
+	@GetMapping(params = {"id"} )
+	public ResponseEntity<Vendor> getVendorByID(@RequestParam final String id) {
+		return new ResponseEntity<>(vs.getVendorByID(id), HttpStatus.OK);
+	}
+	//END GET VENDOR SEARCH BY ID
 	
 	
 	
-	
-	
+	/*
+	 * 
+	 * 
+	 */
 	
 	
 	

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class VendorKey implements Serializable {
 	private String ccId;
-	private String ccName;
-	private String vendor;
+	private String creditCard;
+	private String localVendorName;
 	
 }
