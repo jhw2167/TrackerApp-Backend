@@ -223,6 +223,32 @@ SET BOUGHT_FOR ='PERSONAL'
 WHERE T_ID = '20211227004'; 
 
 
+UPDATE TRANSACTIONS
+SET CATEGORY = 'Domestic'
+WHERE CATEGORY = 'Domistic';
+
+UPDATE TRANSACTIONS
+SET CATEGORY = 'Car'
+WHERE CATEGORY = 'Gas';
+
+UPDATE TRANSACTIONS
+SET CATEGORY = 'Lifestyle'
+WHERE CATEGORY = 'Amazon';
+
+
+UPDATE TRANSACTIONS
+SET VENDOR = 'At&T Internet'
+WHERE VENDOR = 'At&T';
+
+
+UPDATE TRANSACTIONS T
+SET VENDOR = a.capVend
+FROM (
+		SELECT t_id, INITCAP(vendor) AS capVend FROM TRANSACTIONS
+) a
+WHERE a.T_ID = T.T_ID;
+
+
 ---------------------------- VENDOR TABLE TOUR ----------------------------
 
 DROP TABLE Vendor CASCADE;
@@ -238,21 +264,91 @@ INSERT INTO VENDORS (cc_id, cc_name, vendor) VALUES ('test', 'test id', 'test ve
 
 SELECT DISTINCT vendor FROM TRANSACTIONS T;
 
-CREATE VIEW v1 AS SELECT vendor AS vendor, AVG(amount) AS amt, COUNT(*) AS inc FROM TRANSACTIONS T
-WHERE IS_INCOME=true
-GROUP BY VENDOR;
+DROP VIEW inc_vends cascade;
+DROP VIEW no_inc_vends;
+DROP VIEW BASE_INC;
+DROP VIEW cat_select;
 
-CREATE VIEW v2 AS SELECT vendor AS vendor, AVG(amount) AS amt_spnd, COUNT(*) AS no_inc FROM TRANSACTIONS T
+CREATE VIEW base_inc AS SELECT DISTINCT vendor AS v, 0 AS amt, 0 AS no_inc, 0 AS inc FROM TRANSACTIONS T;
+
+--Now we must choose most frequent category with vendor
+CREATE VIEW cat_select AS SELECT * FROM (
+	SELECT CATEGORY, vendor, IS_INCOME, cnt, 
+		RANK() OVER (PARTITION BY VENDOR, IS_INCOME 
+					ORDER BY cnt DESC) AS rn
+		FROM (
+		SELECT VENDOR, CATEGORY, IS_INCOME, COUNT(*) AS cnt 
+		FROM TRANSACTIONS T
+		GROUP BY CATEGORY, VENDOR, IS_INCOME ) mainSubQ 
+	) outerSubQ
+	WHERE outerSubQ.rn = 1;
+		-- we use rank and then select where rank = 1
+
+SELECT * FROM cat_select;
+
+
+CREATE VIEW inc_vends AS
+(SELECT vendor AS vendor, MODE(amount) AS amt, COUNT(*) AS inc FROM TRANSACTIONS T
+	WHERE IS_INCOME=true
+	GROUP BY VENDOR);
+
+CREATE VIEW no_inc_vends AS SELECT vendor AS vendor, MODE(amount) AS amt, COUNT(*) AS no_inc FROM TRANSACTIONS T
 WHERE IS_INCOME=false
 GROUP BY VENDOR;
 
-CREATE VIEW base_inc AS SELECT DISTINCT vendor AS v, 0 AS amt_spent, 0 AS no_inc, 0 AS inc FROM TRANSACTIONS T;
+SELECT * FROM inc_vends;
+SELECT * FROM no_inc_vends;
 
-SELECT * FROM v1;
-SELECT * FROM v2;
+-- Append all vendors to inc list 
+SELECT * FROM inc_vends UNION (SELECT v, amt, 
+inc FROM base_inc
+WHERE v NOT IN (
+	SELECT vendor 
+	FROM inc_vends))
+ORDER BY vendor;
+
+-- Append all vendors to no_inc list 
+SELECT * FROM no_inc_vends UNION (SELECT v, amt, 
+no_inc FROM base_inc
+WHERE v NOT IN (
+	SELECT vendor 
+	FROM no_inc_vends))
+ORDER BY vendor;
 
 
-CREATE VIEW v3 AS (SELECT * FROM v1 JOIN v2 ON v1.vendor=v2.vendor);
+DROP VIEW v3 CASCADE;
+CREATE VIEW v3 AS SELECT v1.vendor, v1.amt AS inc, v2.amt AS spnt,
+v1.inc AS cnt_inc, v2.no_inc AS cnt_no_inc
+FROM (
+	(SELECT * FROM inc_vends UNION 
+	(SELECT v, amt, inc
+	FROM base_inc
+	WHERE v NOT IN (
+		SELECT vendor 
+		FROM inc_vends))) v1 
+		
+INNER JOIN (
+-- Append all vendors to no_inc list 
+SELECT * FROM no_inc_vends UNION (SELECT v, amt, 
+no_inc FROM base_inc
+WHERE v NOT IN (
+	SELECT vendor 
+	FROM no_inc_vends))) v2 ON v1.vendor=v2.vendor 
+
+);
+
+SELECT * FROM v3;
+
+SELECT * --v3.vendor, category, (CASE WHEN cnt_inc > cnt_no_inc THEN inc ELSE spnt END) AS amount, (cnt_inc > cnt_no_inc) AS is_typically_inc
+FROM v3 
+INNER JOIN
+cat_select AS cs ON v3.VENDOR=cs.vendor
+WHERE (cnt_inc > cnt_no_inc AND is_income) OR (cnt_inc <= cnt_no_inc AND NOT is_income)
+ORDER BY v3.VENDOR;
+
+SELECT * FROM VENDORS V 
+-- After this one its just select:
+	-- vendor name, amount if cnt is more, words if count is more
 
 -- We have:
 	-- list of vendors and amount spent 
@@ -260,11 +356,28 @@ CREATE VIEW v3 AS (SELECT * FROM v1 JOIN v2 ON v1.vendor=v2.vendor);
 
 	-- add all distinct vendors to each list with def. values
 	-- inner join on vendor
+	-- SELECT inc or spnt based on which had higher count
 	-- Get most frequently occuring string per vendor 
 
 
 
+--- CREATE TRIGGER FOR ADJUSTING VENDORS TABLE ---
 
+	-- first write function
+DROP VIEW test;
+
+CREATE FUNCTION update_vendors(upd_vend STRING, )
+	RETURNS void AS
+	$$
+	BEGIN 
+		INSERT INTO test VALUES (true);		
+		
+	END
+	$$ LANGUAGE plpgsql;
+	
+
+
+---------------- END TRIGGER ----------------
 
 
 
