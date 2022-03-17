@@ -182,20 +182,21 @@ public class TransactionController {
 	 * 
 	 * @return ResponseEntity<List<Transaction>>
 	 */
-	@GetMapping
+
+	
 	//basic /transactions
+	@RequestMapping("/vendors")
 	public ResponseEntity<List<Vendor>> getVendors() {
 		return new ResponseEntity<List<Vendor>>(vs.getAllVendors(), HttpStatus.OK);
 	}	
 	//END GET ALL VENDORS
 	
 	
-	
 	//Get vendors by searching vendor nam
 	/**
 	 * @return ResponseEntity<List<Vendor>>
 	 */
-	@GetMapping(params = {"name"} )
+	@RequestMapping(value="/vendors", params = {"name"})
 	public ResponseEntity<List<Vendor>> searchVendorsByName(@RequestParam final String name) {
 		return new ResponseEntity<>(vs.searchVendors(name), HttpStatus.OK);
 	}
@@ -206,9 +207,9 @@ public class TransactionController {
 	/**
 	 * @return ResponseEntity<Vendor>
 	 */
-	@GetMapping(params = {"id"} )
-	public ResponseEntity<Vendor> getVendorByID(@RequestParam final String id) {
-		return new ResponseEntity<>(vs.getVendorByID(id), HttpStatus.OK);
+	@RequestMapping(value="/vendors", params = {"id", "cc"})
+	public ResponseEntity<Vendor> getVendorByID(@RequestParam final String id, @RequestParam final String cc) {
+		return new ResponseEntity<>(vs.getVendorByID(id, cc), HttpStatus.OK);
 	}
 	//END GET VENDOR SEARCH BY ID
 	

@@ -36,35 +36,19 @@ public class VendorService
 	
 	/* UTILITY METHODS */
 	
-	//Return all transactions, unsorted
-	public List<SimpleTransaction> getAllTransactions() {
-		return repo.findAll();
+	//Get all vendors as list
+	public List<Vendor> getAllVendors() {
+		return null;
 	}
 	
-	
-	//Return all Transactions sorted
-	public List<SimpleTransaction> getAllTransactonsSorted() {
-		return repo.findAllByOrderByPurchaseDateDesc();
-	}
-	
-	
-	//Return Transactions pageable by start, end
-	public List<SimpleTransaction> getAllTransactionsPageable(Integer start, Integer end) {
-		
-		//throw an error if end < start
+	public List<Vendor> searchVendors(String vendorName) {
 		return null;
 	}
 	
 	
-	//Save Data
-	public void saveTransactions(final List<SimpleTransaction> tx) {
-		repo.saveAll(tx);
+	//get vendor by id
+	public Vendor getVendorByID(String cc_id, String cc) {
+		return null;
 	}
-	
-	//Delete Transaction by ID
-	public void deleteTransactionById(final long id) {
-		repo.deleteById(id);		
-	}
-	
 }
 //END CLASS TRANSACTIONSERVICE

@@ -22,8 +22,15 @@ import com.jack.model.submodel.VendorKey;
 @Data
 public class Vendor {
 	
+	
+	@Transient	//vendor's id as provided by the credit card (obtained from plaid)
+	private String cc_id; 
+	
+	@Transient	//credit card this cc_id is matched to/ e.g. 'Barclay's Jet Blue', 'Barclay's American'
+	private String cc; 
+	
 	@Id
-	private String localName;
+	private String vendor;
 
 	@Column(columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
 	private double amount;
