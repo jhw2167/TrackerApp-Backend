@@ -9,6 +9,7 @@ import com.jack.model.submodel.VendorKey;
 
 @Entity
 @IdClass(VendorKey.class)
+@Table(name="vendor_mapper")
 @Data 
 public class VendorMapper {
 
@@ -18,7 +19,6 @@ public class VendorMapper {
 	@Id
 	private String creditCard;
 	
-	@Id
 	private String localVendorName;
 	
 }

@@ -2,6 +2,7 @@ package com.jack.service;
 
 //Java Imports
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,30 +26,39 @@ public class VendorService
 
 	/* State Variables */
 	
-	SimpleTransactionRepo repo;
+	VendorRepo vr;
+	VendorMapperRepo vmr;
 	
 	//END STATE VARS
 	
 	@Autowired
-	VendorService(SimpleTransactionRepo repo) {
-		this.repo = repo;
+	VendorService(VendorRepo vendorRepo, VendorMapperRepo vendorMapperRepo) {
+		this.vr = vendorRepo;
+		this.vmr = vendorMapperRepo;
 	}
 	
 	/* UTILITY METHODS */
 	
 	//Get all vendors as list
 	public List<Vendor> getAllVendors() {
-		return null;
+		return vr.findAll();
 	}
 	
 	public List<Vendor> searchVendors(String vendorName) {
-		return null;
+		return vr.findAllLikeVendorName(vendorName + "%");	//adding % to SQL like query finds all partial matches
 	}
 	
 	
 	//get vendor by id
 	public Vendor getVendorByID(String cc_id, String cc) {
-		return null;
+		Optional<VendorMapper> vm =  vmr.findVendorByID(cc_id, cc);
+		if(vm.isEmpty())
+			return null;
+		
+		return new Vendor(vm.get().getCcId(), vm.get().getCreditCard(),
+				vr.findByVendor(vm.get().getLocalVendorName()));
 	}
+	//END GET VENDOR BY ID
+	
 }
 //END CLASS TRANSACTIONSERVICE

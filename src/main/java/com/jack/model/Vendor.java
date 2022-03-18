@@ -40,6 +40,20 @@ public class Vendor {
 	
 	@Column(columnDefinition="BOOLEAN DEFAULT FALSE")
 	@JsonProperty
-	private boolean isTypicallyIncome; 
+	private boolean isTypicallyIncome;
+
+	
+	/* CONSTRUCTORS */
+	public Vendor(String cc_id, String cc, Vendor v) {
+		super();
+		this.cc_id = cc_id;
+		this.cc = cc;
+		this.vendor = v.vendor;
+		this.amount = v.amount;
+		this.category = v.category;
+		this.isTypicallyIncome = v.isTypicallyIncome;
+	} 
+	
+	
 	
 }
