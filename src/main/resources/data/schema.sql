@@ -237,9 +237,58 @@ WHERE CATEGORY = 'Amazon';
 
 
 UPDATE TRANSACTIONS
+SET CATEGORY = 'Dinner'
+WHERE VENDOR = 'Jaxon Beer Garden';
+
+UPDATE TRANSACTIONS
+SET CATEGORY = 'Lifestyle'
+WHERE VENDOR = 'HYTOOF';
+
+UPDATE TRANSACTIONS
 SET VENDOR = 'At&T Internet'
 WHERE VENDOR = 'At&T';
 
+
+UPDATE TRANSACTIONS
+SET VENDOR = 'Del Friscos'
+WHERE VENDOR LIKE 'Del Frisco%';
+
+
+UPDATE TRANSACTIONS
+SET VENDOR = 'Yumilicious'
+WHERE VENDOR LIKE 'Yum%';
+
+
+UPDATE TRANSACTIONS
+SET VENDOR = 'Original Pancake House', CATEGORY='Breakfast'
+WHERE VENDOR LIKE '%Pancake%';
+
+UPDATE TRANSACTIONS
+SET CATEGORY='Local Travel'
+WHERE VENDOR LIKE 'Parking%';
+
+
+UPDATE TRANSACTIONS
+SET CATEGORY='Lunch'
+WHERE VENDOR LIKE 'Press Waffles';
+
+
+UPDATE TRANSACTIONS
+SET CATEGORY='Dinner'
+WHERE VENDOR LIKE 'Raising Canes';
+
+UPDATE TRANSACTIONS
+SET CATEGORY='Terry Blacks'
+WHERE VENDOR LIKE 'Terry Black%';
+
+UPDATE TRANSACTIONS
+SET VENDOR='Shell'
+WHERE VENDOR LIKE 'Shell Oil';
+
+
+
+SELECT * FROM TRANSACTIONS T 
+WHERE VENDOR LIKE '%Pancake%';
 
 UPDATE TRANSACTIONS T
 SET VENDOR = a.capVend
@@ -287,7 +336,7 @@ CREATE VIEW base_inc AS SELECT DISTINCT vendor AS v, 0 AS amt, 0 AS no_inc, 0 AS
 --Now we must choose most frequent category with vendor
 CREATE VIEW cat_select AS SELECT * FROM (
 	SELECT CATEGORY, vendor, IS_INCOME, cnt, 
-		RANK() OVER (PARTITION BY VENDOR, IS_INCOME 
+		RANK() OVER (PARTITION BY VENDOR, IS_INCOME, CATEGORY 
 					ORDER BY cnt DESC) AS rn
 		FROM (
 		SELECT VENDOR, CATEGORY, IS_INCOME, COUNT(*) AS cnt 
@@ -301,11 +350,11 @@ SELECT * FROM cat_select;
 
 
 CREATE VIEW inc_vends AS
-(SELECT vendor AS vendor, MODE(amount) AS amt, COUNT(*) AS inc FROM TRANSACTIONS T
+(SELECT vendor AS vendor, PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY AMOUNT) AS amt, COUNT(*) AS inc FROM TRANSACTIONS T
 	WHERE IS_INCOME=true
 	GROUP BY VENDOR);
 
-CREATE VIEW no_inc_vends AS SELECT vendor AS vendor, MODE(amount) AS amt, COUNT(*) AS no_inc FROM TRANSACTIONS T
+CREATE VIEW no_inc_vends AS SELECT vendor AS vendor, PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY AMOUNT) AS amt, COUNT(*) AS no_inc FROM TRANSACTIONS T
 WHERE IS_INCOME=false
 GROUP BY VENDOR;
 
@@ -397,7 +446,7 @@ CREATE FUNCTION update_vendors()
 		CREATE VIEW upd AS SELECT vendor AS val 
 			FROM TRANSACTIONS T 
 			ORDER BY timestamp_
-			DESC LIMIT 1;
+			DESC LIMIT 200;
 	
 	-- DROP PREVIOUS VIEWS	
 		DROP VIEW IF EXISTS upd_vendor CASCADE;
@@ -480,7 +529,7 @@ CREATE FUNCTION update_vendors()
 			WHERE VENDORS.vendor=upd_vend.vendor;
 		ELSE 
 			INSERT INTO VENDORS (VENDOR, AMOUNT, CATEGORY, IS_TYPICALLY_INCOME)
-			SELECT upd_vend.vendor, upd_vend.amount, upd_vend.category, upd_vend.is_typically_inc
+			SELECT DISTINCT upd_vend.vendor, upd_vend.amount, upd_vend.category, upd_vend.is_typically_inc
 			FROM upd_vend;
 		END IF;
 	
@@ -488,17 +537,8 @@ CREATE FUNCTION update_vendors()
 	END
 	$$ LANGUAGE plpgsql;
 
-CREATE TRIGGER VEND_UPD_ON_TRANS_INS AFTER INSERT 
-	ON test EXECUTE PROCEDURE update_vendors();
-
-INSERT INTO test VALUES ('test');
-SELECT * FROM VENDORS;
-SELECT * FROM TEST;
-
--- 43.97
-UPDATE TRANSACTIONS 
-SET AMOUNT = '43.97'
-WHERE vendor='The Henry'
+SELECT * FROM UPD_vend
+SELECT DISTINCT * FROM VENDORS V
 
 DROP TRIGGER VEND_UPD_ON_TRANS_INS;
 ---------------- END TRIGGER ----------------
