@@ -95,14 +95,6 @@ public class TransactionController {
 	}
 	
 	
-	@GetMapping
-	@RequestMapping("/categories")
-	public ResponseEntity<List<String>> getCategories() {
-		List<String> cats = ts.getAllCategories();
-		return new ResponseEntity<List<String>>(cats, HttpStatus.OK);
-	}
-	//END GET Categories
-	
 	
 	@GetMapping(params = {"start", "to"} )
 	@RequestMapping("/income")
@@ -122,6 +114,40 @@ public class TransactionController {
 		return new ResponseEntity<List<SummaryTuple>>(tx, HttpStatus.OK);
 	}
 	//END GET INCOME SUMMARY
+	
+	@GetMapping
+	@RequestMapping("/categories")
+	public ResponseEntity<List<String>> getCategories() {
+		List<String> cats = ts.getAllCategories();
+		return new ResponseEntity<List<String>>(cats, HttpStatus.OK);
+	}
+	//END GET Categories
+	
+	@GetMapping
+	@RequestMapping("/payMethods")
+	public ResponseEntity<List<String>> getPayMethods() {
+		List<String> vals = ts.getPayMethods();
+		return new ResponseEntity<List<String>>(vals, HttpStatus.OK);
+	}
+	//END GET Categories
+	
+	
+	@GetMapping
+	@RequestMapping("/boughtFor")
+	public ResponseEntity<List<String>> getBoughtFor() {
+		List<String> vals = ts.getBoughtFor();
+		return new ResponseEntity<List<String>>(vals, HttpStatus.OK);
+	}
+	//END GET Categories
+	
+	
+	@GetMapping
+	@RequestMapping("/payStatus")
+	public ResponseEntity<List<String>> getPayStatus() {
+		List<String> vals = ts.getPayStatus();
+		return new ResponseEntity<List<String>>(vals, HttpStatus.OK);
+	}
+	//END GET Categories
 	
 	
 	//END GET METHODS

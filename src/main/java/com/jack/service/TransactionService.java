@@ -70,8 +70,21 @@ public class TransactionService
 		return repo.countByPurchaseDate(purchaseDate);
 	}
 	
+	/* SIMPLE GETS FOR COL VALUES*/
 	public List<String> getAllCategories() {
 		return repo.findCategoryGroupByCategory();
+	}
+	
+	public List<String> getPayMethods() {
+		return repo.findPayMethodsGroupByPayMethod();
+	}
+	
+	public List<String> getBoughtFor() {
+		return repo.findBoughtForGroupByBoughtFor();
+	}
+	
+	public List<String> getPayStatus() {
+		return repo.findPayStatusGroupByPayStatus();
 	}
 
 	

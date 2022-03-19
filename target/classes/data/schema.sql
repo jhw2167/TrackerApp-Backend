@@ -201,9 +201,12 @@ ALTER TABLE vendor_mapper v
 ADD FOREIGN KEY (local) REFERENCES Persons(PersonID);
 
 INSERT INTO VENDOR_MAPPER (cc_id, credit_card, vendor) 
-VALUES ('test id', 'test cc', 'test vendor');
+VALUES ('test id', 'test cc', 'The Henry');
 
+INSERT INTO VENDOR_MAPPER (cc_id, credit_card, vendor) 
+VALUES ('test id', 'test 2', 'The Henry');
 
+DELETE FROM FINANCESPRACTICE.vendor_mapper
 
 
 

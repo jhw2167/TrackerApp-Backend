@@ -24,10 +24,6 @@ import com.jack.model.*;
 
 public interface TransactionRepo extends JpaRepository<Transaction, Long>
 {
-	//Find all categories in transactions table
-	@Query(value="SELECT t.category FROM TRANSACTIONS t GROUP BY CATEGORY", nativeQuery=true)
-	public List<String> findCategoryGroupByCategory();
-	
 	//simple find all transactions
 	public List<Transaction> findAll();
 	
@@ -91,6 +87,23 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 			+ ") b ON a.c1=b.c2 GROUP BY c1 ORDER BY value DESC", nativeQuery=true)
 	public List<Map<String, Object>> findExpensesAggregatedByCategoryAndBoughtFor(
 			@Param("start") LocalDate from, @Param("end") LocalDate to);
+	
+	
+	
+	//Find all categories in transactions table
+	@Query(value="SELECT t.category FROM TRANSACTIONS t GROUP BY CATEGORY", nativeQuery=true)
+	public List<String> findCategoryGroupByCategory();
+		
+	@Query(value="SELECT t.PAY_METHOD FROM TRANSACTIONS t GROUP BY PAY_METHOD", nativeQuery=true)
+	public List<String> findPayMethodsGroupByPayMethod();
+	
+	
+	@Query(value="SELECT t.bought_for FROM TRANSACTIONS t GROUP BY bought_for", nativeQuery=true)
+	public List<String> findBoughtForGroupByBoughtFor();
+	
+	
+	@Query(value="SELECT t.PAY_STATUS FROM TRANSACTIONS t GROUP BY PAY_STATUS", nativeQuery=true)
+	public List<String> findPayStatusGroupByPayStatus();
 	
 	
 }
