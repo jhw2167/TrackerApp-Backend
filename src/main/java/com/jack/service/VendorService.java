@@ -55,6 +55,11 @@ public class VendorService
 		if(vm.isEmpty())
 			return null;
 		
+		//set values in vendor
+		Vendor internalVendor = vm.get().getVendor();
+		internalVendor.setCc(vm.get().getCreditCard());
+		internalVendor.setCc_id(vm.get().getCcId());
+		
 		return vm.get().getVendor();
 	}
 	//END GET VENDOR BY ID
