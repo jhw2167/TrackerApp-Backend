@@ -70,8 +70,7 @@ public class VendorController {
 
 	
 	//basic /transactions
-	@GetMapping
-	@RequestMapping("/vendors")
+	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<Vendor>> getVendors() {
 		return new ResponseEntity<List<Vendor>>(vs.getAllVendors(), HttpStatus.OK);
 	}	
@@ -82,7 +81,7 @@ public class VendorController {
 	/**
 	 * @return ResponseEntity<List<Vendor>>
 	 */
-	@RequestMapping(value="/vendors", params = {"name"})
+	@RequestMapping(value="/query", params = {"name"}, method=RequestMethod.GET)
 	public ResponseEntity<List<Vendor>> searchVendorsByName(@RequestParam final String name) {
 		return new ResponseEntity<>(vs.searchVendors(name), HttpStatus.OK);
 	}
@@ -93,12 +92,25 @@ public class VendorController {
 	/**
 	 * @return ResponseEntity<Vendor>
 	 */
-	@RequestMapping(value="/vendors", params = {"id", "cc"})
+	@RequestMapping(value="/query", params = {"id", "cc"}, method=RequestMethod.GET)
 	public ResponseEntity<Vendor> getVendorByID(@RequestParam final String id, @RequestParam final String cc) {
 		return new ResponseEntity<>(vs.getVendorByID(id, cc), HttpStatus.OK);
 	}
 	//END GET VENDOR SEARCH BY ID
 	
+	/* POST METHODS */
+	
+	@PostMapping
+	public ResponseEntity<Vendor> postTransactions(@RequestBody final Vendor vm) {
+		Vendor o = null;
+		try {
+			o = vs.saveVendor(vm);
+		}catch (Exception e) {
+			System.out.println("Multi-save Exception: " + e.getMessage());
+		}
+		
+		return new ResponseEntity<Vendor>(o, HttpStatus.OK);
+	}
 	
 	/* PUT METHODS */
 	

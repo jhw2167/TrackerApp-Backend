@@ -189,13 +189,19 @@ SELECT * FROM VENDORS V;
 INSERT INTO VENDORS (cc_id, cc_name, vendor) 
 VALUES ('test', 'test id', 'test vendor');
 
+CREATE TABLE temp_vendors AS (SELECT * FROM VENDORS V)
+SELECT * FROM temp_vendors
 
+---------------------------- VENDOR MAPPER TABLE TOUR ----------------------------
 
+SELECT * FROM VENDOR_MAPPER
+DROP TABLE VENDOR_MAPPER;
 
+ALTER TABLE vendor_mapper v
+ADD FOREIGN KEY (local) REFERENCES Persons(PersonID);
 
-
-
-
+INSERT INTO VENDOR_MAPPER (cc_id, credit_card, vendor) 
+VALUES ('test id', 'test cc', 'test vendor');
 
 
 

@@ -168,53 +168,6 @@ public class TransactionController {
 		return rsp;
 	}
 	
-	
-	/*
-	 *		/transactions/vendor enpoints 
-	 *
-	 *		GET and POST information on vendors for POST endpoint autofill
-	 * 
-	 */
-	
-	
-	/**
-	 *	Get all transactions, default sorted by date, descending (most recent to oldest) 
-	 * 
-	 * @return ResponseEntity<List<Transaction>>
-	 */
-
-	
-	//basic /transactions
-	@RequestMapping("/vendors")
-	public ResponseEntity<List<Vendor>> getVendors() {
-		return new ResponseEntity<List<Vendor>>(vs.getAllVendors(), HttpStatus.OK);
-	}	
-	//END GET ALL VENDORS
-	
-	
-	//Get vendors by searching vendor nam
-	/**
-	 * @return ResponseEntity<List<Vendor>>
-	 */
-	@RequestMapping(value="/vendors", params = {"name"})
-	public ResponseEntity<List<Vendor>> searchVendorsByName(@RequestParam final String name) {
-		return new ResponseEntity<>(vs.searchVendors(name), HttpStatus.OK);
-	}
-	//END GET VENDOR SEARCH
-	
-	
-	//Get vendors by searching vendor nam
-	/**
-	 * @return ResponseEntity<Vendor>
-	 */
-	@RequestMapping(value="/vendors", params = {"id", "cc"})
-	public ResponseEntity<Vendor> getVendorByID(@RequestParam final String id, @RequestParam final String cc) {
-		return new ResponseEntity<>(vs.getVendorByID(id, cc), HttpStatus.OK);
-	}
-	//END GET VENDOR SEARCH BY ID
-	
-	
-	
 	/*
 	 * 
 	 * 

@@ -31,7 +31,7 @@ public class Vendor {
 	
 	@Id
 	private String vendor;
-
+	
 	@Column(columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
 	private double amount;
 	
@@ -39,11 +39,14 @@ public class Vendor {
 	private String category;
 	
 	@Column(columnDefinition="BOOLEAN DEFAULT FALSE")
-	@JsonProperty
 	private boolean isTypicallyIncome;
 
 	
 	/* CONSTRUCTORS */
+	public Vendor() {
+		super();		//spring needs default constructor
+	}
+	
 	public Vendor(String cc_id, String cc, Vendor v) {
 		super();
 		this.cc_id = cc_id;

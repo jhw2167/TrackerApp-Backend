@@ -1,0 +1,15 @@
+{
+	"tId": "210604001",
+	"purchaseDate": "2021-06-04",
+	"amount": "5.89",
+	"vendor": "Trader Joes",
+	"category": "Groceries",
+	"boughtFor": "PERSONAL",
+	"payMethod": "Cap1",
+	"payStatus": "COMPLETE",
+	"isIncome": "FALSE",
+	"reimburses": "0",
+	"postedDate": "06-04-2021",
+	"notes": ""
+}
+

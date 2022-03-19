@@ -19,6 +19,30 @@ public class VendorMapper {
 	@Id
 	private String creditCard;
 	
-	private String localVendorName;
+	/*Foreign key constraint on  VendorMapper.localVendorName -> vendors.vendor
+	 * 	- each unique creditCard/cc_id id combo maps to a friendly (local) vendor name
+	 * 	- each local vendor name matches only *one* unqiue vendor name in Vendors table which
+	 * 		generates predictive metrics for that vendor  
+	 */
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "vendor", referencedColumnName = "vendor")
+	private Vendor vendor;
+
+	
+	/* CONSTRUCTORS */
+	public VendorMapper() {
+		super();
+	}
+	
+	public VendorMapper(Vendor v) {
+		super();
+		this.ccId = v.getCc_id();
+		this.creditCard = v.getCc();
+		this.vendor = v;
+	}
+	//END CONSTRUCTOR BUILD VENDOR_MAPPER FROM VENDOR
+	
 	
 }
+//END CLASS VENDORMAPPER

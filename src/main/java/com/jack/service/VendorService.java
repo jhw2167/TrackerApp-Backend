@@ -55,10 +55,40 @@ public class VendorService
 		if(vm.isEmpty())
 			return null;
 		
-		return new Vendor(vm.get().getCcId(), vm.get().getCreditCard(),
-				vr.findByVendor(vm.get().getLocalVendorName()));
+		return vm.get().getVendor();
 	}
 	//END GET VENDOR BY ID
+	
+	/* 
+	 * POST METHODS 
+	 * 
+	 */
+	
+	/*
+	 * 	saveVendor - typically used to save vendor-mapper value for auto-
+	 * 	generating front-end values from Plaid vendors
+	 * 
+	 * 	We attempt to save vendor to vendors table first because
+	 *  there is a foreign key constraint on vendorMapper.vendors -> vendor.vendors
+	 */
+	public Vendor saveVendor(final Vendor v) {
+		VendorMapper saved = null;
+		if(vr.findByVendor(v.getVendor()) != null) {
+			vr.save(v);
+		}
+		//Foreign key constraint on  VendorMapper.localVendorName -> vendors.vendor
+		//which means vendor needs to be saved first
+					
+		
+		//now this vendor definitely exists in the table
+		if(v.getCc() != null && v.getCc_id() != null) {
+			saved = vmr.save(new VendorMapper(v));
+			Vendor internalVendor = saved.getVendor();
+			internalVendor.setCc(saved.getCreditCard());
+			internalVendor.setCc_id(saved.getCcId());
+		}
+		 return saved.getVendor();					
+	}
 	
 }
 //END CLASS TRANSACTIONSERVICE
