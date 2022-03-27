@@ -27,6 +27,10 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	//simple find all transactions
 	public List<Transaction> findAll();
 	
+	//simple find tranasction like id
+	public Transaction findBytId(Long tId);
+		
+	
 	//FindAll sorted by date YYYY-MM-DD format
 	public List<Transaction> findAllByOrderByPurchaseDateDesc();
 	
@@ -46,6 +50,11 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	@Query(value="SELECT * FROM transactions AS t ORDER BY t.t_id DESC LIMIT :limit OFFSET :offset", nativeQuery=true)
 	public List<Transaction> findAllByOrderByTidDescPageable( @Param("limit") Long limit, @Param("offset") Long offset);
 	
+	
+	//find all that partially match name
+	@Query(value="SELECT * FROM TRANSACTIONS t WHERE t.vendor LIKE :name", nativeQuery=true)
+	public List<Transaction> findAllLikeVendorName(@Param("name") String name);
+
 	
 	//Find income tuple:
 		//Vendor (source) - sum total - Cat1-Cat2...

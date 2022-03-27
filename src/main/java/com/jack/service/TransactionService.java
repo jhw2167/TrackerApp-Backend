@@ -66,6 +66,14 @@ public class TransactionService
 		return repo.findAllByPurchaseDate(purchaseDate);
 	}
 	
+	public Transaction getTransactionByID(final Long id) {
+		return repo.findBytId(id);
+	}
+	
+	public List<Transaction> searchVendors(String name) {
+		return repo.findAllLikeVendorName(name + "%");
+	}
+	
 	public long countByPurchaseDate(LocalDate purchaseDate) {		
 		return repo.countByPurchaseDate(purchaseDate);
 	}

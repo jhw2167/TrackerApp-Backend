@@ -69,6 +69,28 @@ public class TransactionController {
 	//END GET TRANSACTIONS
 	
 	
+	//Get vendors by searching vendor nam
+	/**
+	 * @return ResponseEntity<List<Vendor>>
+	 */
+	@RequestMapping(value="/query", params = {"name"}, method=RequestMethod.GET)
+	public ResponseEntity<List<Transaction>> searchTransactionsByVendorName(@RequestParam final String name) {
+		return new ResponseEntity<>(ts.searchVendors(name), HttpStatus.OK);
+	}
+	//END GET VENDOR SEARCH
+	
+	
+	//Get vendors by searching vendor nam
+	/**
+	 * @return ResponseEntity<Vendor>
+	 */
+	@RequestMapping(value="/query", params = {"id"}, method=RequestMethod.GET)
+	public ResponseEntity<Transaction> getVendorByID(@RequestParam final long id) {
+		return new ResponseEntity<>(ts.getTransactionByID(id), HttpStatus.OK);
+	}
+	//END GET VENDOR SEARCH BY ID
+	
+	
 	//Get Transactions pageanated from params [start-end)
 	/**
 	 * @return ResponseEntity<List<Transaction>>
