@@ -90,6 +90,8 @@ CREATE TABLE transactions (
 -- Queries
 SELECT * FROM SIMPLE_TRANSACTIONS;
 SELECT * FROM TRANSACTIONS;
+SELECT * FROM TRANSACTIONS ORDER BY TIMESTAMP_ DESC;
+
 SELECT * FROM TRANSACTIONS2;
 
 SELECT t.category FROM TRANSACTIONS t GROUP BY CATEGORY;
@@ -108,8 +110,8 @@ SELECT v1, SUM(sum1) / COUNT(cat), STRING_AGG(cat, '/') FROM
 ( SELECT vendor AS v1, SUM(amount) AS sum1 
 FROM TRANSACTIONS t1
 WHERE t1.IS_INCOME=TRUE AND 
-t1.purchase_date >= '2021-01-31' AND
-t1.purchase_date < '2022-03-01'
+t1.purchase_date >= '2021-03-31' AND
+t1.purchase_date < '2022-05-01'
 GROUP BY t1.VENDOR ) AS a
 INNER JOIN 
 (
@@ -129,14 +131,16 @@ SELECT c1, SUM(sum1) / COUNT(BOUGHT_FOR) AS value , STRING_AGG(BOUGHT_FOR, '/') 
 ( SELECT CATEGORY AS c1, SUM(amount) AS sum1 
 FROM TRANSACTIONS t1
 WHERE t1.IS_INCOME=false AND 
-t1.purchase_date >= '2021-01-31' AND
-t1.purchase_date < '2022-03-01'
+t1.purchase_date >= '2022-03-31' AND
+t1.purchase_date < '2022-05-01'
 GROUP BY t1.CATEGORY ) AS a
 INNER JOIN 
 (
 SELECT DISTINCT t2.CATEGORY AS c2, t2.BOUGHT_FOR 
 FROM TRANSACTIONS t2 
-WHERE t2.IS_INCOME =false
+WHERE t2.IS_INCOME =FALSE AND 
+t2.purchase_date >= '2022-03-31' AND
+t2.purchase_date < '2022-05-01'
 ) b ON a.c1=b.c2 GROUP BY c1 ORDER BY value DESC;
  
 
@@ -162,8 +166,14 @@ INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR, category, bought_
 					VALUES (0, '2000-01-01', 0, 		'none',		'none', 'PERSONAL', 'none',		'COMPLETE', FALSE, 		0,			'2000-01-01', ''	 );
 
 
+INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR, category, bought_for, pay_method, pay_status, is_income, reimburses, posted_date, notes) 
+					VALUES (1, 					'2000-01-02', 0, 	 'sample_v',	'cat', 'PERSONAL', 'none',		'COMPLETE', FALSE, 		0,			'2000-01-01', ''	 );
+
+				
+SELECT * FROM TRANSACTIONS T WHERE VENDOR LIKE 'The%'
+
 --Deletes
-DELETE FROM TRANSACTIONS t WHERE t.t_id IN ()
+DELETE FROM TRANSACTIONS t WHERE t.t_id IN (20220327000)
 
 
 --- ADD TIMESTAMP to TRANSACTIONS ---
@@ -174,7 +184,6 @@ SELECT * FROM TRANSACTIONS_22_3_14
 ALTER TABLE TRANSACTIONS 
 ADD timestamp_ TIMESTAMP DEFAULT NOW()
 
-SELECT * FROM TRANSACTIONS T
 
 UPDATE TRANSACTIONS T
 SET timestamp_ = T.PURCHASE_DATE::timestamp
@@ -185,12 +194,15 @@ SET timestamp_ = T.PURCHASE_DATE::timestamp
 DROP TABLE Vendor CASCADE;
 
 SELECT * FROM VENDORS V;
+SELECT * FROM VENDORS V WHERE VENDOR LIKE 'The%';
 
 INSERT INTO VENDORS (cc_id, cc_name, vendor) 
 VALUES ('test', 'test id', 'test vendor');
 
 CREATE TABLE temp_vendors AS (SELECT * FROM VENDORS V)
 SELECT * FROM temp_vendors
+
+DELETE FROM VENDORS WHERE VENDOR LIKE 'The Jon'
 
 ---------------------------- VENDOR MAPPER TABLE TOUR ----------------------------
 
@@ -210,6 +222,6 @@ DELETE FROM FINANCESPRACTICE.vendor_mapper
 
 
 
-
+SELECT DISTINCT Vendor FROM TRANSACTIONS T;
 
 

@@ -7,10 +7,11 @@
 
 SELECT DISTINCT vendor FROM TRANSACTIONS T;
 
-DROP VIEW inc_vends cascade;
-DROP VIEW no_inc_vends;
-DROP VIEW BASE_INC;
-DROP VIEW cat_select;
+DROP VIEW IF exists inc_vends cascade;
+DROP VIEW IF exists no_inc_vends;
+DROP VIEW IF exists BASE_INC;
+DROP VIEW IF exists cat_select;
+DROP TABLE IF exists cs2 cascade;
 
 CREATE VIEW base_inc AS SELECT DISTINCT vendor AS v, 0 AS amt, 0 AS no_inc, 0 AS inc FROM TRANSACTIONS T;
 
@@ -18,17 +19,27 @@ CREATE VIEW base_inc AS SELECT DISTINCT vendor AS v, 0 AS amt, 0 AS no_inc, 0 AS
 CREATE VIEW cat_select AS SELECT * FROM (
 	SELECT CATEGORY, vendor, IS_INCOME, cnt, 
 		RANK() OVER (PARTITION BY VENDOR, IS_INCOME, CATEGORY 
-					ORDER BY cnt DESC) AS rn
+					ORDER BY cnt DESC ) AS rn
 		FROM (
 		SELECT VENDOR, CATEGORY, IS_INCOME, COUNT(*) AS cnt 
 		FROM TRANSACTIONS T
-		GROUP BY CATEGORY, VENDOR, IS_INCOME ) mainSubQ 
+		GROUP BY CATEGORY, VENDOR, IS_INCOME) mainSubQ 
 	) outerSubQ
 	WHERE outerSubQ.rn = 1;
 		-- we use rank and then select where rank = 1
 
 SELECT * FROM cat_select;
+SELECT * FROM vendors2 ORDER BY vendor; 
 
+CREATE table cs2 AS SELECT cs.category, cs.vendor, cs.is_income, cs.cnt, cs.rn FROM
+CAT_SELECT CS INNER JOIN VENDORs2 v2
+ON (cs.category=UPPER(v2.category) AND cs.vendor=UPPER(v2.vendor)) ORDER BY vendor;
+
+DROP VIEW CAT_SELECT;
+CREATE VIEW CAT_SELECT AS SELECT * FROM cs2;
+DELETE FROM CAT_SELECT WHERE 
+vendor='TACO BELL' OR vendor='MCDONALDS' OR vendor='ONESTOPPARKING';
+-- these particular vendors have redundancies, one must be deleted
 
 CREATE VIEW inc_vends AS
 (SELECT vendor AS vendor, PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY AMOUNT) AS amt, COUNT(*) AS inc FROM TRANSACTIONS T
@@ -59,7 +70,7 @@ WHERE v NOT IN (
 ORDER BY vendor;
 
 
-DROP VIEW v3 CASCADE;
+DROP VIEW IF exists v3 CASCADE;
 CREATE VIEW v3 AS SELECT v1.vendor, v1.amt AS inc, v2.amt AS spnt,
 v1.inc AS cnt_inc, v2.no_inc AS cnt_no_inc
 FROM (
@@ -76,9 +87,8 @@ SELECT * FROM no_inc_vends UNION (SELECT v, amt,
 no_inc FROM base_inc
 WHERE v NOT IN (
 	SELECT vendor 
-	FROM no_inc_vends))) v2 ON v1.vendor=v2.vendor 
+	FROM no_inc_vends))) v2 ON v1.vendor=v2.vendor);
 
-);
 
 SELECT * FROM v3;
 
@@ -89,7 +99,21 @@ cat_select AS cs ON v3.VENDOR=cs.vendor
 WHERE (cnt_inc > cnt_no_inc AND is_income) OR (cnt_inc <= cnt_no_inc AND NOT is_income)
 ORDER BY v3.VENDOR;
 
-SELECT * FROM VENDORS V 
+
+CREATE VIEW v4 AS SELECT v3.vendor, category, CAST((CASE WHEN cnt_inc > cnt_no_inc THEN inc ELSE spnt END) AS NUMERIC) AS amount,
+(cnt_inc > cnt_no_inc) AS is_typically_inc
+FROM v3 
+INNER JOIN
+cat_select AS cs ON v3.VENDOR=cs.vendor
+WHERE (cnt_inc > cnt_no_inc AND is_income) OR (cnt_inc <= cnt_no_inc AND NOT is_income)
+ORDER BY v3.VENDOR;
+
+
+INSERT INTO VENDORS (AMOUNT,CATEGORY,IS_TYPICALLY_INCOME,VENDOR)
+SELECT AMOUNT, CATEGORY, IS_TYPICALLY_INC, VENDOR
+FROM v4
+
+SELECT * FROM v4 ORDER BY vendor 
 -- After this one its just select:
 	-- vendor name, amount if cnt is more, words if count is more
 
@@ -105,6 +129,10 @@ SELECT * FROM VENDORS V
 
 
 
+INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR, category, bought_for, pay_method, pay_status, is_income, reimburses, posted_date, notes) 
+VALUES 					(1, '2022-03-15', 		0, 		'7 Eleven',		'none', 'PERSONAL', 'none',		'COMPLETE', FALSE, 		0,			'2000-01-01', ''	 );
+
+DELETE FROM TRANSACTIONS WHERE T_ID =1;
 --- CREATE TRIGGER FOR ADJUSTING VENDORS TABLE ---
 
 	-- first write function
@@ -125,11 +153,23 @@ CREATE FUNCTION update_vendors()
 	$$
 	BEGIN 
 		DROP VIEW IF EXISTS upd CASCADE;
-		CREATE VIEW upd AS SELECT vendor AS val 
+	
+		-- Convert Fresh Transaction values to capitals for consistency
+		UPDATE TRANSACTIONS
+		SET CATEGORY = UPPER(CATEGORY),
+		BOUGHT_FOR = UPPER(BOUGHT_FOR),
+		VENDOR = UPPER(VENDOR),
+		PAY_METHOD = UPPER(PAY_METHOD)
+		WHERE timestamp_ = (SELECT timestamp_ 
 			FROM TRANSACTIONS T 
 			ORDER BY timestamp_
-			DESC LIMIT 200;
+			DESC LIMIT 1);	
 	
+		CREATE VIEW upd AS SELECT VENDOR AS val 
+			FROM TRANSACTIONS T 
+			ORDER BY timestamp_
+			DESC LIMIT 1;
+		
 	-- DROP PREVIOUS VIEWS	
 		DROP VIEW IF EXISTS upd_vendor CASCADE;
 		DROP VIEW IF EXISTS BASE_INC cascade;
@@ -154,7 +194,8 @@ CREATE FUNCTION update_vendors()
 			GROUP BY CATEGORY, VENDOR, IS_INCOME
 			) mainSubQ 
 		) outerSubQ
-		WHERE outerSubQ.rn = 1;
+		WHERE outerSubQ.rn = 1
+		LIMIT 1;
 	
 		-- CREATE VIEW OF INCOME VENDORS AND NON-INCOME VENDORS 
 		CREATE VIEW inc_vends AS
@@ -200,11 +241,14 @@ CREATE FUNCTION update_vendors()
 		WHERE (cnt_inc > cnt_no_inc AND is_income) OR (cnt_inc <= cnt_no_inc AND NOT is_income)
 		ORDER BY v3.VENDOR);
 	
-	IF EXISTS (SELECT * FROM VENDORS V WHERE VENDOR=(SELECT val FROM upd))
+	--SELECT * FROM upd
+	--SELECT * FROM VENDORS v WHERE v.VENDOR LIKE '7%'
+	--SELECT * FROM CAT_SELECT CS 
+	DO $inner$ BEGIN 
+	IF EXISTS (SELECT * FROM VENDORS V INNER JOIN upd u ON v.vendor=u.val)
 		THEN
 			UPDATE VENDORS 
-			SET vendor=upd_vend.vendor, 
-				AMOUNT=upd_vend.amount,
+			SET  AMOUNT=upd_vend.amount,
 				CATEGORY=upd_vend.category,
 				IS_TYPICALLY_INCOME=upd_vend.is_typically_inc
 			FROM upd_vend
@@ -214,21 +258,59 @@ CREATE FUNCTION update_vendors()
 			SELECT DISTINCT upd_vend.vendor, upd_vend.amount, upd_vend.category, upd_vend.is_typically_inc
 			FROM upd_vend;
 		END IF;
-	
+	END
+	$inner$ language plpgsql;
 		RETURN NULL;
 	END
 	$$ LANGUAGE plpgsql;
 
+--Triggers run in alphabetical order, we want this one to run second
+DROP TRIGGER IF EXISTS VEND_UPD_ON_TRANS_INS ON TRANSACTIONs;
 CREATE TRIGGER VEND_UPD_ON_TRANS_INS AFTER INSERT
 ON transactions EXECUTE PROCEDURE update_vendors();
 
+SELECT * FROM TRANSACTIONS T ORDER BY TIMESTAMP_ DESC
+
 SELECT * FROM UPD_vend
 SELECT * FROM VENDORS V
-WHERE vendor='The Jon'	--43.97
+WHERE vendor='SAMPLE_V'	--43.97
 
 DELETE FROM TRANSACTIONS 
-WHERE vendor='The Jon'
+WHERE vendor='SAMPLE_V';
 AND AMOUNT ='6.95'
 
-DROP TRIGGER VEND_UPD_ON_TRANS_INS;
+DROP TRIGGER VEND_UPD_ON_TRANS_INS ON TRANSACTIONs;
 ---------------- END TRIGGER ----------------
+
+
+-- Function and Trigger for capitalizing values as they enter DB
+DROP FUNCTION IF EXISTS capitalize_trans CASCADE;
+CREATE FUNCTION capitalize_trans() RETURNS void AS
+	$$
+	BEGIN 
+		
+UPDATE TRANSACTIONS
+SET CATEGORY = UPPER(CATEGORY),
+BOUGHT_FOR = UPPER(BOUGHT_FOR),
+VENDOR = UPPER(VENDOR),
+PAY_METHOD = UPPER(PAY_METHOD)
+WHERE timestamp_ = (SELECT timestamp_ 
+			FROM TRANSACTIONS T 
+			ORDER BY timestamp_
+			DESC LIMIT 1);	
+	END
+	$$ LANGUAGE plpgsql;
+
+-- END FUNCTION
+
+-- Decided to add function to existing trigger
+
+
+
+
+
+
+
+
+
+

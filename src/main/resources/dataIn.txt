@@ -1,327 +1,50 @@
-09/01 - Dunkin - 6.95 - Breakfast - JB 
-09/02 - Del Taco - 9.66 - Lunch - JB
-09/03 - Dunkin - 6.95 - Breakfast - JB
-09/03 - Jack Box - 8.81 - Lunch - JB
-09/07 - Dunkin - 6.95 - Breakfast - JB
-09/08 - Taco Bell - 6.55 - Lunch - JB
-09/09 - McDonalds - 7.92 - Breakfast - JB
-09/10 - Taco bell - 9.60 - Lunch - JB
-09/10 - Revature - 976.87 - Income - Georgetown --- true
-09/11 - The Stand - 3.14 - Dinner - JB - Family
-09/11 - Football Concession - 16.00 - Dinner - JB
-09/12 - Hello Gelato - 6.95 - Breakfast - JB
-09/13 - Chipotle - 6.95 - Breakfast - JB
-09/15 - Del Taco - 6.58 - Breakfast - JB
-09/17 - Smoothie Stop - 10.00 - Snacks - JB
-09/17 - Sports Clips - 30.00 - Lifestyle - JB
-09/17 - La Cab - 18.69 - Lunch - JB
-09/18 - Target - 33.90 - Lifestyle - JB
-09/18 - Only Place SM - 24.40 - Breakfast - JB
-09/18 - Chipotle - 10.64 - Dinner - JB
-09/18 - Nordstrom Rack - 126.69 - Retail - JB
-09/20 - Steam - 58.82 - Entertainment - Visa Gift Card ------ Black Ops additional Buy
-09/21 - McDonalds - 7.36 - Breakfast - JB
-09/23 - McDonalds - 8.48 - Breakfast - JB
-09/24 - CVS Pharmacy - 13.13 - Pharmacy - JB
-09/24 - Jack Box - 9.02 - Snack - JB
-09/24 - Taco Bell - 7.64 - Dinner - JB
-09/24 - Revature - 1368.67 - Income - JB --- true
-09/27 - MLine Tower - 150.00 - Domestic - JB
-09/27 - MLine Tower - 5.00 - Domestic - JB
-09/27 - MLine Tower - 340.00 - Domestic - JB
-09/27 - ErenterPlan Insurance - 68.50 - Domestic - JB
-09/29 - ON3 Media - 10.00 - Entertainment - JB ------ We are SC bball subscript
-09/30 - Spotify - 9.99 - Entertainment - JB
-09/30 - Delta - 73.40 - Travel - JB ------ One way La -> Dallas
-10/01 - Taco Bell - 6.55 - Dinner - JB
-10/02 - Panera - 19.38 - Lunch - JB
-10/02 - Cabanita - 20.62 - Dinner - JB
-10/02 - Jack Box - 5.68 - Snacks - JB
-10/03 - Houstons - 40.00 - Lunch - Venmo
-10/04 - McDonalds - 7.36 - Breakfast - JB
-10/04 - Del Taco - 7.57 - Lunch - JB
-10/04 - Amazon - 1.08 - Lifestyle - JB ------ Amz Prime
-10/04 - Amazon - 74.72 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/4 - Office Desk Chair
-10/04 - Amazon - 37.97 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/4 - King Sheets
-10/04 - Amazon - 589.00 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/4 - King Mattress
-10/04 - Amazon - 187.62 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/4 - King Frame
-10/04 - Amazon - 99.99 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/4 - Desk
-10/07 - MLine Tower - 1536.77 - Domestic - Georgetown ------ Initial Monthly rent
-10/08 - Delta - 30.00 - Travel - JB ------ Checked bag to texas
-10/08 - Target - 79.45 - Entertainment - JB - Personal - COMPLETE - true
-10/08 - Target - 77.16 - Income  - JB - Personal - COMPLETE - true - REIMBURSES TARGET ABOVE
-10/08 - Revature - 1368.66 - Income - Georgetown - Personal - COMPLETE - true
-10/09 - Zipcar - 25.00 - Local Travel - JB
-10/09 - Zipcar - 14.80 - Local Travel - JB
-10/09 - Zipcar - 7.00 - Local Travel - JB
-10/09 - Mattress Firm - 865.99 - Lifestyle - JB
-10/09 - Kroger - 79.40 - Groceries - JB
-10/09 - Harbor Freight - 133.10 - Retail - JB
-10/09 - Zipcar - 14.80 - Local Travel - JB ----- 10/10
-10/09 - Zipcar - 14.79 - Local Travel - JB ----- 10/10
-10/09 - Lyft - 104.50 - Local Travel - JB ----- 10/10
-10/09 - Chipotle - 17.25 - Dinner - JB ----- 10/10
-10/10 - Starbucks - 5.30 - Breakfast - JB
-10/10 - Sixty Vines - 63.48 - Dinner - JB
-10/10 - Target - 338.36 - Lifestyle - JB
-10/10 - Amazon - 70.35 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/10 - 3 pocket laundry basket
-10/10 - Amazon - 436.70 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/10 - Anti fatigue kitchen mat, auto trash can, room trash bin, file cabinet
-10/10 - Amazon - 125.65 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/10 - Akro mills storage bin (small), Akro mills storage bin (medium), trash bags, comforter
-10/11 - Amazon - 117.19 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/11 - Brita tub, tide pods, labels, sponges, tupper ware, labels 
-10/11 - Amazon - 79.00 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/11 - Brita Filters, key hooks, hangers, lighters
-10/11 - Amazon - 7.07 - Lifestyle - JB
-10/11 - Kroger - 50.77 - Groceries - JB
-10/12 - Amazon - 37.37 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/12 - plates and cups
-10/12 - Amazon - 94.09 - Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/12 - power strip, cook book holder, butter tray, bowls, spice rack
-10/12 - Amazon - 7.25 -	 Lifestyle - JB 	- Personal   - COMPLETE   - false     - 0 -		10/12 - medicine cups
-10/12 - Las Palmas - 20.10 - Dinner - JB
-10/14 - Mi Cocina - 12.94 - Dinner - JB
-10/15 - Whole Foods - 65.43 - Groceries - JB
-10/16 - Good Graces - 37.48 - Breakfast - JB - Group
-10/16 - Graces Reimburse - 16.00 - Income - Venmo - Group - COMPLETE - true - ABOVE
-10/16 - Lyft - 6.84 - Local Travel - JB ----- 10/18
-10/16 - Target - 199.58 - Retail - JB
-10/16 - Amazon - 37.10 - Lifestyle - JB ----- 10/18- silverware sorter, floating shelf
-10/16 - Amazon - 48.31 - Lifestyle - JB ----- 10/18 - duck tape, alarm clock, belt holder
-10/17 - Terry blacks - 30.32 - Lunch - JB ----- 10/18
-10/19 - Amazon - 36.63 - Lifestyle - JB
-10/19 - Amazon - 4.93 - Lifestyle - JB
-10/19 - Gloria's - 31.06 - Dinner - JB
-10/20 - Starbucks - 7.25 - Breakfast - JB
-10/20 - Amazon - 64.00 - Lifestyle - JB
-10/21 - Chipotle - 17.25 - Lunch - JB
-10/21 - Amazon - 83.65 - Lifestyle - JB ------ files, bath mat, protein
-10/22 - Revature - 1368.67 - Income - Georgetown ---- true
-10/22 - AT&T Internet - 46.02 - Domestic - Georgetown
-10/24 - Shell - 9.71 - Lifestyle - JB - Date
-10/24 - Starbucks - 14.99 - Breakfast - JB - Date
-10/24 - Six Flags - 80.08 - Entertainment - JB
-10/24 - Six Flags - 7.57 - Entertainment - JB
-10/24 - Lyft - 32.97 - Local Travel - JB ----- 10/26 - Trip to Kennedy
-10/25 - Amazon - 106.29 - Lifestyle - JB ------ magnet squares, towlets, organizer, placematts, doormat
-10/25 - Amazon - 59.53 - Lifestyle - JB ----- 11/2 - Computer charger
-10/25 - Amazon - 41.12 - Lifestyle - JB ------ hair dryer, fruit plate
-10/25 - Original Pancake House - 23.25 - JB
-10/26 - Amazon - 21.64 - Lifestyle - JB
-10/25 - Amazon - 80.01 - Lifestyle - JB ----- 10/26 - baking sheets, dish towels, rubber bands
-10/26 - Amazon - 7.37 - Lifestyle - JB ------ furniture pads, computer wipes
-10/26 - Mi Cocina - 23.71 - Dinner - JB
-10/27 - Whole Foods - 151.02 - Groceries - JB
-10/27 - Amazon - 7.03 - Lifestyle - JB ------ Q-tips
-10/27 - Lyft - 7.27 - Local Travel - JB
-10/27 - Del Frisco's - 56.29 - Dinner - JB - Date
-10/27 - Starbucks - 22.25 - 
-10/28 - Shell - 8.33 - Snacks - JB
-10/29 - Chipotle - 17.25 - Dinner - JB
-10/30 - Amazon - 53.82 - Lifesyle - JB ----- 10/31 - Gum, Utility Items, Phone Case
-10/29 - Amazon - 19.47 - Lifesyle - JB ----- 11/1 - Phone Case
-10/30 - Amazon - 18.43 - Lifesyle - JB ------ Nail File, clips
-10/31 - Amazon - 98.75 - Returns - Amazon Balance - Personal - COMPLETE - true - REIMBURSES AUTO TRASH - 10/31 - Reimbursement for Auto Trash can purchased on amazon
-10/31 - Shell - 8.83 - Snacks - JB
-10/31 - Del Friscos - 65.29 - Dinner - JB
-11/2 - Starbucks - 7.25 - Breakfast - JB 
-11/4 - Amazon - 637.59 - Returns - JB -- COMPLETE - true - REIMBURSES KING MATTRESS - 11/4 - Reimbursement for King mattress purchased on amazon
-11/4 - Walmart - 12.95 - Lifestyle - JB ------ walmart plus
-11/5 - Walmart - 302.02 - Lifestyle - JB ------ flat monitor
-11/5 - PARKRECEIPTS.COM - 12.95 - Lifestyle - JB
-11/5 - Target - 10.83 - Returns - JB
-11/5 - Revature - 1316.92 - Income - Georgetown
-11/5 - Amazon - 34.60 - Lifestyle - Amazon Balance ------ Bath rugs and Wall mount
-11/7 - Chevron - 47.90 - Gas - JB
-11/7 - Puttery - 23.45 - Entertainment - JB - Date
-11/7 - Seven Doors - 49.11 - Dinner - JB - Date
-11/8 - NTTA - 40.00 - Local Travel - JB ------ Toll Tag initial load
-11/8 - Shell - 3.79 - Snacks - JB
-11/8 - Burger King - 5.49 - Lunch - JB
-11/8 - Amazon - 35.67 - Lifestyle - Amazon Balance ------ USB cables, protein shake
-11/8 - Amazon - 6.38 - Lifestyle - Amazon Balance ------ Phone stand
-11/8 - Amazon - 43.24 - Lifestyle - Amazon Balance ------ Rope, slippers
-11/8 - Amazon - 8.93 - Lifestyle - Amazon balance ------ Gumjob
-11/9 - Target - 72.06 - Lifestyle - JB
-11/9 - Six Flags - 40.02 - Lunch - JB
-11/9 - Amazon - 59.53 - Returns - JB -- COMPLETE - true - 0 - 11/9 - Reimburses for ?, not sure, exact cost of computer charger though
-11/9 - Taco bell - 8.63 - Dinner - JB
-11/9 - M Line Tower - 2013.00 - Domestic - Georgetown ------ November Rent
-11/9 - M Line Tower - 2013.00 - Domestic - Georgetown ------ December Rent, prepaid
-11/10 - Varsity Energy - 42.36 - Domestic - Georgetown
-11/12 - Taco bell - 10.36 - Dinner - JB
-11/12 - Amazon - 7.07 - Lifestyle - JB ------ ?
-11/12 - Amazon - 126.61 - Lifestyle - JB ------ File Cabinet, headphone holder, mic
-11/12 - Amazon - 50.21 - Lifestyle - JB ------ Nu sense wireless Bullet
-11/12 - Amazon - 51.95 - Lifestyle - JB ------ Spreader bar
-11/12 - Amazon - 11.80 - Lifestyle - JB ------ Gorilla Glue, kitchen matts
-11/12 - Whole Foods - 67.01 - Groceries - JB
-11/12 - Walgreens - 2.19 - Retail - JB
-11/13 - Teresa Photographs - 100 - Entertainment - Cap1 ------ Photos from independent
-11/13 - Chevron - 47.90 - Gas - Cap1
-11/13 - Trader Joes - 31.24 - Groceries - Cap1
-11/14 - Wal Mart - 269.54 - Entertainment - JB
-11/15 - Parking - 4.00 - Entertainment - Cap1 ------ Parking for pictures
-11/15 - Chic fil A - 11.41 - Lunch - Cap1
-11/15 - Chipotle - 8.66 - Dinner - Cap1
-11/17 - Taco Bell - 7.12 - Dinner - Cap1
-11/17 - Yummylicious - 10.24 - Snacks - Cap1
-11/17 - Starbucks - 5.14 - Breakfast - Cap1
-11/18 - 300 Management LLC - 40.00 - Entertainment - Cap1 ------ Collete Dallas Nigtclub
-11/19 - Chipotle - 8.66 - Dinner - Cap1
-11/19 - Revature - 1455.96 - Income - Georgetown --- true
-11/19 - Amazon - 41.39 - Lifestyle - JB ----- 11/21 - Cmd Hook, Wall mount
-11/21 - Wal Mart - 302.02 - Returns - JB -- COMPLETE - true - REIMBURSES flat screen 11/5 - 11/21 - 
-11/20 - Trader joes - 43.30 - Groceries - Cap1 ----- 11/22
-11/21 - Trader joes - 13.65 - Groceries - Cap1 ----- 11/22
-11/21 - Target - 18.39 - Lifestyle - Cap1
-11/22 - Original Pancake House - 13.82 - Lifestyle - Cap1
-11/22 - Amazon - 19.40 - Lifestyle - JB ------ extension cords, cmd strips
-11/23 - AT&T - 46.02 - Domistic - JB
-11/24 - Trader Joes - 11.96 - Groceries - Cap1
-11/24 - Taco Bell - 8.63 - Dinner - Cap1
-11/25 - Amazon - 19.45 - Lifestyle - JB ------ Akromills storage, delivered in October
-11/26 - Lyft - 67.47 - Local travel - JB
-11/29 - Chipotle - 9.04 - Dinner - Cap1
-11/29 - HYTTOOXF - 64.00 - Retail - Cap1 ------ Lovesense order, returned
-11/29 - HYTTOOXF - 30.00 - Lifestyle - Cap1
-11/29 - Amazon - 38.08 - Lifestyle - JB ------ Catan, tennis balls
-11/29 - Amazon - 14.05 - Lifestyle - JB ------ Bananagram
-11/29 - Amazon - 110.39 - Lifestyle - JB ------ keyboard, basketball
-11/29 - Amazon - 50.21 - Returns - JB -- COMPLETE - true - REIMBURSES AMAZON BULLET - 11/29 - Reimbursement for nu sense bullet
-11/29 - 7 Eleven - 4.83 - Snacks - Cap1
-11/30 - Amazon - 22.04 - Lifestyle - JB ------ file cabinet #2, wall lights, paid in part with amazon balance
-12/1 - Trader Joes - 52.84 - Groceries - Cap1
-12/2 - Whole Foods - 17.50 - Groceries - Cap1
-12/3 - Revature - 1316.92 - Income - Georgetown
-12/3 - Walmart - 12.95 - Returns - JB -- COMPLETE - true - 0 -- walmart plus reimbursement
-12/4 - Fork & Fire - 38.02 - Dinner - Cap1 - Date
-12/4 - Walmart - 9.72 - Lifestyle - Cap1 - Date ------ Preg test
-12/6 - Raising Canes - 15.66 - Cap1
-12/6 - Exxon - 40.88 - Gas - Cap1
-12/6 - Press Waffles - 13.00 - Cap1
-12/6 - Yummylicious - 5.99 - Snacks - Cap1
-12/7 - Mi Cocina - 12.94 - Dinner - Cap1
-12/7 - Trader Joes - 45.65 - Groceries - Cap1
-12/6 - Target - 54.11 - Lifestyle - Cap1 ----- 12/7
-12/7 - Target - 5.41 - Lifestyle - Cap1
-12/8 - Starbucks - 7.25 - Breakfast - Cap1
-12/8 - Amazon - 47.87 - Lifestyle - JB ------ Anti-chew dog spray, basketball for blake
-12/8 - Amazon - 54.94 - Lifestyle - JB ------ Air pump, shelves, volleyball
-12/10 - Trader Joes - 14.05 - Groceries - Cap1
-12/10 - Krispy Kreme - 4.49 - Breakfast - Cap1
-12/10 - DFW Gun Club - 97.94 - Entertainment - Cap1 ----- 12/13
-12/11 - OneStopParking - 45.59 - Travel - Cap1 ------ Parking for Christmas week
-12/11 - Target - 159.82 - Lifestyle - Cap1 ----- 12/13 - Clothes for sure, Car cleaning stuff, plastic tub organizer
-12/12 - Lyft - 6.30 - Local Travel - Cap1 ------ trip to Daniel's
-12/13 - Shell - 23.80 - Groceries - Cap1 ------ drinks for Daniel's party
-12/13 - Taco Bell - 8.74 - Dinner - Cap1
-12/13 - Trader Joes - 25.91 - Groceries - Cap1
-12/14 - Krispy Kreme - 4.49 - Breakfast - Cap1 ----- 12/17
-12/16 - Chipotle - 11.58 - Dinner - Cap1 ----- 12/18
-12/17 - Revature - 1455.96 - Income - Georgetown --- TRUE
-12/16 - Buffalo Wild Wings - 18.67 - Dinner - JB
-12/18 - Starbucks - 5.25 - Breakfast - Cap1 ----- 12/21
-12/20 - AT&T - 46.02 - Domestic - JB
-12/21 - HYTTOOXF - 59.00 - Returns - Cap1 --- TRUE - REIMBURSES 11/29 LOVSESENSE-- Lovesense order, returned
-12/21 - McDonalds - 8.74 - Breakfast - Cap1
-12/22 - Parking - 3.00 - Local Travel - Cap1
-12/23 - The Counter - 39.14 - Lunch -  Cap1 - Family
-12/23 - SFHT LLC - 198.00 - Health - Cap1 ------ Quest 10 pannel STD test
-12/27 - McDonalds - 15.85 - Breakfast - Cap1
-12/27 - 7 Eleven - 13.34 - Breakfast - Cap1
-12/27 - Trader Joes - 16.43 - Groceries - Cap1
-12/27 - Trader Joes - 20.42 - Groceries - Cap1
-12/27 - Amazon - 36.90 - Lifestyle - JB - Books
-12/28 - Lyft - 70.45 - Travel - JB
-12/28 - Chipotle - 17.09 - Dinner - JB
-12/28 - Shell Oil - 9.93 - Groceries - Cap1
-12/30 - Revature - 1455.97 - Income - Georgetown --- TRUE
-12/31 - Yumilicious - 6.19 - Snacks - Cap1
-1/1/22 - M Line Tower - 2061.81 - Domestic - Georgetown ----- 1/3/22
-1/3/22 - Taco bell - 8.63 - Dinner - Cap1
-1/3/22 - Staples - 8.03 - Misc - Cap1
-1/3/22 - Krispy Kreme - 4.49 - Snacks - Cap1
-1/3/22 - Whole Foods - 62.14 - Groceries - Cap1
-1/4/22 - Trader Joes - 34.66 - Groceries - Cap1
-1/4/22 - CVS - 57.67 - Pharmacy - Cap1
-1/4/22 - Walmart - 97.55 - Groceries - Cap1
-1/4/22 - AAAS Science - 25.00 - Entertainment - Cap1
-1/4/22 - Walmart - 269.54 - Returns - JB --- TRUE - REIMBURSES WALMART MONITOR - 1/7/22 - Refund for extra Walmart Monitor recieved
-1/5/22 - Amazon - 17.75 - Returns - JB --- TRUE - REIMBURSES AMAZON 12/27 - 1/5/22 - Refund for Amz book not received
-1/5/22 - Old Navy - 161.14 - Retail - Cap1
-1/5/22 - Bloomingdales - 32.44 - Retail - Cap1
-1/5/22 - Nordstrom - 172.43 - Retail - Cap1
-1/6/22 - Eighteen Eight Hair Salon - 69.99 - Lifestyle - Cap1
-1/7/22 - Best Buy - 70.35 - Entertainment - Cap1
-1/7/22- Chipotle - 2.98 - Dinner - Cap1
-1/8/22 - Nordstrom - 172.43 - Retail - Cap1 --- TRUE - REIMBURSES AMAZON 12/27 - 1/8/22 - Refund for returned clothes
-1/10/22 - Varsity Energy - 71.65 - Domestic - Georgetown
-1/10/22 - Starbucks - 5.14 - Snacks - Cap1
-1/10/22 - Club Monaco - 90.63 - Retail - Cap1
-1/10/22 - Taco Bell - 8.84 - Dinner - Cap1
-1/10/22 - Trader Joes - 62.74 - Groceries - Cap1
-1/11/22 - Whole Foods - 25.87 - Groceries - Cap1
-1/13/22 - Amazon - 1.08 - Lifestyle - JB ------ Amz Prime
-1/13/22 - Amazon - 123.08 - Amazon - Cap1 ------ Paper towels, mouse, ink, surge protectors
-1/13/22 - Amazon - 167.04 - Amazon - Cap1 ------ End table, wall mount, mini handheld vacuum, pillow, paper
-1/14/22 - Revature - 1458.05 - Income - Georgetown --- TRUE
-1/14/22 - Velvet Taco - 18.11 - Dinner - Cap1 ----- 1/17/22
-1/15/22 - The Original Pancake House - 11.97 - Breakfast - Cap1 ----- 1/17/22
-1/16/22 - Whole Foods - 24.89 - Groceries - Cap1
-1/16/22  - Amazon - 43.29 - Returns - JB --- TRUE - REIMBURSES AMAZON 12/27 - 1/16/22 - Refund for Amz Cheap handheld vacuum
-1/16/22 - Amazon - 17.48 - Lifestyle - Amazon ------- AC/DC to car plug, heal protector sticks
-1/17/22 - Amazon - 24.88 - Lifestyle - Amazon ------- Combs, drink Mixer
-1/16/22 - Coal Vines - 27.27 - Lunch - Cap1 ----- 1/17/22
-1/16/22 - Wave Wash - 12.00 - Car - Cap1
-1/17/22 - Lyft - 4.99 - Local Travel - JB
-1/17/22 - Lyft - 7.82 - Local Travel - JB
-1/17/22 - Jaxon Beer Garden - 32.05 - Local Travel - Cap1
-1/17/22 - Spotify - 12.99 - Entertainment - Cap1 ----- 1/18/22
-1/17/22 - Trader Joes - 37.17 - Groceries - Cap1
-1/19/22 - Trader Joes - 18.55 - Groceries - Cap1
-1/22/22 - AT&T - 46.02 - Domestic - JB
-1/22/22 - Taco Bell - 8.84 - Dinner - Cap1
-1/23/22 - Whole Foods - 51.03 - Groceries - Cap1
-1/24/22 - Trader Joes - 41.52 - Groceries - Cap1
-1/26/22 - Target - 119.43 - Lifestyle - Cap1 ----- 1/28/22 - Clothes for sure, Car cleaning stuff, plastic tub organizer
-1/26/22 - Taco Bell - 8.95 - Dinner - Cap1
-1/27/22 - Perot Museum - 40.00 - Entertainment - Cap1 - DATE
-1/27/22 - North Italia - 50.38 - Dinner - Cap1 - DATE
-1/28/22 - Shell - 4.63 - Snacks - Cap1
-1/28/22 - Revature - 1458.04 - Income - Georgetown --- TRUE
-1/30/22 - Will Call - 90.00 - Dinner - Cap1
-1/30/22 - Lyft - 11.37 - Local Travel - JB ----- 2/1/22 - To and From will call with Cade
-1/30/22 - Venmo - 40.00 - Income - Venmo Balance --- REIMBURSES ABOVE - TRUE -- Cade payment for dinner
-1/31/22 - Sephora - 50.00 - Gift - Cap1 ----- 2/2/22 - Hayden Bday present
-2/1/22 - Lowes - 8.94 - Groceries - Cap1
-2/1/22 - Trader Joes - 27.78 - Groceries - Cap1
-2/1/22 - M Line Tower - 2054.21 - Domestic - Georgetown
-2/4/22 - Trader Joes - 38.57 - Groceries - Cap1
-2/4/22 - Andres Neighbor - 30.00 - Dinner - Venmo
-2/5/22 - American Airlines - 390.21 - Travel - American
-2/5/22 - SMU Parking - 9.00 - Local Travel - American
-2/5/22 - Whole Foods - 7.51 - Groceries - Cap1
-2/5/22 - Walmart - 17.23 - Groceries - Cap1
-2/5/22 - Blue Chew - 26.70 - Pharmacy - Cap1
-2/6/22 - Macy's - 85.25 - Retail - American
-2/6/22 - Chipotle - 11.31 - Lunch - American
-2/7/22 - Whole Foods - 8.77 - Groceries - American
-2/7/22 - Starbucks - 4.60 - Breakfast - American
-2/7/22 - Chic Fil A - 6.81 - Lunch - Cap1
-2/8/22 - Trader Joes - 25.07 - Groceries - American
-2/8/22  - MLine Tower - 20.00 - Domestic - Georgetown
-2/9/22 - Whole Foods - 10.83 - Groceries - American
-2/11/22 - Krispy Kreme - 4.49 - Breakfast - American
-2/11/22 - Target - 4.32 - Groceries - American
-2/11/22 - Post Office - 11.60 - Misc - American
-2/11/22 - Taco Bell - 9.28 - Dinner - American
-2/11/22 - Revature - 1458.05 - Income - Georgetown --- TRUE
-2/14/22 - Terry Black's - 18.90 - Dinner - American
-2/14/22 - Hooters's - 19.30 - Dinner - American
-2/14/22 - Lyft - 17.98 - Local Travel - JB ------ To and back deep ellum, Cade
-2/14/22 - Starbucks - 9.20 - Snacks - American - Date
-2/14/22 - Target - 5.94 - Groceries - American
-2/15/22 - Yumilicious - 10.61 - Snacks - American - Date
-2/16/22 - Starbucks - 9.20 - Snacks - American
-2/16/22 - Trader Joes - 57.15 - Groceries - American ------ Milk, Juice, turkey, burger, heavy cream
-2/16/22 - Canes - 14.82 - Lunch - American
-2/17/22 - Whole Foods - 12.33 - Groceries - American
-2/17/22 - DFW Gun Club - 81.19 - Entertainment - American
-2/17/22 - Burger King - 5.39 - Lunch - American
-2/18/22 - The Henry - 43.97 - Dinner - American
+4/1/22 - M Line Tower - 2050.22 - Domestic - Georgetown
+4/1/22 - Parking - 1.50 - Local Travel - American
+4/1/22 - Dallas Tax County - 202.77 - Car - Cap1
+4/1/22 - Haywire - 40.52 - Dinner - American
+4/1/22 - Yumilicious - 9.01 - Snacks - American
+4/2/22 - Whole Foods - 27.45 - Groceries - American
+4/2/22 - WalMart - 16.57 - Groceries - American
+4/2/22 - WalMart - 4.78 - Groceries - American
+4/4/22 - Taco Bell - 5.68 - Dinner - American
+4/6/22 - Whole Foods - 10.34 - Groceries - American
+4/6/22 - Whole Foods - 5.99 - Groceries - American
+4/6/22 - Oreilly Autoparts - 31.70 - Local Travel - American ------ License plate kit
+4/6/22 - Yumilicious - 4.73 - Snacks - American
+4/8/22 - Trader Joes - 26.23 - Groceries - American
+4/9/22 - McDonalds - 8.85 - Breakfast - American
+4/9/22 - Revature - 2187.07 - Income - Georgetown --- TRUE
+4/9/22 - American Airlines - 339.20 - Travel - American - Dad ----- Mother's day to LA, round trip
+4/11/22 - Starbucks - 8.66 - Snacks - American - Date
+4/11/22 - Krispy Kreme - 4.49 - Breakfast - American
+4/11/22 - Varsity Energy - 85.09 - Domestic - Georgetown
+4/12/22 - Nordstrom Rack - 101.89 - Lifestyle - American ------ Shorts, Breezer shirt, discounted 54.36 (from 156.26) for sweater return
+4/12/22 - Haywire - 29.78 - Dinner - American
+4/12/22 - Haywire - 12.99 - Dinner - American ------ Mule drink at bar
+4/12/22 - FS Enthuware - 10.74 - Education - American ------ Java course prep
+4/13/22 - Krispy Kreme - 4.57 - Breakfast - American
+4/13/22 - Comet Cleaners - 27.21 - Lifestyle - American
+4/17/22 - Coachella - 15.22 - Snacks - American ------ Beer #1
+4/17/22 - Coachella - 15.22 - Snacks - American ------ Beer #2
+4/17/22 - CVS - 49.74 - Pharmacy - American - Dad
+4/18/22 - Spotify - 12.99 - Entertainment - Cap1
+4/18/22 - Venmo - 6.50 - Reimbursement - Venmo --- TRUE - ABOVE -- Malcolm venmo for spotify
+4/20/22 - Walmart - 6.39 - Groceries - American
+4/20/22 - Krispy Kreme - 4.57 - Breakfast - American
+4/21/22 - Trader Joes - 48.76 - Groceries - American
+4/21/22 - Amazon - 40.00 - Lifestyle - Parents CC
+4/22/22 - Taco Bell - 6.26 - Dinner - American
+4/22/22 - Revature - 1458.05 - Income - Georgetown --- TRUE
+4/22/22 - Trader Joes - 34.73 - Groceries - American
+4/22/22 - Whole Foods - 21.00 - Groceries - American
+4/24/22 - Il bracco - 26.82 - Lunch - American
+4/24/22 - C Sensation - 45.45 - Lifeystle - American
+4/26/22 - Joe Leo - 20.15 - Lunch - American
+4/26/22 - Eighteen Eight - 104.79 - Lifestyle - American
+4/28/22 - Krispy Kreme - 4.49 - Breakfast - American
+4/28/22 - Walmart - 10.06 - Groceries - American
+4/28/22 - Whole Foods - 19.40 - Groceries - American
+4/29/22 - The Studio at the Fact - 9.00 - Entertainment - American
+4/29/22 - Taco Bell - 4.12 - Dinner - American
+4/29/22 - CVS - 9.78 - Pharmacy - American - Dad -- TRUE - CVS_4/17/22 - 4/29/22 - Reimbursement for extra ALoe I bought
+4/30/22 - Chipotle - 9.15 - Dinner - American

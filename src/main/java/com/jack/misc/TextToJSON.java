@@ -36,6 +36,7 @@ public class TextToJSON {
 	}
 	
 	private static String fileName = "src/main/resources/dataIn.txt";
+	private static String outFile = "src/main/resources/dataOut.txt";
 		
 	/* METHODS */
 	public void readFile() {
@@ -116,7 +117,6 @@ public class TextToJSON {
 		
 		System.out.println("Size of transactions to write: " + vals.size());
 		
-		String outFile = "src/main/resources/dataOut.txt";
 		System.out.println("\nWriting to: "+outFile);
 		
 		File out = new File(outFile);

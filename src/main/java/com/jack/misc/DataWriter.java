@@ -4,11 +4,21 @@ public class DataWriter {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		TextToJSON j = new TextToJSON();
-		//j.readFile();
 		
-		String file = "C:\\Users\\jack\\source\\repos\\Web_Dev\\02-Personal_Repos\\trackerapp-frontend\\src\\resources\\svg\\double_plus.svg";
-		SVGToReactFormat.convert(file);
+		String file = args[1];
+		
+		int process = Integer.parseInt(args[0]);
+		
+		switch(process) {
+		case 1:
+			TextToJSON j = new TextToJSON();
+			j.readFile();
+			break;
+		case 2:
+			SVGToReactFormat.convert(file);
+			break;
+		}
+		//END SWITCH
 		
 	}
 

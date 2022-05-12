@@ -70,7 +70,9 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 			+ "(\r\n"
 			+ "SELECT DISTINCT t2.VENDOR AS v2, t2.category AS cat \r\n"
 			+ "FROM TRANSACTIONS t2 \r\n"
-			+ "WHERE t2.IS_INCOME =TRUE\r\n"
+			+ "WHERE t2.IS_INCOME =TRUE AND \r\n"
+			+ "t2.purchase_date >= :start AND \r\n"
+			+ "t2.purchase_date < :end \r\n"
 			+ ") b ON a.v1=b.v2 GROUP BY v1 ORDER BY value DESC", nativeQuery=true)
 	public List<Map<String, Object>> findIncomeAggregatedByVendorAndCategories(
 			@Param("start") LocalDate from, @Param("end") LocalDate to);
@@ -92,7 +94,9 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 			+ "(\r\n"
 			+ "SELECT DISTINCT t2.CATEGORY AS c2, t2.BOUGHT_FOR \r\n"
 			+ "FROM TRANSACTIONS t2 \r\n"
-			+ "WHERE t2.IS_INCOME =false\r\n"
+			+ "WHERE t2.IS_INCOME =false AND \r\n"
+			+ "t2.purchase_date >= :start AND \r\n"
+			+ "t2.purchase_date < :end \r\n"
 			+ ") b ON a.c1=b.c2 GROUP BY c1 ORDER BY value DESC", nativeQuery=true)
 	public List<Map<String, Object>> findExpensesAggregatedByCategoryAndBoughtFor(
 			@Param("start") LocalDate from, @Param("end") LocalDate to);
