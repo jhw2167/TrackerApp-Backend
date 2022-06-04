@@ -216,12 +216,26 @@ public class TransactionController {
 		return rsp;
 	}
 	
+	
 	/*
-	 * 
+	 * Non-restful, need a method for mass deletion in case of impropper additions
 	 * 
 	 */
-	
-	
-	
-
+	@PostMapping(value="/deleteAll")
+	public ResponseEntity<String> deleteTransactions(@RequestBody final List<Long> ids) 
+	{
+		StringBuilder s = new StringBuilder();
+		for(Long id : ids) 
+		{
+			try {
+				s.append( deleteTransaction(id).getBody() );
+			} catch (Exception e) {
+				s.append("Error deleting id " + id + ", may not exist");
+			}
+			s.append("\n");
+		}
+		ResponseEntity<String> rsp = new ResponseEntity<>(s.toString(), HttpStatus.OK);
+		return rsp;
+	}
 }
+//END TRANSACTION CONTROLLER

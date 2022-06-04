@@ -35,8 +35,8 @@ public class TextToJSON {
 		terms.add("notes");
 	}
 	
-	private static String fileName = "target/classes/dataIn.txt";
-	private static String outFile = "target/classes/dataOut.txt";
+	private static String fileName = "src/main/resources/dataIn.txt";
+	private static String outFile = "src/main/resources/dataOut.txt";
 		
 	/* METHODS */
 	public void readFile() {
