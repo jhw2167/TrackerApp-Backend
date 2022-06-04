@@ -23,3 +23,5 @@
 hs_err_pid*
 
 #other files
+src/main/resources/*
+target/classes/*
