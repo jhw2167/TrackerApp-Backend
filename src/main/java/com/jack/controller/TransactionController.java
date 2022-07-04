@@ -5,6 +5,8 @@ package com.jack.controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 //Java Imports
 import java.util.ArrayList;
@@ -12,10 +14,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 //Project Imports
 import com.jack.model.*;
 import com.jack.service.*;
@@ -40,6 +46,14 @@ public class TransactionController {
 	/* State Variables */
 	TransactionService ts;		//autowired with spring
 	VendorService vs;			//auto
+	
+	/* Static variables */
+	static final ObjectMapper MAPPER = new ObjectMapper();
+	static {
+		MAPPER.registerModule(new JavaTimeModule());
+		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		MAPPER.setDateFormat(df);
+	}
 	
 	@Autowired
 	TransactionController(TransactionService ts, VendorService vs) {
@@ -198,6 +212,35 @@ public class TransactionController {
 	/* PUT METHODS */
 	
 	/* PATCH METHODS */
+	
+	//Patch single transaction entry
+	@PatchMapping
+	public ResponseEntity<String> patchTransactions(@RequestBody final List<Transaction> tx)
+	{
+		StringBuilder body = new StringBuilder("Patched Transactions: \n");
+		HttpStatus status = HttpStatus.OK;
+		List<Transaction> refined = new ArrayList<>();
+		try {
+			tx.forEach( (t) -> refined.add(ts.updateTransaction(t)) );
+		} catch(ResourceNotFoundException e) {
+			body = new StringBuilder(e.getMessage());
+			body.append("\n\nTransactions successfully patched: \n");
+			status = HttpStatus.NOT_FOUND;
+		}
+		
+		for(Transaction t : refined ) {
+			try {
+				body.append(MAPPER.writeValueAsString(t) + "\n");
+			} catch (JsonProcessingException e) {
+				System.out.println(e);
+				body.append("Error converting transaction to JSON with id: " + t.getTId());
+			}
+		}
+		
+		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), status);
+		return rsp;
+	}
+	
 	
 	/* DELETE METHODS */
 	

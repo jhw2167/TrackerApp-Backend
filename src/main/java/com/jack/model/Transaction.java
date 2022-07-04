@@ -49,6 +49,7 @@ public class Transaction {
 	/* PERSISTED  STATE VARIABLES */
 
 	@Id
+	@JsonProperty("tid")
 	private long tId;
 	
 	@Column(columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
@@ -127,6 +128,19 @@ public class Transaction {
 		this.notes = t.notes;
 	}
 
+	public void updateData(Transaction t) {
+		this.setAmount(t.getAmount());
+		this.setBoughtFor(t.getBoughtFor());
+		this.setCategory(t.getCategory());
+		this.setIncome(t.isIncome());
+		this.setNotes(t.getNotes());
+		this.setPayMethod(t.getPayMethod());
+		this.setPayStatus(t.getPayStatus());
+		this.setPurchaseDate(t.getPurchaseDate());
+		this.setPostedDate(t.getPostedDate());
+		this.setReimburses(t.getReimburses());
+		this.setVendor(t.getVendor());
+	}
 	/* END CONSTRUCTORS */
 
 	public void settId(long tId) {

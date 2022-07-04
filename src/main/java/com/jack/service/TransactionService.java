@@ -7,8 +7,10 @@ import java.util.ArrayList;
 //Java Imports
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 //Spring Imports
@@ -130,5 +132,14 @@ public class TransactionService
 		repo.deleteById(id);		
 	}
 	
+	public Transaction updateTransaction(Transaction tx) throws ResourceNotFoundException {
+		System.out.println("Attempting to save: " + tx);
+		if(!repo.existsById(tx.getTId()))
+			throw new ResourceNotFoundException("No Transaction found with ID: " + tx.getTId());
+		
+		//old.get().updateData(tx);
+		//return old.get();
+		return repo.save(tx);
+	}
 }
 //END CLASS TRANSACTIONSERVICE
