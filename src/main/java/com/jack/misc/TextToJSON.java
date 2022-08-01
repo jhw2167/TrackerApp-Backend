@@ -37,7 +37,16 @@ public class TextToJSON {
 	
 	private static String fileName = "src/main/resources/dataIn.txt";
 	private static String outFile = "src/main/resources/dataOut.txt";
-		
+	
+	public TextToJSON() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public TextToJSON(String folderName) {
+		this.fileName=folderName + "\\dataIn.txt";
+		this.outFile=folderName + "\\dataOut.txt";
+	}
+	
 	/* METHODS */
 	public void readFile() {
 		

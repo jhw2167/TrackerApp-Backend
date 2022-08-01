@@ -32,7 +32,7 @@ public interface VendorRepo extends JpaRepository<Vendor, Long>
 	public Vendor findByVendor(String vendor);
 	
 	//find all that partially match name
-	@Query(value="SELECT * FROM VENDORS v WHERE v.vendor LIKE :name", nativeQuery=true)
+	@Query(value="SELECT * FROM VENDORS v WHERE v.vendor LIKE UPPER(:name)", nativeQuery=true)
 	public List<Vendor> findAllLikeVendorName(@Param("name") String name);
 	
 }

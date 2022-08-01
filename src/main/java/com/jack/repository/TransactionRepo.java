@@ -52,7 +52,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	
 	
 	//find all that partially match name
-	@Query(value="SELECT * FROM TRANSACTIONS t WHERE t.vendor LIKE :name", nativeQuery=true)
+	@Query(value="SELECT * FROM TRANSACTIONS t WHERE t.vendor LIKE UPPER(:name)", nativeQuery=true)
 	public List<Transaction> findAllLikeVendorName(@Param("name") String name);
 
 	
