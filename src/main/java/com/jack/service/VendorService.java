@@ -45,7 +45,7 @@ public class VendorService
 	}
 	
 	public List<Vendor> searchVendors(String vendorName) {
-		return vr.findAllLikeVendorName(vendorName + "%");	//adding % to SQL like query finds all partial matches
+		return vr.findAllLikeVendorName("%" + vendorName + "%");	//adding % to SQL like query finds all partial matches
 	}
 	
 	

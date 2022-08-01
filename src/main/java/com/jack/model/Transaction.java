@@ -74,7 +74,7 @@ public class Transaction {
 	private String payStatus;
 	
 	@Column(columnDefinition="BOOLEAN DEFAULT FALSE")
-	@JsonProperty
+	@JsonProperty("income")
 	private boolean isIncome;
 	
 	@Column(columnDefinition="INTEGER REFERENCES transactions(t_id) DEFAULT 0")

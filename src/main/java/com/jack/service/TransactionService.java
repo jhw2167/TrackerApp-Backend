@@ -73,7 +73,7 @@ public class TransactionService
 	}
 	
 	public List<Transaction> searchVendors(String name) {
-		return repo.findAllLikeVendorName(name + "%");
+		return repo.findAllLikeVendorName("%" + name + "%");
 	}
 	
 	public long countByPurchaseDate(LocalDate purchaseDate) {		
