@@ -213,7 +213,7 @@ public class TransactionController {
 	
 	/* PATCH METHODS */
 	
-	//Patch single transaction entry
+	//Patch a list of transactions entry
 	@PatchMapping
 	public ResponseEntity<String> patchTransactions(@RequestBody final List<Transaction> tx)
 	{
@@ -240,6 +240,8 @@ public class TransactionController {
 		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), status);
 		return rsp;
 	}
+	
+	
 	
 	
 	/* DELETE METHODS */
