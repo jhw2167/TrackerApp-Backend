@@ -52,7 +52,7 @@ public class VendorService
 	//get vendor by id
 	public Vendor getVendorByID(String cc_id, String cc) {
 		Optional<VendorMapper> vm =  vmr.findVendorByID(cc_id, cc);
-		if(vm.isEmpty())
+		if(!vm.isPresent())
 			return null;
 		
 		//set values in vendor
