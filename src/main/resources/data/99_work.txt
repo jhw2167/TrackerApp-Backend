@@ -1,0 +1,14 @@
+
+export const TRANS_DATA_ = "tId"; 
+export const TRANS_DATA_ = "purchaseDate"; 
+export const TRANS_DATA_ = "amount"; 
+export const TRANS_DATA_ = "vendor"; 
+export const TRANS_DATA_ = "category"; 
+export const TRANS_DATA_ = "boughtFor"; 
+export const TRANS_DATA_ = "payMethod"; 
+export const TRANS_DATA_ = "payStatus"; 
+export const TRANS_DATA_ = "isIncome"; 
+export const TRANS_DATA_ = "reimburses"; 
+export const TRANS_DATA_ = "postedDate"; 
+export const TRANS_DATA_ = "notes";
+
