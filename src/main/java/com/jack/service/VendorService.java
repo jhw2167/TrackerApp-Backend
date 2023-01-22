@@ -51,7 +51,7 @@ public class VendorService
 	
 	//get vendor by id
 	public Vendor getVendorByID(String cc_id, String cc) {
-		Optional<VendorMapper> vm =  vmr.findVendorByID(cc_id, cc);
+		Optional<VendorNames> vm =  vmr.findVendorByID(cc_id, cc);
 		if(!vm.isPresent())
 			return null;
 		
@@ -77,7 +77,7 @@ public class VendorService
 	 *  there is a foreign key constraint on vendorMapper.vendors -> vendor.vendors
 	 */
 	public Vendor saveVendor(final Vendor v) {
-		VendorMapper saved = null;
+		VendorNames saved = null;
 		if(vr.findByVendor(v.getVendor()) != null) {
 			vr.save(v);
 		}
@@ -87,7 +87,7 @@ public class VendorService
 		
 		//now this vendor definitely exists in the table
 		if(v.getCc() != null && v.getCc_id() != null) {
-			saved = vmr.save(new VendorMapper(v));
+			saved = vmr.save(new VendorNames(v));
 			Vendor internalVendor = saved.getVendor();
 			internalVendor.setCc(saved.getCreditCard());
 			internalVendor.setCc_id(saved.getCcId());

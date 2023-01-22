@@ -21,14 +21,7 @@ import com.jack.model.submodel.VendorKey;
 @Entity @Table(name="vendors")
 @Data
 public class Vendor {
-	
-	
-	@Transient	//vendor's id as provided by the credit card (obtained from plaid)
-	private String cc_id; 
-	
-	@Transient	//credit card this cc_id is matched to/ e.g. 'Barclay's Jet Blue', 'Barclay's American'
-	private String cc; 
-	
+
 	@Id
 	private String vendor;
 	
@@ -49,8 +42,6 @@ public class Vendor {
 	
 	public Vendor(String cc_id, String cc, Vendor v) {
 		super();
-		this.cc_id = cc_id;
-		this.cc = cc;
 		this.vendor = v.vendor;
 		this.amount = v.amount;
 		this.category = v.category;

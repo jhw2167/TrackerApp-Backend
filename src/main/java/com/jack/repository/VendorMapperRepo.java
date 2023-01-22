@@ -1,18 +1,14 @@
 package com.jack.repository;
 
 
-import java.sql.Date;
-import java.time.LocalDate;
 //JAVA Imports
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+        import java.util.Optional;
 
 //Spring Imports
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
-import org.springframework.data.jpa.repository.JpaRepository;
+        import org.springframework.data.jpa.repository.JpaRepository;
 
 //Project Imports
 import com.jack.model.*;
@@ -23,20 +19,20 @@ import com.jack.model.*;
  * - 
  */
 
-public interface VendorMapperRepo extends JpaRepository<VendorMapper, Long>
+public interface VendorMapperRepo extends JpaRepository<VendorNames, Long>
 {
 	
 	//simple find all transactions
-	public List<VendorMapper> findAll();
+	public List<VendorNames> findAll();
 	
 	//find all that partially match name
 	@Query(value="SELECT * FROM VENDOR_MAPPER v WHERE v.local_vendor_name LIKE :name", nativeQuery=true)
-	public List<VendorMapper> findAllLikeVendorName(@Param("name") String name);
+	public List<VendorNames> findAllLikeVendorName(@Param("name") String name);
 	
 	@Query(value="SELECT * FROM VENDOR_MAPPER v "
 			+ "WHERE v.cc_id=:cc_id AND "
 			+ "v.credit_card=:credit_card", nativeQuery=true)
-	public Optional<VendorMapper> findVendorByID(@Param("cc_id") String cc_id, @Param("credit_card") String creditCard);
+	public Optional<VendorNames> findVendorByID(@Param("cc_id") String cc_id, @Param("credit_card") String creditCard);
 	
 	
 }
