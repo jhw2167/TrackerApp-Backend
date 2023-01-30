@@ -7,10 +7,10 @@
 
 SELECT DISTINCT vendor FROM TRANSACTIONS T;
 
+DROP VIEW IF exists cat_select;
 DROP VIEW IF exists inc_vends cascade;
 DROP VIEW IF exists no_inc_vends;
 DROP VIEW IF exists BASE_INC;
-DROP VIEW IF exists cat_select;
 DROP TABLE IF exists cs2 cascade;
 
 CREATE VIEW base_inc AS SELECT DISTINCT vendor AS v, 0 AS amt, 0 AS no_inc, 0 AS inc FROM TRANSACTIONS T;
@@ -133,6 +133,8 @@ INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR, category, bought_
 VALUES 					(1, '2022-03-15', 		0, 		'7 Eleven',		'none', 'PERSONAL', 'none',		'COMPLETE', FALSE, 		0,			'2000-01-01', ''	 );
 
 DELETE FROM TRANSACTIONS WHERE T_ID =1;
+
+
 --- CREATE TRIGGER FOR ADJUSTING VENDORS TABLE ---
 
 	-- first write function
@@ -169,18 +171,13 @@ CREATE FUNCTION update_vendors()
 			FROM TRANSACTIONS T 
 			ORDER BY timestamp_
 			DESC LIMIT 1;
-		
-	-- DROP PREVIOUS VIEWS	
-		DROP VIEW IF EXISTS upd_vendor CASCADE;
-		DROP VIEW IF EXISTS BASE_INC cascade;
-		DROP VIEW  IF EXISTS cat_select cascade;
-		DROP VIEW  IF EXISTS inc_vends cascade;
-		DROP VIEW  IF EXISTS no_inc_vends cascade;
 
+		
 	-- GET BASE VALUES
 		CREATE VIEW base_inc AS SELECT DISTINCT vendor AS v, 0 AS amt, 0 AS no_inc, 0 AS inc
 		FROM TRANSACTIONS T
 		WHERE VENDOR = (SELECT val FROM upd);
+	
 	
 	-- GET CATEGORIES 
 	CREATE VIEW cat_select AS SELECT * FROM (
@@ -196,6 +193,7 @@ CREATE FUNCTION update_vendors()
 		) outerSubQ
 		WHERE outerSubQ.rn = 1
 		LIMIT 1;
+	
 	
 		-- CREATE VIEW OF INCOME VENDORS AND NON-INCOME VENDORS 
 		CREATE VIEW inc_vends AS
@@ -261,6 +259,17 @@ CREATE FUNCTION update_vendors()
 	END
 	$inner$ language plpgsql;
 		RETURN NULL;
+	
+	
+	-- DROP VIEWS	
+		DROP VIEW IF EXISTS BASE_INC cascade;
+		DROP VIEW  IF EXISTS cat_select cascade;
+		DROP VIEW  IF EXISTS no_inc_vends cascade;
+		DROP VIEW  IF EXISTS inc_vends cascade;
+		DROP VIEW IF EXISTS upd_vendor CASCADE;
+		DROP VIEW IF EXISTS upd CASCADE;
+		DROP VIEW  IF EXISTS v3 cascade;
+	
 	END
 	$$ LANGUAGE plpgsql;
 

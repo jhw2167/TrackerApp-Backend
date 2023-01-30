@@ -196,8 +196,8 @@ public class TransactionController {
 	{
 		List<Transaction> refined = new ArrayList<>();
 		tx.forEach( (t) -> {
-			refined.add(
-						ts.saveTransaction( new Transaction(t,
+			vs.saveVendor(new Vendor(t.getVendor(), 0d, t.getCategory(), t.isIncome()));
+			refined.add(ts.saveTransaction( new Transaction(t,
 											ts.countByPurchaseDate(
 											t.getPurchaseDate() ) ) ) ); } ); 
 		

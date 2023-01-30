@@ -27,14 +27,14 @@ public class VendorService
 	/* State Variables */
 	
 	VendorRepo vr;
-	VendorMapperRepo vmr;
+	VendorNamesRepo vnr;
 	
 	//END STATE VARS
 	
 	@Autowired
-	VendorService(VendorRepo vendorRepo, VendorMapperRepo vendorMapperRepo) {
+	VendorService(VendorRepo vendorRepo, VendorNamesRepo vendorMapperRepo) {
 		this.vr = vendorRepo;
-		this.vmr = vendorMapperRepo;
+		this.vnr = vendorMapperRepo;
 	}
 	
 	/* UTILITY METHODS */
@@ -47,20 +47,15 @@ public class VendorService
 	public List<Vendor> searchVendors(String vendorName) {
 		return vr.findAllLikeVendorName("%" + vendorName + "%");	//adding % to SQL like query finds all partial matches
 	}
-	
+
+	public Optional<Vendor> checkVendorExists(String vendorName) {
+		List<Vendor> v = searchVendors(vendorName);
+		return Optional.ofNullable( ( v.isEmpty() ) ? null : v.get(0) );
+	}
 	
 	//get vendor by id
-	public Vendor getVendorByID(String cc_id, String cc) {
-		Optional<VendorNames> vm =  vmr.findVendorByID(cc_id, cc);
-		if(!vm.isPresent())
-			return null;
-		
-		//set values in vendor
-		Vendor internalVendor = vm.get().getVendor();
-		internalVendor.setCc(vm.get().getCreditCard());
-		internalVendor.setCc_id(vm.get().getCcId());
-		
-		return vm.get().getVendor();
+	public Vendor getVendorByID(String cc_id) {
+		return null;
 	}
 	//END GET VENDOR BY ID
 	
@@ -68,32 +63,18 @@ public class VendorService
 	 * POST METHODS 
 	 * 
 	 */
-	
-	/*
-	 * 	saveVendor - typically used to save vendor-mapper value for auto-
-	 * 	generating front-end values from Plaid vendors
-	 * 
-	 * 	We attempt to save vendor to vendors table first because
-	 *  there is a foreign key constraint on vendorMapper.vendors -> vendor.vendors
+
+	/**
+	 * Checks to see a vendor exists before saving it to DB
+	 * Returns searched vendor if found in the table
+	 * @param v
+	 * @return Vendor
+	 *
 	 */
 	public Vendor saveVendor(final Vendor v) {
-		VendorNames saved = null;
-		if(vr.findByVendor(v.getVendor()) != null) {
-			vr.save(v);
-		}
-		//Foreign key constraint on  VendorMapper.localVendorName -> vendors.vendor
-		//which means vendor needs to be saved first
-					
-		
-		//now this vendor definitely exists in the table
-		if(v.getCc() != null && v.getCc_id() != null) {
-			saved = vmr.save(new VendorNames(v));
-			Vendor internalVendor = saved.getVendor();
-			internalVendor.setCc(saved.getCreditCard());
-			internalVendor.setCc_id(saved.getCcId());
-		}
-		 return saved.getVendor();					
+		Optional<Vendor> searchedVendor = checkVendorExists(v.getVendor());
+		return (searchedVendor.isPresent()) ? searchedVendor.get() : vr.save(v);
 	}
-	
+
 }
 //END CLASS TRANSACTIONSERVICE

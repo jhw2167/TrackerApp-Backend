@@ -42,8 +42,6 @@ ALTER TABLE TRANSACTIONS
 DROP COLUMN temp_pm, DROP COLUMN TEMP_vend CASCADE;
 
 
--- Vendor 
-
 
 -- #########	#########	########	#########	########	#########	########
 
@@ -100,8 +98,35 @@ SELECT DISTINCT PAY_METHOD FROM TRANSACTIONS T
 -- #########	#########	########	#########	########	#########	########
 
 
+---------------- VENDORS UPDATES ----------------
+
+SELECT * FROM VENDORS V
+DELETE FROM VENDORS 
+WHERE vendor LIKE 'TRADER B%';
+
+
+SELECT * FROM VENDORS V 
+WHERE vendor LIKE 'TERRY%';
+
+DELETE FROM VENDORS V
+WHERE amount=33.05
+
+
+-- #########	#########	########	#########	########	#########	########
+
 
 ---------------- TRANSACTIONS UPDATES ----------------
+
+DELETE FROM TRANSACTIONS T
+WHERE AMOUNT =99999
+
+SELECT * FROM TRANSACTIONS T 
+WHERE vendor LIKE 'TRADER%';
+
+UPDATE TRANSACTIONS 
+SET vendor = 'TERRY BLACKS'
+WHERE vendor LIKE 'TERRY BLACK%'; 
+
 
 UPDATE TRANSACTIONS 
 SET PAY_METHOD = 'AMERICAN',
@@ -114,6 +139,7 @@ WHERE T_ID = 20221206001;
 
 SELECT * FROM TRANSACTIONS T 
 WHERE vendor LIKE 'MAN%';
+
 
 SELECT * FROM TRANSACTIONS T 
 WHERE T_ID = 0;

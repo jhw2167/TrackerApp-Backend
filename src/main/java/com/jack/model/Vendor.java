@@ -40,13 +40,29 @@ public class Vendor {
 		super();		//spring needs default constructor
 	}
 	
-	public Vendor(String cc_id, String cc, Vendor v) {
+	public Vendor(Vendor v) {
 		super();
 		this.vendor = v.vendor;
 		this.amount = v.amount;
 		this.category = v.category;
 		this.isTypicallyIncome = v.isTypicallyIncome;
-	} 
+	}
+
+	public Vendor(String v) {
+		super();
+		setVendor(v.replace("'", "").toUpperCase());
+		setAmount(0);
+		setCategory("MISC");
+		setTypicallyIncome(false);
+	}
+
+	public Vendor(String v, Double a, String c, Boolean inc) {
+		super();
+		setVendor(v.replace("'", "").toUpperCase());
+		setAmount(a);
+		setCategory(c);
+		setTypicallyIncome(inc);
+	}
 	
 	
 	

@@ -116,8 +116,8 @@ public class Transaction {
 		settId(t.purchaseDate.toString(), transOnDate);
 		this.purchaseDate = t.purchaseDate;
 		this.amount = t.amount;
-		this.vendor = t.vendor;
-		
+
+		setVendor(t.vendor);
 		setCategory(t.category);
 		setBoughtFor(t.boughtFor);
 		setPayMethod(t.payMethod);
@@ -157,7 +157,13 @@ public class Transaction {
 		this.tId = Long.parseLong(id);
 		//System.out.println("Set id is: " + tId);
 	}
-	
+
+	/*
+		- Removes all instance of ' from vendor and sends to upper case
+	 */
+	private void setVendor(String vendor2) {
+		this.vendor = vendor2.replace("'", "").toUpperCase();
+	}
 	
 	private void setPostedDate(LocalDate postedDate2) {
 		this.postedDate = postedDate2==null ? this.purchaseDate : postedDate2;		

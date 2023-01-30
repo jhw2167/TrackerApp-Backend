@@ -93,8 +93,8 @@ public class VendorController {
 	 * @return ResponseEntity<Vendor>
 	 */
 	@RequestMapping(value="/query", params = {"id", "cc"}, method=RequestMethod.GET)
-	public ResponseEntity<Vendor> getVendorByID(@RequestParam final String id, @RequestParam final String cc) {
-		return new ResponseEntity<>(vs.getVendorByID(id, cc), HttpStatus.OK);
+	public ResponseEntity<Vendor> getVendorByID(@RequestParam final String id) {
+		return new ResponseEntity<>(vs.getVendorByID(id), HttpStatus.OK);
 	}
 	//END GET VENDOR SEARCH BY ID
 	

@@ -19,7 +19,7 @@ import com.jack.model.*;
  * - 
  */
 
-public interface VendorMapperRepo extends JpaRepository<VendorNames, Long>
+public interface VendorNamesRepo extends JpaRepository<VendorNames, Long>
 {
 	
 	//simple find all transactions

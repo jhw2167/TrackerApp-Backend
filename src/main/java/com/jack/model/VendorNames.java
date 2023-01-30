@@ -8,7 +8,6 @@ import lombok.Data;
 import com.jack.model.submodel.VendorKey;
 
 @Entity
-@IdClass(VendorKey.class)
 @Table(name="vendor_names")
 @Data 
 public class VendorNames {
@@ -17,7 +16,7 @@ public class VendorNames {
 	@Column(name = "cc_id")
 	private String ccId;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "vendor", referencedColumnName = "vendor")
 	private Vendor vendor;
 
@@ -27,12 +26,9 @@ public class VendorNames {
 		super();
 	}
 	
-	public VendorNames(Vendor v) {
-		super();
-		this.ccId = v.getCc_id();
-		this.vendor = v;
-	}
+
 	//END CONSTRUCTOR BUILD VENDOR_MAPPER FROM VENDOR
+	//May need constructor to build VN from plaid_vendor object
 	
 	
 }
