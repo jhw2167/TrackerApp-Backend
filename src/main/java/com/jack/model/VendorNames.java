@@ -4,8 +4,7 @@ import javax.persistence.*;
 
 import lombok.Data;
 
-//Project imports
-import com.jack.model.submodel.VendorKey;
+
 
 @Entity
 @Table(name="vendor_names")

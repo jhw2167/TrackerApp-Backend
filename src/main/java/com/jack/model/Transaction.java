@@ -26,16 +26,16 @@ import com.jack.service.TransactionService;
  	SQL COL DEFINITIONS:
  
  	tId 			INTEGER 		PRIMARY KEY,
-	purchaseDate 	VARCHAR(12) 	NOT NULL DEFAULT CURRENT_DATE,
+	purchase_date 	VARCHAR(12) 	NOT NULL DEFAULT CURRENT_DATE,
 	amount 			NUMERIC(10, 2) 	NOT NULL DEFAULT '0' CHECK (amount>=0),
 	vendor 			VARCHAR(50) 	REFERENCES vendors(vendor),
 	category		VARCHAR(50)		NOT NULL DEFAULT 'Misc'
-	payMethod 		VARCHAR(50) 	REFERENCES pay_methods(payMethod) NOT NULL DEFAULT 'CASH',
+	pay_method 		VARCHAR(50) 	REFERENCES pay_methods(payMethod) NOT NULL DEFAULT 'CASH',
 	bought_for 		RECIPIENT 		NOT NULL DEFAULT 'PERSONAL',
-	payStatus 		STATUS_TYPE 	NOT NULL DEFAULT 'COMPLETE', 
-	isIncome 		BOOLEAN 		DEFAULT FALSE,
+	pay_status 		STATUS_TYPE 	NOT NULL DEFAULT 'COMPLETE',
+	is_income 		BOOLEAN 		DEFAULT FALSE,
 	reimburses 		INTEGER 		REFERENCES transactions(tId) DEFAULT 0,
-	postedDate 	VARCHAR(12) 	DEFAULT CURRENT_DATE,
+	posted_date 	VARCHAR(12) 	DEFAULT CURRENT_DATE,
 	notes 			VARCHAR(1024) 	DEFAULT NULL
  
  * 

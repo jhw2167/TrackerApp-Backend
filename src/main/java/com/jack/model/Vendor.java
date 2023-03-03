@@ -14,7 +14,6 @@ import lombok.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 //Project imports
 import com.jack.repository.*;
-import com.jack.model.submodel.VendorKey;
 
 
 
