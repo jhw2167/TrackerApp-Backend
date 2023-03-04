@@ -25,3 +25,4 @@ hs_err_pid*
 #other files
 *.properties
 target/*
+tracker_db/*

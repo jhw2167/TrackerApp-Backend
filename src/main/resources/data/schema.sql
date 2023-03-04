@@ -102,6 +102,27 @@ CREATE TABLE transactions (
 	notes VARCHAR(1024) DEFAULT NULL
 );
 
+
+-- User Accounts table
+DROP TABLE IF EXISTS user_accounts
+CREATE TABLE user_accounts (
+u_id VARCHAR not null, auth_token VARCHAR,
+created_date VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE,
+deactivated_date VARCHAR(12), 
+email VARCHAR UNIQUE NOT NULL,
+last_login_date VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE,
+password VARCHAR NOT NULL,
+primary key (u_id)
+)
+
+INSERT INTO USER_ACCOUNTS (user_id, email, password_) VALUES ('20230303JackHenryWelsh@gmail.com', 'JackHenryWelsh@gmail.com', 'password' )
+
+ALTER TABLE USER_ACCOUNTS
+RENAME COLUMN u_id TO user_id;
+
+SELECT * FROM USER_ACCOUNTS; 
+DROP TABLE USER_ACCOUNTS;
+
 -- Queries
 SELECT * FROM SIMPLE_TRANSACTIONS;
 SELECT * FROM PAY_METHODS PM ;
@@ -188,6 +209,11 @@ INSERT INTO TRANSACTIONS (t_id, PURCHASE_DATE, AMOUNT, VENDOR, category, bought_
 
 				
 SELECT * FROM TRANSACTIONS T WHERE VENDOR LIKE 'The%'
+
+
+INSERT INTO USER_ACCOUNTS (user_id, email, password_) VALUES ('20230303JackHenryWelsh@gmail.com', 'JackHenryWelsh@gmail.com', 'password' )
+
+SELECT * FROM user_accounts
 
 --Deletes
 DELETE FROM TRANSACTIONS t WHERE t.t_id IN (20220327000)

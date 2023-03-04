@@ -2,6 +2,7 @@ package com.jack.model;
 
 //Imports
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.jack.model.submodel.TransactionKey;
 import com.jack.utility.Time;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -31,9 +32,9 @@ import java.time.LocalDate;
 public class UserAccount {
 
     @Id
-    @JsonProperty("uid")
-    @Column(name = "u_id", columnDefinition="VARCHAR")
-    private String uId;
+    @JsonProperty("userId")
+    @Column(name = "user_id", columnDefinition="VARCHAR")
+    private String userId;
 
     @Column(name = "created_date", columnDefinition="VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE")
     private LocalDate createdDate;
@@ -44,7 +45,7 @@ public class UserAccount {
     @Column(name = "email", columnDefinition="VARCHAR UNIQUE NOT NULL")
     private String email;
 
-    @Column(name = "password", columnDefinition="VARCHAR NOT NULL")
+    @Column(name = "password_", columnDefinition="VARCHAR NOT NULL")
     private String password;
 
     @Column(name = "last_login_date", columnDefinition="VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE")
@@ -64,7 +65,7 @@ public class UserAccount {
     }
 
     public UserAccount(UserAccount u) {
-        this.uId = setUId(u.createdDate, u.email);
+        this.userId = setUserId(u.createdDate, u.email);
         this.createdDate = u.createdDate;
         this.deactivatedDate = u.deactivatedDate;
         this.email = u.email;
@@ -78,10 +79,27 @@ public class UserAccount {
         - createdDate should be set to "today" if it is ever null
         - this should run after email has been successfully validated
      */
-    public String setUId(LocalDate createdDate, String email) {
+    public String setUserId(LocalDate createdDate, String email) {
         return createdDate.toString() + email;
     }
 
+
+    //END SETTERS
+
+    /* Utility Methods */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        final UserAccount u = (UserAccount) obj;
+        return this.userId.equals(u.getUserId());
+    }
 
 
 }

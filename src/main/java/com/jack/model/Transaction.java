@@ -1,22 +1,21 @@
 package com.jack.model;
 
+//Java imports
 import java.time.LocalDate;
 
 //Spring Imports
-import javax.annotation.Resource;
+
 
 //JPA Imports
 import javax.persistence.*;
-
 import org.springframework.stereotype.Component;
 
 //Lombok Imports
 import lombok.*;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 //Project imports
-import com.jack.repository.*;
-import com.jack.service.TransactionService;
+import com.jack.model.submodel.TransactionKey;
 
 
 /* Transaction model class for holding data in each transaction as read from the database
@@ -44,9 +43,15 @@ import com.jack.service.TransactionService;
 @Data 									//We want lombok to write getters and setters
 @Entity @Table(name="transactions")		//Want JPA to pick it up
 @Component										//We want spring to pick it up
+@IdClass(TransactionKey.class)
 public class Transaction {
 	
 	/* PERSISTED  STATE VARIABLES */
+
+	@Id
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
+	private UserAccount user;
 
 	@Id
 	@JsonProperty("tid")
@@ -85,7 +90,7 @@ public class Transaction {
 	
 	@Column(columnDefinition="VARCHAR(1024) DEFAULT NULL")
 	private String notes;
-	
+
 	//End State Vars
 	//###############################################
 	
