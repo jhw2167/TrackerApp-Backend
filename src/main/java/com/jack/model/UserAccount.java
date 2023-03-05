@@ -2,7 +2,6 @@ package com.jack.model;
 
 //Imports
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.jack.model.submodel.TransactionKey;
 import com.jack.utility.Time;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -26,8 +25,7 @@ import java.time.LocalDate;
 
 
 @Data                                    //We want lombok to write getters and setters
-@Entity
-@Table(name="user_accounts")    		//Want JPA to pick it up
+@Entity @Table(name="user_accounts")    		//Want JPA to pick it up
 @Component                              //We want spring to pick it up
 public class UserAccount {
 

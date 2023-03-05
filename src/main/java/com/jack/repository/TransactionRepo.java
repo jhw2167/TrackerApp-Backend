@@ -28,7 +28,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	public List<Transaction> findAll();
 	
 	//simple find tranasction like id
-	public Transaction findBytId(Long tId);
+	public Transaction findByTrueId(String trueId);
 		
 	
 	//FindAll sorted by date YYYY-MM-DD format

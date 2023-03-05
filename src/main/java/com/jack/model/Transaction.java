@@ -8,6 +8,8 @@ import java.time.LocalDate;
 
 //JPA Imports
 import javax.persistence.*;
+
+import com.jack.utility.General;
 import org.springframework.stereotype.Component;
 
 //Lombok Imports
@@ -15,7 +17,6 @@ import lombok.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 //Project imports
-import com.jack.model.submodel.TransactionKey;
 
 
 /* Transaction model class for holding data in each transaction as read from the database
@@ -43,18 +44,16 @@ import com.jack.model.submodel.TransactionKey;
 @Data 									//We want lombok to write getters and setters
 @Entity @Table(name="transactions")		//Want JPA to pick it up
 @Component										//We want spring to pick it up
-@IdClass(TransactionKey.class)
 public class Transaction {
 	
 	/* PERSISTED  STATE VARIABLES */
-
 	@Id
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
-	private UserAccount user;
+	@Column(name = "true_id", columnDefinition="VARCHAR PRIMARY KEY")
+	@JsonProperty("trueId")
+	private String trueId;
 
-	@Id
 	@JsonProperty("tid")
+	@Column(name="t_id", columnDefinition="INTEGER NOT NULL")
 	private long tId;
 	
 	@Column(columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
@@ -101,6 +100,7 @@ public class Transaction {
 	
 	public Transaction(final Transaction t) {
 		super();
+		this.trueId=t.trueId;
 		this.tId = t.tId;
 		this.purchaseDate = t.purchaseDate;
 		this.amount = t.amount;
@@ -148,11 +148,15 @@ public class Transaction {
 	}
 	/* END CONSTRUCTORS */
 
+	
+	//Setters
+
+	public void setTrueId(String userId, long tid) {
+		int hash = General.mergeHash(userId.hashCode(), new Long(tid).hashCode());
+	}
 	public void settId(long tId) {
 		this.tId = tId;
 	}
-	
-	//Setters
 	public void settId(String _purchaseDate, long transOnDate) {
 		//parse date string into coherent string
 		String date = _purchaseDate.replace("-", "");
@@ -191,6 +195,25 @@ public class Transaction {
 	}
 	
 	//END SETTERS
-	
+
+
+	/* Overrides */
+
+	public int hashCode() {
+		return trueId.hashCode();
+	}
+/*
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
+		final TransactionId tk = (TransactionId) obj;
+		return this.trueId.equals(tk.getTransaction());
+	}*/
 }
 //END CLASS

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
 //Java Imports
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 //Project imports
 import com.jack.repository.*;
 import com.jack.model.*;
+import com.jack.model.submodel.*;
 
 /* Service class for transactions handels all BUSINESS logic and is called from the 
  * controller class
@@ -31,15 +33,15 @@ public class TransactionService
 {
 
 	/* State Variables */
-	
+
+	@Autowired
 	TransactionRepo repo;
+
+	@Autowired
+	TransactionKeyRepo keyRepo;
 	
 	//END STATE VARS
-	
-	@Autowired
-	TransactionService(TransactionRepo repo) {
-		this.repo = repo;
-	}
+
 	
 	/* UTILITY METHODS */
 	
@@ -68,8 +70,12 @@ public class TransactionService
 		return repo.findAllByPurchaseDate(purchaseDate);
 	}
 	
-	public Transaction getTransactionByID(final Long id) {
-		return repo.findBytId(id);
+	public Transaction getTransactionByID(final String userId, final Long tId) {
+		Optional<TransactionKey> tk = keyRepo.findByUserIdAndTid(userId, tId);
+		if(tk.isPresent())
+			return tk.get().getTransaction();
+		else
+			return null; //error stuff
 	}
 	
 	public List<Transaction> searchVendors(String name) {

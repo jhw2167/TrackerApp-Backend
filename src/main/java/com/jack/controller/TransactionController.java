@@ -39,7 +39,7 @@ import com.jack.service.*;
 
 //Combines @Controller and @ResponseBody annotations for a restful project
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/finances/users/{userId}/transactions")
 public class TransactionController {
 	
 	
@@ -98,9 +98,9 @@ public class TransactionController {
 	/**
 	 * @return ResponseEntity<Vendor>
 	 */
-	@RequestMapping(value="/query", params = {"id"}, method=RequestMethod.GET)
-	public ResponseEntity<Transaction> getVendorByID(@RequestParam final long id) {
-		return new ResponseEntity<>(ts.getTransactionByID(id), HttpStatus.OK);
+	@RequestMapping(value="/{tid}", method=RequestMethod.GET)
+	public ResponseEntity<Transaction> getVendorByID(@PathVariable("userId") final String userId, @PathVariable("tid") final long tId) {
+		return new ResponseEntity<>(ts.getTransactionByID(userId, tId), HttpStatus.OK);
 	}
 	//END GET VENDOR SEARCH BY ID
 	

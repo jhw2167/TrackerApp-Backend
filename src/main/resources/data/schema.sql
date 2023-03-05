@@ -88,7 +88,8 @@ description VARCHAR(1023) DEFAULT NULL
 -- DROP and create table vendors
 DROP TABLE IF EXISTS transactions CASCADE;
 CREATE TABLE transactions (
-	t_id INTEGER PRIMARY KEY,
+	true_id VARCHAR PRIMARY KEY,
+	t_id INTEGER NOT NULL,
 	purchase_date VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE,
 	amount NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0),
 	vendor VARCHAR(50) REFERENCES vendors(vendor),
@@ -101,6 +102,46 @@ CREATE TABLE transactions (
 	posted_date VARCHAR(12) DEFAULT CURRENT_DATE,
 	notes VARCHAR(1024) DEFAULT NULL
 );
+
+ALTER TABLE TRANSACTIONS ADD COLUMN true_id VARCHAR NOT NULL DEFAULT '1'
+SELECT * FROM TRANSACTIONS T 
+
+UPDATE TRANSACTIONS t 
+SET true_id=t_id
+
+
+SELECT * 
+  FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+ WHERE TABLE_NAME = 'transactions'
+
+ALTER TABLE TRANSACTIONS DROP CONSTRAINT transactions_pkey
+
+ALTER TABLE TRANSACTIONS DROP CONSTRAINT transactions_reimburses_fkey
+ALTER TABLE TRANSACTIONS ADD FOREIGN KEY 
+(reimburses) REFERENCES transactions(true_id);
+
+ALTER TABLE TRANSACTIONS 
+ADD CONSTRAINT transactions_unique_true_id UNIQUE (true_id);
+
+
+ALTER TABLE TRANSACTIONS ADD COLUMN r2 VARCHAR NOT NULL DEFAULT '1'
+
+UPDATE TRANSACTIONS t 
+SET r2=REIMBURSES 
+
+ALTER TABLE TRANSACTIONS
+DROP COLUMN R2
+
+UPDATE TRANSACTIONS t 
+SET REIMBURSES=r2
+
+ALTER TABLE TRANSACTIONS ADD FOREIGN KEY 
+(reimburses) REFERENCES transactions(true_id);
+
+
+ALTER TABLE TRANSACTIONS
+ADD PRIMARY KEY (true_id);
+
 
 
 -- User Accounts table
@@ -122,6 +163,14 @@ RENAME COLUMN u_id TO user_id;
 
 SELECT * FROM USER_ACCOUNTS; 
 DROP TABLE USER_ACCOUNTS;
+
+alter table transactions add column user_id VARCHAR not NULL DEFAULT '20230303JackHenryWelsh@gmail.com'
+alter table transactions add constraint FKp4k31sc1tp36lh34mk6f8x3b3 foreign key (user_id) references user_accounts
+
+alter table transactions DROP column user_id 
+
+SELECT * FROM transactions
+
 
 -- Queries
 SELECT * FROM SIMPLE_TRANSACTIONS;

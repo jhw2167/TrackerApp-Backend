@@ -49,7 +49,7 @@ public class TransactionServiceTest {
 		//tsx.add(new Transaction(10024, "2020-09-17", 25.02));
 		
 		when(repoMock.findAll()).thenReturn(tsx);
-		service = new TransactionService(repoMock);
+		service = new TransactionService();
 	}
 	
 	
