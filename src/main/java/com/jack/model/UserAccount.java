@@ -26,7 +26,6 @@ import java.time.LocalDate;
 
 @Data                                    //We want lombok to write getters and setters
 @Entity @Table(name="user_accounts")    		//Want JPA to pick it up
-@Component                              //We want spring to pick it up
 public class UserAccount {
 
     @Id

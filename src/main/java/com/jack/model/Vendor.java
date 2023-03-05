@@ -17,8 +17,8 @@ import com.jack.repository.*;
 
 
 
-@Entity @Table(name="vendors")
 @Data
+@Entity @Table(name="vendors")
 public class Vendor {
 
 	@Id

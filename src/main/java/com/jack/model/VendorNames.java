@@ -5,10 +5,8 @@ import javax.persistence.*;
 import lombok.Data;
 
 
-
-@Entity
-@Table(name="vendor_names")
-@Data 
+@Data
+@Entity @Table(name="vendor_names")
 public class VendorNames {
 
 	@Id

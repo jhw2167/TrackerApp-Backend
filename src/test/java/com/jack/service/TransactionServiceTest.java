@@ -34,6 +34,9 @@ public class TransactionServiceTest {
 	/* Variables we need to mock */
 	@Mock
 	TransactionRepo repoMock;
+
+	@Mock
+	TransactionKeyRepo keyRepoMock;
 	
 	
 	/* Class to Test */

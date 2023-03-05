@@ -24,37 +24,35 @@ import com.jack.model.UserAccount;
 
 @Data
 @Entity @Table(name="transaction_keys")
-@Component
 public class TransactionKey {
 
     @Id
-    @Column(name = "key_id")
+    @Column(name = "key_id", columnDefinition="NUMERIC PRIMARY KEY")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long keyId;     //necessary dummy key to avoid annoying legacy composite key code
 
-    @Autowired
+
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "true_id", referencedColumnName = "true_id", columnDefinition="VARCHAR")
+    @JoinColumn(name = "true_id", referencedColumnName = "true_id", columnDefinition="NUMERIC NOT NULL")
     @JsonProperty("trueId")
     private Transaction transaction;
 
-    @Autowired
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
     @JsonProperty("userId")
     private UserAccount user;
 
-    @JsonProperty("tid")
-    @Column(name="t_id", columnDefinition="INTEGER NOT NULL")
-    private long tId;
-    public int hashCode() {
-        return transaction.hashCode();
-    }
-
     public TransactionKey() {
         //dummy constr
     }
 
-   /* public boolean equals(Object obj) {
+    public TransactionKey(Transaction t, UserAccount u) {
+        this.transaction = t;
+        this.user = u;
+    }
+
+    @Override
+   public boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }
@@ -65,5 +63,5 @@ public class TransactionKey {
 
         final TransactionKey tk = (TransactionKey) obj;
         return this.transaction.equals(tk.getTransaction());
-    }*/
+    }
 }

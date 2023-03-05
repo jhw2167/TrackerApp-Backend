@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -44,8 +45,13 @@ public class TransactionController {
 	
 	
 	/* State Variables */
-	TransactionService ts;		//autowired with spring
-	VendorService vs;			//auto
+	@Autowired
+	TransactionService ts;
+	@Autowired
+	VendorService vs;
+
+	@Autowired
+	UserAccountService us;
 	
 	/* Static variables */
 	static final ObjectMapper MAPPER = new ObjectMapper();
@@ -54,13 +60,14 @@ public class TransactionController {
 		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		MAPPER.setDateFormat(df);
 	}
-	
+
+	/*
 	@Autowired
 	TransactionController(TransactionService ts, VendorService vs) {
 		this.ts = ts;
 		this.vs = vs;
 	}
-	
+	*/
 	
 	/* End State Variable Declarations */
 //##################################################################
@@ -103,7 +110,12 @@ public class TransactionController {
 		return new ResponseEntity<>(ts.getTransactionByID(userId, tId), HttpStatus.OK);
 	}
 	//END GET VENDOR SEARCH BY ID
-	
+
+	@RequestMapping(value="/updateKeys", method=RequestMethod.POST)
+	public ResponseEntity postTransKeys(@PathVariable("userId") final String userId) {
+		ts.postTransKeys(userId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 	
 	//Get Transactions pageanated from params [start-end)
 	/**
@@ -192,18 +204,27 @@ public class TransactionController {
 	
 	//Post new transactions to the database - data send in will be transaction objects
 	@PostMapping
-	public ResponseEntity<String> postTransactions(@RequestBody final List<Transaction> tx) 
+	public ResponseEntity<String> postTransactions(@PathVariable("userId") final String userId,
+												   @RequestBody final List<Transaction> tx)
 	{
+		//Make sure user exists else exit
+		Optional<UserAccount> user = us.getUserAccountById(userId);
+		if(!user.isPresent())
+			return new ResponseEntity<>("No user found with id: "+userId, HttpStatus.BAD_REQUEST);
+
+
+		//Build Transactions to save
 		List<Transaction> refined = new ArrayList<>();
 		tx.forEach( (t) -> {
 			vs.saveVendor(new Vendor(t.getVendor(), 0d, t.getCategory(), t.isIncome()));
-			refined.add(ts.saveTransaction( new Transaction(t,
+			refined.add(ts.saveTransaction( new Transaction(user.get(), t,
 											ts.countByPurchaseDate(
 											t.getPurchaseDate() ) ) ) ); } ); 
 		
 		final StringBuilder body = new StringBuilder("Transactions successfully posted: \n"); 
 		refined.forEach((trans) -> body.append(trans.getTId() + "\n"));
 		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), HttpStatus.OK);
+
 		return rsp;
 	}
 	

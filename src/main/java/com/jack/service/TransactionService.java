@@ -39,10 +39,12 @@ public class TransactionService
 
 	@Autowired
 	TransactionKeyRepo keyRepo;
+
+	@Autowired
+	UserAccountRepo userRepo;
 	
 	//END STATE VARS
 
-	
 	/* UTILITY METHODS */
 	
 	//Return all transactions, unsorted
@@ -76,6 +78,21 @@ public class TransactionService
 			return tk.get().getTransaction();
 		else
 			return null; //error stuff
+	}
+
+	public void postTransKeys(String userId) {
+		List<Transaction> allTrans = repo.findAll();
+		Optional<UserAccount> u = userRepo.findByUserId(userId);
+
+		if (!u.isPresent())
+			return;
+
+		for (Transaction t : allTrans) {
+				t.setTrueId(u.get().getUserId(), t.getTId());
+				repo.save(t);
+				TransactionKey tk = new TransactionKey(t, u.get());
+				keyRepo.save(tk);
+		} //END FOR
 	}
 	
 	public List<Transaction> searchVendors(String name) {
