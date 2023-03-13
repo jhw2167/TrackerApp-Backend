@@ -159,6 +159,8 @@ public class Transaction {
 
 	public void setTrueId(String userId, long tid) {
 		this.trueId = General.mergeHash(userId.hashCode(), new Long(tid).hashCode());
+		this.trueId = Math.abs(trueId);
+		System.out.println("Merged id: " + trueId);
 	}
 	public void settId(long tId) {
 		this.tId = tId;

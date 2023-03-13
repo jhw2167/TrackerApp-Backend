@@ -113,8 +113,9 @@ public class TransactionController {
 
 	@RequestMapping(value="/updateKeys", method=RequestMethod.POST)
 	public ResponseEntity postTransKeys(@PathVariable("userId") final String userId) {
-		ts.postTransKeys(userId);
-		return new ResponseEntity<>(HttpStatus.OK);
+		// **TURNED OFF**
+		//ts.postTransKeys(userId);
+		return new ResponseEntity<String>("NOT IMPLEMENTED - ENABLE IN SOURCE", HttpStatus.BAD_REQUEST);
 	}
 	
 	//Get Transactions pageanated from params [start-end)
