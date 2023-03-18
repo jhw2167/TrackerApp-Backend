@@ -84,8 +84,8 @@ public class TransactionController {
 	 */
 	@GetMapping
 	//basic /transactions
-	public ResponseEntity<List<Transaction>> getTransactions() {
-		return new ResponseEntity<List<Transaction>>(ts.getAllTransactions(), HttpStatus.OK);
+	public ResponseEntity<List<Transaction>> getUserTransactions(@PathVariable("userId") final String userId) {
+		return new ResponseEntity<List<Transaction>>(ts.getAllUserTransactions(userId), HttpStatus.OK);
 	}
 	//END GET TRANSACTIONS
 	
@@ -124,9 +124,12 @@ public class TransactionController {
 	 */
 	@GetMapping(params = {"start", "to"} )
 	@RequestMapping("/dates")
-	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(@RequestParam final String start,
+	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(
+			@PathVariable("userId") final String userId,
+			@RequestParam final String start,
 			@RequestParam final String to) {
-		List<Transaction> tx = ts.getAllTransactionsBetweenPurchaseDate(LocalDate.parse(start), LocalDate.parse(to));
+		List<Transaction> tx = ts.getAllTransactionsBetweenPurchaseDate(userId,
+				LocalDate.parse(start), LocalDate.parse(to));
 		return new ResponseEntity<>(tx, HttpStatus.OK);
 	}
 	

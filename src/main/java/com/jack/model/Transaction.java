@@ -52,6 +52,13 @@ public class Transaction {
 	@JsonProperty("trueId")
 	private long trueId;
 
+	/* This addition prevents this table from being 3NF, as (tid, user_id) -> is a primary key,
+	however, it makes our code implementation and queries much easier
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
+	@JsonProperty("userId")
+	private UserAccount user;
+	*/
 	@JsonProperty("tid")
 	@Column(name="t_id", columnDefinition="NUMERIC NOT NULL")
 	private long tId;

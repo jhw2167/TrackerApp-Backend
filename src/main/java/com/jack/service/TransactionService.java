@@ -48,14 +48,14 @@ public class TransactionService
 	/* UTILITY METHODS */
 	
 	//Return all transactions, unsorted
-	public List<Transaction> getAllTransactions() {
-		return repo.findAll();
+	public List<Transaction> getAllUserTransactions(final String userId) {
+		return repo.findAllByUserId(userId);
 	}
 	
 	
 	//Return all Transactions sorted
-	public List<Transaction> getAllTransactonsSorted() {
-		return repo.findAllByOrderByPurchaseDateDesc();
+	public List<Transaction> getAllTransactonsSorted(final String userId) {
+		return repo.findAllByOrderByPurchaseDateDesc(userId);
 	}
 	
 	
@@ -64,8 +64,9 @@ public class TransactionService
 		return repo.findAllByOrderByTidDescPageable(limit, offset);
 	}
 	
-	public List<Transaction> getAllTransactionsBetweenPurchaseDate(LocalDate from, LocalDate to) {
-		return repo.findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(from, to);
+	public List<Transaction> getAllTransactionsBetweenPurchaseDate(final String userId,
+																   LocalDate from, LocalDate to) {
+		return repo.findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(userId, from, to);
 	}
 	
 	public List<Transaction> getAllTransactionsByPurchaseDate(LocalDate purchaseDate) {

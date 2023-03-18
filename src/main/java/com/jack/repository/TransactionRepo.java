@@ -24,20 +24,45 @@ import com.jack.model.*;
 
 public interface TransactionRepo extends JpaRepository<Transaction, Long>
 {
-	//simple find all transactions
-	public List<Transaction> findAll();
+	//simple find all transactions by userId
+	@Query(value = "SELECT * FROM  " +
+			"( " +
+			"(SELECT * FROM TRANSACTION_KEYS TK  " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN  " +
+			"TRANSACTIONS T  " +
+			"ON T.TRUE_ID = A.TRUE_ID  " +
+			")", nativeQuery = true)
+	public List<Transaction> findAllByUserId(@Param("user_id") String userId);
 	
 	//simple find tranasction like id
 	public Transaction findByTrueId(String trueId);
 		
 	
 	//FindAll sorted by date YYYY-MM-DD format
-	public List<Transaction> findAllByOrderByPurchaseDateDesc();
+	@Query(value = "SELECT * FROM  " +
+			"( " +
+			"(SELECT * FROM TRANSACTION_KEYS TK  " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN  " +
+			"TRANSACTIONS T  " +
+			"ON T.TRUE_ID = A.TRUE_ID  " +
+			") ORDER BY T.PURCHASE_DATE DESC;", nativeQuery = true)
+	public List<Transaction> findAllByOrderByPurchaseDateDesc(@Param("user_id") String userId);
 	
 	//FindAll between dates sorted by date YYYY-MM-DD format
-	@Query(value="SELECT * FROM transactions AS t WHERE t.purchase_date >= :start AND t.purchase_date < :end ORDER BY t.purchase_date DESC", nativeQuery=true)
+	@Query(value = "SELECT * FROM  " +
+			"( " +
+			"(SELECT * FROM TRANSACTION_KEYS TK  " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN  " +
+			"TRANSACTIONS B  " +
+			"ON B.TRUE_ID = A.TRUE_ID  ) AS t " +
+			"WHERE t.purchase_date >= :start AND t.purchase_date < :end " +
+			"ORDER BY t.purchase_date DESC", nativeQuery=true)
 	public List<Transaction> findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(
-			@Param("start") LocalDate from, @Param("end") LocalDate to);
+			@Param("user_id") String userId, @Param("start") LocalDate from,
+			@Param("end") LocalDate to);
 		
 	
 	//findAll transactions with matching purchaseDate
