@@ -95,8 +95,9 @@ public class TransactionController {
 	 * @return ResponseEntity<List<Vendor>>
 	 */
 	@RequestMapping(value="/query", params = {"name"}, method=RequestMethod.GET)
-	public ResponseEntity<List<Transaction>> searchTransactionsByVendorName(@RequestParam final String name) {
-		return new ResponseEntity<>(ts.searchVendors(name), HttpStatus.OK);
+	public ResponseEntity<List<Transaction>> searchTransactionsByVendorName(@PathVariable("userId") final String userId,
+			@RequestParam final String name) {
+		return new ResponseEntity<>(ts.searchVendors(userId, name), HttpStatus.OK);
 	}
 	//END GET VENDOR SEARCH
 	
@@ -140,9 +141,9 @@ public class TransactionController {
 	 */
 	@GetMapping(params = {"limit", "offset"} )
 	@RequestMapping("/recent")
-	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(@RequestParam final Long limit,
-			@RequestParam(required=false) final Long offset) {
-		List<Transaction> tx = ts.getAllTransactionsPageableID(limit, (offset != null) ? offset : 0L);
+	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(@PathVariable("userId") final String userId,
+			@RequestParam final String start, @RequestParam final Long limit, @RequestParam(required=false) final Long offset) {
+		List<Transaction> tx = ts.getAllTransactionsPageableID(userId, limit, (offset != null) ? offset : 0L);
 		return new ResponseEntity<>(tx, HttpStatus.OK);
 	}
 	
@@ -150,9 +151,10 @@ public class TransactionController {
 	
 	@GetMapping(params = {"start", "to"} )
 	@RequestMapping("/income")
-	public ResponseEntity<List<SummaryTuple>> getIncomeSummary(@RequestParam final String start,
-			@RequestParam final String to) {
-		List<SummaryTuple> tx = ts.getIncomeAggregatedInDateRange(LocalDate.parse(start), LocalDate.parse(to)) ;
+	public ResponseEntity<List<SummaryTuple>> getIncomeSummary(@PathVariable("userId") final String userId,
+										   @RequestParam final String start, @RequestParam final String to) {
+		List<SummaryTuple> tx = ts.getIncomeAggregatedInDateRange(userId,
+				LocalDate.parse(start), LocalDate.parse(to)) ;
 		return new ResponseEntity<List<SummaryTuple>>(tx, HttpStatus.OK);
 	}
 	//END GET INCOME SUMMARY
@@ -160,25 +162,26 @@ public class TransactionController {
 	
 	@GetMapping(params = {"start", "to"} )
 	@RequestMapping("/expenses")
-	public ResponseEntity<List<SummaryTuple>> getExpenseSummary(@RequestParam final String start,
-			@RequestParam final String to) {
-		List<SummaryTuple> tx = ts.getExpensesAggregatedInDateRange(LocalDate.parse(start), LocalDate.parse(to)) ;
+	public ResponseEntity<List<SummaryTuple>> getExpenseSummary(@PathVariable("userId") final String userId,
+											@RequestParam final String start, @RequestParam final String to) {
+		List<SummaryTuple> tx = ts.getExpensesAggregatedInDateRange(userId,
+				LocalDate.parse(start), LocalDate.parse(to)) ;
 		return new ResponseEntity<List<SummaryTuple>>(tx, HttpStatus.OK);
 	}
 	//END GET INCOME SUMMARY
 	
 	@GetMapping
 	@RequestMapping("/categories")
-	public ResponseEntity<List<String>> getCategories() {
-		List<String> cats = ts.getAllCategories();
+	public ResponseEntity<List<String>> getCategories(@PathVariable("userId") final String userId) {
+		List<String> cats = ts.getAllCategories(userId);
 		return new ResponseEntity<List<String>>(cats, HttpStatus.OK);
 	}
 	//END GET Categories
 	
 	@GetMapping
 	@RequestMapping("/payMethods")
-	public ResponseEntity<List<String>> getPayMethods() {
-		List<String> vals = ts.getPayMethods();
+	public ResponseEntity<List<String>> getPayMethods(@PathVariable("userId") final String userId) {
+		List<String> vals = ts.getPayMethods(userId);
 		return new ResponseEntity<List<String>>(vals, HttpStatus.OK);
 	}
 	//END GET Categories
@@ -186,8 +189,8 @@ public class TransactionController {
 	
 	@GetMapping
 	@RequestMapping("/boughtFor")
-	public ResponseEntity<List<String>> getBoughtFor() {
-		List<String> vals = ts.getBoughtFor();
+	public ResponseEntity<List<String>> getBoughtFor(@PathVariable("userId") final String userId) {
+		List<String> vals = ts.getBoughtFor(userId);
 		return new ResponseEntity<List<String>>(vals, HttpStatus.OK);
 	}
 	//END GET Categories
@@ -195,8 +198,8 @@ public class TransactionController {
 	
 	@GetMapping
 	@RequestMapping("/payStatus")
-	public ResponseEntity<List<String>> getPayStatus() {
-		List<String> vals = ts.getPayStatus();
+	public ResponseEntity<List<String>> getPayStatus(@PathVariable("userId") final String userId) {
+		List<String> vals = ts.getPayStatus(userId);
 		return new ResponseEntity<List<String>>(vals, HttpStatus.OK);
 	}
 	//END GET Categories
@@ -222,7 +225,7 @@ public class TransactionController {
 		tx.forEach( (t) -> {
 			vs.saveVendor(new Vendor(t.getVendor(), 0d, t.getCategory(), t.isIncome()));
 			refined.add(ts.saveTransaction( new Transaction(user.get(), t,
-											ts.countByPurchaseDate(
+											ts.countByPurchaseDate(userId,
 											t.getPurchaseDate() ) ) ) ); } ); 
 		
 		final StringBuilder body = new StringBuilder("Transactions successfully posted: \n"); 

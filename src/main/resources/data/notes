@@ -1,0 +1,40 @@
+SELECT c1 as aggregateCol, SUM(sum1) / COUNT(BOUGHT_FOR) as value, STRING_AGG(BOUGHT_FOR, '/') as categories
+	FROM
+	( SELECT CATEGORY AS c1, SUM(amount) AS sum1
+	FROM user_transactions t1
+	WHERE t1.IS_INCOME=false AND
+	t1.purchase_date >= :start AND
+	t1.purchase_date < :end
+	GROUP BY t1.CATEGORY ) AS a
+	INNER JOIN
+	(
+	SELECT DISTINCT t2.CATEGORY AS c2, t2.BOUGHT_FOR
+	FROM user_transactions t2
+	WHERE t2.IS_INCOME =false AND
+	t2.purchase_date >= :start AND
+	t2.purchase_date < :end
+	) b ON a.c1=b.c2 GROUP BY c1 ORDER BY value DESC
+	
+	CREATE PROCEDURE GET_TOTAL_CARS_BY_MODEL(IN model_in VARCHAR(50), OUT count_out INT)
+BEGIN
+    SELECT COUNT(*) into count_out from car WHERE model = model_in;
+END
+
+
+@Query(value=
+			"SELECT c1 as aggregateCol, SUM(sum1) / COUNT(BOUGHT_FOR) as value, STRING_AGG(BOUGHT_FOR, '/') as categories"
+			+ " FROM\r\n"
+			+ "( SELECT CATEGORY AS c1, SUM(amount) AS sum1 \r\n"
+			+ "FROM TRANSACTIONS t1\r\n"
+			+ "WHERE t1.IS_INCOME=false AND \r\n"
+			+ "t1.purchase_date >= :start AND\r\n"
+			+ "t1.purchase_date < :end \r\n"
+			+ "GROUP BY t1.CATEGORY ) AS a\r\n"
+			+ "INNER JOIN \r\n"
+			+ "(\r\n"
+			+ "SELECT DISTINCT t2.CATEGORY AS c2, t2.BOUGHT_FOR \r\n"
+			+ "FROM TRANSACTIONS t2 \r\n"
+			+ "WHERE t2.IS_INCOME =false AND \r\n"
+			+ "t2.purchase_date >= :start AND \r\n"
+			+ "t2.purchase_date < :end \r\n"
+			+ ") b ON a.c1=b.c2 GROUP BY c1 ORDER BY value DESC", nativeQuery=true)

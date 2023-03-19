@@ -25,8 +25,14 @@ public interface TransactionKeyRepo extends JpaRepository<TransactionKey, Long>
 	public List<TransactionKey> findAll();
 	
 	//simple Find TransactionKey using userId and Tid
-	@Query(value="SELECT * FROM TRANSACTION_KEYS t " +
-			"WHERE t.user_id=:userId and t.t_id=:tId ", nativeQuery=true)
-	public Optional<TransactionKey> findByUserIdAndTid(String userId, Long tId);
+	@Query(value = "SELECT * FROM  " +
+			"( " +
+			"(SELECT * FROM TRANSACTION_KEYS TK  " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN  " +
+			"TRANSACTIONS T  " +
+			"ON T.TRUE_ID = A.TRUE_ID  AND T.t_id= :t_id" +
+			") ", nativeQuery = true)
+	public Optional<TransactionKey> findByUserIdAndTid(@Param("user_id") String userId, @Param("t_id") long tid);
 
 }

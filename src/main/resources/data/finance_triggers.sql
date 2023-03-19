@@ -150,7 +150,7 @@ DELETE FROM test;
 SELECT vendor FROM TRANSACTIONS T ORDER BY timestamp_ DESC LIMIT 1;
 
 DROP FUNCTION IF EXISTS update_vendors CASCADE;
-CREATE FUNCTION update_vendors()
+CREATE OR REPLACE FUNCTION update_vendors()
 	RETURNS trigger AS
 	$$
 	BEGIN 

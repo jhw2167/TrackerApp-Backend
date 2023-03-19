@@ -9,6 +9,7 @@ import java.util.Map;
 
 //Spring Imports
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,6 +25,12 @@ import com.jack.model.*;
 
 public interface TransactionRepo extends JpaRepository<Transaction, Long>
 {
+	//#0
+	//simple find tranasction like id
+	public Transaction findByTrueId(String trueId);
+
+
+	//#1
 	//simple find all transactions by userId
 	@Query(value = "SELECT * FROM  " +
 			"( " +
@@ -34,11 +41,8 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 			"ON T.TRUE_ID = A.TRUE_ID  " +
 			")", nativeQuery = true)
 	public List<Transaction> findAllByUserId(@Param("user_id") String userId);
-	
-	//simple find tranasction like id
-	public Transaction findByTrueId(String trueId);
-		
-	
+
+	//#2
 	//FindAll sorted by date YYYY-MM-DD format
 	@Query(value = "SELECT * FROM  " +
 			"( " +
@@ -49,8 +53,9 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 			"ON T.TRUE_ID = A.TRUE_ID  " +
 			") ORDER BY T.PURCHASE_DATE DESC;", nativeQuery = true)
 	public List<Transaction> findAllByOrderByPurchaseDateDesc(@Param("user_id") String userId);
-	
-	//FindAll between dates sorted by date YYYY-MM-DD format
+
+	//#3
+	//FindAll between dates sorted by date YYYY-MM-DD format NOT INCLUSIVE TO END DATE
 	@Query(value = "SELECT * FROM  " +
 			"( " +
 			"(SELECT * FROM TRANSACTION_KEYS TK  " +
@@ -63,85 +68,127 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	public List<Transaction> findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(
 			@Param("user_id") String userId, @Param("start") LocalDate from,
 			@Param("end") LocalDate to);
-		
-	
-	//findAll transactions with matching purchaseDate
-	public List<Transaction> findAllByPurchaseDate(LocalDate purchaseDate);
-	
-	//count transactions with matching purchaseDate
-	public long countByPurchaseDate(LocalDate purchaseDate);
-	
-	//find all transactions sorted between start and end
-	@Query(value="SELECT * FROM transactions AS t ORDER BY t.t_id DESC LIMIT :limit OFFSET :offset", nativeQuery=true)
-	public List<Transaction> findAllByOrderByTidDescPageable( @Param("limit") Long limit, @Param("offset") Long offset);
-	
-	
-	//find all that partially match name
-	@Query(value="SELECT * FROM TRANSACTIONS t WHERE t.vendor LIKE UPPER(:name)", nativeQuery=true)
-	public List<Transaction> findAllLikeVendorName(@Param("name") String name);
 
-	
+	//#4
+	//findAll transactions with matching purchaseDate
+	@Query(value = "SELECT * FROM  " +
+			"( " +
+			"(SELECT * FROM TRANSACTION_KEYS TK  " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN  " +
+			"TRANSACTIONS B  " +
+			"ON B.TRUE_ID = A.TRUE_ID  ) AS t " +
+			"WHERE t.purchase_date = :purchaseDate " +
+			"ORDER BY t.purchase_date DESC", nativeQuery=true)
+	public List<Transaction> findAllByPurchaseDate(@Param("user_id") String userId,
+			@Param("purchaseDate") LocalDate purchaseDate);
+
+	//#5
+	//count transactions with matching purchaseDate
+	@Query(value = "SELECT COUNT(*) FROM " +
+			"( " +
+			"(SELECT * FROM TRANSACTION_KEYS TK  " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN  " +
+			"TRANSACTIONS B  " +
+			"ON B.TRUE_ID = A.TRUE_ID  ) AS t " +
+			"WHERE t.purchase_date = :purchaseDate", nativeQuery=true)
+	public long countByPurchaseDate(@Param("user_id") String userId,
+			@Param("purchaseDate") LocalDate purchaseDate);
+
+	//#6a
+	//find all transactions sorted between user_id and t_id OFFESET AND LIMIT
+	@Query(value = "SELECT * FROM " +
+			"( " +
+			"(SELECT * FROM TRANSACTION_KEYS TK  " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN  " +
+			"TRANSACTIONS B  " +
+			"ON B.TRUE_ID = A.TRUE_ID  ) AS t " +
+			"ORDER BY t.t_id DESC LIMIT :limit OFFSET :offset", nativeQuery=true)
+	public List<Transaction> findAllByOrderByTidDescPageable( @Param("user_id") String userId,
+			@Param("limit") Long limit, @Param("offset") Long offset);
+
+
+	//#7
+	//find all that partially match name
+	@Query(value = "SELECT * FROM " +
+			"( " +
+			"(SELECT * FROM TRANSACTION_KEYS TK  " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN  " +
+			"TRANSACTIONS B  " +
+			"ON B.TRUE_ID = A.TRUE_ID  ) AS t " +
+			"WHERE t.vendor LIKE UPPER(:name)", nativeQuery=true)
+	public List<Transaction> findAllLikeVendorName( @Param("user_id") String userId,
+			@Param("name") String name);
+
+	//#8
 	//Find income tuple:
 		//Vendor (source) - sum total - Cat1-Cat2...
 		//Takes start and end date (typically a montly basis
-	@Query(value="SELECT v1 as aggregateCol, SUM(sum1) / COUNT(cat) as value, STRING_AGG(cat, '/') as categories FROM\r\n"
-			+ "( SELECT vendor AS v1, SUM(amount) AS sum1 \r\n"
-			+ "FROM TRANSACTIONS t1\r\n"
-			+ "WHERE t1.IS_INCOME=TRUE AND \r\n"
-			+ "t1.purchase_date >= :start AND\r\n"
-			+ "t1.purchase_date < :end \r\n"
-			+ "GROUP BY t1.VENDOR ) AS a\r\n"
-			+ "INNER JOIN \r\n"
-			+ "(\r\n"
-			+ "SELECT DISTINCT t2.VENDOR AS v2, t2.category AS cat \r\n"
-			+ "FROM TRANSACTIONS t2 \r\n"
-			+ "WHERE t2.IS_INCOME =TRUE AND \r\n"
-			+ "t2.purchase_date >= :start AND \r\n"
-			+ "t2.purchase_date < :end \r\n"
-			+ ") b ON a.v1=b.v2 GROUP BY v1 ORDER BY value DESC", nativeQuery=true)
-	public List<Map<String, Object>> findIncomeAggregatedByVendorAndCategories(
+	@Query(value = "SELECT * FROM BUILD_INCOME_EXPENSE_SUMMARY(:user_id, :start, :end, true)", nativeQuery=true)
+	public List<Map<String, Object>> findIncomeAggregatedByVendorAndCategories( @Param("user_id") String userId,
 			@Param("start") LocalDate from, @Param("end") LocalDate to);
-	
-	
+
+	//#9
 	//Find income tuple:
 		//Vendor (source) - sum total - Cat1-Cat2...
 		//Takes start and end date (typically a montly basis
-	
-	@Query(value="SELECT c1 as aggregateCol, SUM(sum1) / COUNT(BOUGHT_FOR) as value, STRING_AGG(BOUGHT_FOR, '/') as categories"
-			+ " FROM\r\n"
-			+ "( SELECT CATEGORY AS c1, SUM(amount) AS sum1 \r\n"
-			+ "FROM TRANSACTIONS t1\r\n"
-			+ "WHERE t1.IS_INCOME=false AND \r\n"
-			+ "t1.purchase_date >= :start AND\r\n"
-			+ "t1.purchase_date < :end \r\n"
-			+ "GROUP BY t1.CATEGORY ) AS a\r\n"
-			+ "INNER JOIN \r\n"
-			+ "(\r\n"
-			+ "SELECT DISTINCT t2.CATEGORY AS c2, t2.BOUGHT_FOR \r\n"
-			+ "FROM TRANSACTIONS t2 \r\n"
-			+ "WHERE t2.IS_INCOME =false AND \r\n"
-			+ "t2.purchase_date >= :start AND \r\n"
-			+ "t2.purchase_date < :end \r\n"
-			+ ") b ON a.c1=b.c2 GROUP BY c1 ORDER BY value DESC", nativeQuery=true)
-	public List<Map<String, Object>> findExpensesAggregatedByCategoryAndBoughtFor(
+
+	@Query(value = "SELECT * FROM BUILD_INCOME_EXPENSE_SUMMARY(:user_id, :start, :end, false)", nativeQuery=true)
+	public List<Map<String, Object>> findExpensesAggregatedByCategoryAndBoughtFor( @Param("user_id") String userId,
 			@Param("start") LocalDate from, @Param("end") LocalDate to);
-	
-	
-	
+
+
+	//#10
 	//Find all categories in transactions table
-	@Query(value="SELECT t.category FROM TRANSACTIONS t GROUP BY CATEGORY", nativeQuery=true)
-	public List<String> findCategoryGroupByCategory();
-		
-	@Query(value="SELECT t.PAY_METHOD FROM TRANSACTIONS t GROUP BY PAY_METHOD", nativeQuery=true)
-	public List<String> findPayMethodsGroupByPayMethod();
-	
-	
-	@Query(value="SELECT t.bought_for FROM TRANSACTIONS t GROUP BY bought_for", nativeQuery=true)
-	public List<String> findBoughtForGroupByBoughtFor();
-	
-	
-	@Query(value="SELECT t.PAY_STATUS FROM TRANSACTIONS t GROUP BY PAY_STATUS", nativeQuery=true)
-	public List<String> findPayStatusGroupByPayStatus();
+	@Query(value="SELECT T.category FROM " +
+			"(" +
+			"(SELECT * FROM TRANSACTION_KEYS TK " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN " +
+			"TRANSACTIONS B " +
+			"ON B.TRUE_ID = A.TRUE_ID " +
+			") AS T " +
+			"GROUP BY category", nativeQuery=true)
+	public List<String> findCategoryGroupByCategory(@Param("user_id") String userId);
+
+	//#11
+	@Query(value="SELECT T.pay_method FROM " +
+			"(" +
+			"(SELECT * FROM TRANSACTION_KEYS TK " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN " +
+			"TRANSACTIONS B " +
+			"ON B.TRUE_ID = A.TRUE_ID " +
+			") AS T " +
+			"GROUP BY pay_method", nativeQuery=true)
+	public List<String> findPayMethodsGroupByPayMethod(@Param("user_id") String userId);
+
+	//#12
+	@Query(value="SELECT T.bought_for FROM " +
+			"(" +
+			"(SELECT * FROM TRANSACTION_KEYS TK " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN " +
+			"TRANSACTIONS B " +
+			"ON B.TRUE_ID = A.TRUE_ID " +
+			") AS T " +
+			"GROUP BY bought_for", nativeQuery=true)
+	public List<String> findBoughtForGroupByBoughtFor(@Param("user_id") String userId);
+
+	//#13
+	@Query(value="SELECT T.pay_status FROM " +
+			"(" +
+			"(SELECT * FROM TRANSACTION_KEYS TK " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN " +
+			"TRANSACTIONS B " +
+			"ON B.TRUE_ID = A.TRUE_ID " +
+			") AS T " +
+			"GROUP BY pay_status", nativeQuery=true)
+	public List<String> findPayStatusGroupByPayStatus(@Param("user_id") String userId);
 	
 	
 }
