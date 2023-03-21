@@ -29,7 +29,7 @@ public class PayMethodKey {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long keyId;     //necessary dummy key to avoid annoying legacy composite key code
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL")
     @JsonProperty("pmId")
     private PayMethod payMethod;

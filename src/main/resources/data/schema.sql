@@ -200,6 +200,11 @@ alter table transactions add constraint FKp4k31sc1tp36lh34mk6f8x3b3 foreign key 
 alter table transactions DROP column user_id 
 
 SELECT * FROM transactions
+SELECT * FROM PAY_METHODS PM 
+SELECT * FROM PAY_METHOD_KEYS PM 
+
+UPDATE PAY_METHOD_keys PMK
+SET key_id=-1 WHERE key_id=0;
 
 SELECT * FROM user_accounts WHERE user_id=UPPER('20230303JackHenryWelsh@gmail.com');
 

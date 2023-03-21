@@ -201,7 +201,7 @@ public class TransactionService
 			PayMethod pm = new PayMethod(userId, t.getPayMethodString(), "SIMPLE");
 			PayMethodKey pmk = new PayMethodKey(pm, u.get());
 
-			if(!pmkRepo.findByPmId(pm.getPmId()).isPresent()) {
+			if(!pmkRepo.existsByPayMethod(pm)) {
 				pmRepo.save(pm);
 				pmkRepo.save(pmk);
 			}
