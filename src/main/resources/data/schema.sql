@@ -74,10 +74,12 @@ vendor VARCHAR(50) REFERENCES vendors(vendor),
 SELECT * FROM VENDOR_NAMES V 
 
 -- DROP and create table pay_methods
-DROP TABLE IF EXISTS pay_methods CASCADE;
+DROP TABLE IF EXISTS pay_methods;
+
 CREATE TABLE pay_methods (
-pay_method VARCHAR(50) PRIMARY KEY,
-institution_type INSTITUTION_TYPE DEFAULT 'SIMPLE',
+pm_id NUMERIC PRIMARY KEY,
+pay_method VARCHAR NOT NULL,
+institution_type VARCHAR DEFAULT 'SIMPLE',
 balance NUMERIC DEFAULT NULL,
 credit_line NUMERIC DEFAULT NULL,
 cash_back NUMERIC DEFAULT NULL,
@@ -85,11 +87,25 @@ description VARCHAR(1023) DEFAULT NULL
 );
 
 
+DROP TABLE IF EXISTS pay_method_keys;
+
+CREATE TABLE pay_methods (
+key_id NUMERIC PRIMARY KEY,
+pm_id NUMERIC NOT NULL REFERENCES PAY_METHODS (pm_id),
+user_id VARCHAR NOT NULL REFERENCES PAY_METHODS (user_id)
+)
+
+INSERT INTO PAY_METHODS (pm_id, pay_method, institution_type) VALUES (0, 'CASH', 'SIMPLE')
+INSERT INTO PAY_METHOD_keys (key_id, pm_id, USER_ID) VALUES (0, 0, '20230303JACKHENRYWELSH@GMAIL.COM')
+
+SELECT * FROM pay_method_keys pmk WHERE pm_id=0
+
+
 -- DROP and create table vendors
 DROP TABLE IF EXISTS transactions CASCADE;
 CREATE TABLE transactions (
 	true_id VARCHAR PRIMARY KEY,
-	t_id INTEGER NOT NULL,
+	t_id INTEGER NOT NULL unique,
 	purchase_date VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE,
 	amount NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0),
 	vendor VARCHAR(50) REFERENCES vendors(vendor),
@@ -104,6 +120,7 @@ CREATE TABLE transactions (
 );
 
 ALTER TABLE TRANSACTIONS ADD COLUMN true_id VARCHAR NOT NULL DEFAULT '1'
+ALTER TABLE transactions ADD constraint transactions_unique_t_id UNIQUE (t_id);
 SELECT TRUE_ID FROM TRANSACTIONS T ORDER BY TRUE_ID 
 SELECT TRUE_ID FROM TRANSACTION_KEYS T ORDER BY TRUE_ID 
 
@@ -142,12 +159,20 @@ ADD PRIMARY KEY (t_id);
 
 alter table transaction_keys add constraint FK12nif4vswq2lmt57akynhg6qk foreign key (true_id) references transactions
 
+ALTER TABLE transactions ADD constraint transactions_unique_t_id UNIQUE (t_id);
+
 ALTER TABLE TRANSACTIONS ALTER COLUMN reimburses SET DEFAULT 500730621   
 
 ALTER TABLE TRANSACTIONS ALTER COLUMN true_id DROP DEFAULT;
 ALTER TABLE TRANSACTIONS ALTER COLUMN true_id TYPE NUMERIC USING (true_id::NUMERIC);
 ALTER TABLE TRANSACTION_KEYS ALTER COLUMN true_id TYPE NUMERIC USING (true_id::NUMERIC);
 ALTER TABLE TRANSACTIONS ALTER COLUMN reimburses TYPE NUMERIC USING (reimburses::NUMERIC);
+
+---
+
+ALTER TABLE TRANSACTIONS DROP CONSTRAINT "transactions_pay_method_fkey";
+
+
 
 -- User Accounts table
 DROP TABLE IF EXISTS user_accounts
@@ -176,6 +201,8 @@ alter table transactions DROP column user_id
 
 SELECT * FROM transactions
 
+SELECT * FROM user_accounts WHERE user_id=UPPER('20230303JackHenryWelsh@gmail.com');
+
 
 -- Queries
 SELECT * FROM SIMPLE_TRANSACTIONS;
@@ -197,25 +224,6 @@ SELECT * FROM transactions AS t ORDER BY t.t_id DESC LIMIT 10 OFFSET 5;
 --AGG Queries
 STRING_AGG( UNIQUE(CATEGORY), '-')
 
-
-
-
-		-- Expense SUMMARY
-SELECT c1, SUM(sum1) / COUNT(BOUGHT_FOR) AS value , STRING_AGG(BOUGHT_FOR, '/') FROM
-( SELECT CATEGORY AS c1, SUM(amount) AS sum1 
-FROM TRANSACTIONS t1
-WHERE t1.IS_INCOME=false AND 
-t1.purchase_date >= '2022-03-31' AND
-t1.purchase_date < '2022-05-01'
-GROUP BY t1.CATEGORY ) AS a
-INNER JOIN 
-(
-SELECT DISTINCT t2.CATEGORY AS c2, t2.BOUGHT_FOR 
-FROM TRANSACTIONS t2 
-WHERE t2.IS_INCOME =FALSE AND 
-t2.purchase_date >= '2022-03-31' AND
-t2.purchase_date < '2022-05-01'
-) b ON a.c1=b.c2 GROUP BY c1 ORDER BY value DESC;
  
 
 

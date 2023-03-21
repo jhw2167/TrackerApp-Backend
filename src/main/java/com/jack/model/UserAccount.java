@@ -77,7 +77,7 @@ public class UserAccount {
         - this should run after email has been successfully validated
      */
     public String setUserId(LocalDate createdDate, String email) {
-        return createdDate.toString() + email;
+        return createdDate.toString() + email.toUpperCase();
     }
 
 

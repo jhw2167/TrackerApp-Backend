@@ -1,7 +1,6 @@
 package com.jack.service;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.jack.repository.*;
 import com.jack.model.*;
 import com.jack.model.submodel.*;
+import com.jack.repository.subrepo.*;
 
 /* Service class for transactions handels all BUSINESS logic and is called from the 
  * controller class
@@ -42,6 +42,11 @@ public class TransactionService
 
 	@Autowired
 	UserAccountRepo userRepo;
+
+	@Autowired
+	PayMethodRepo pmRepo;
+	@Autowired
+	PayMethodKeyRepo pmkRepo;
 	
 	//END STATE VARS
 
@@ -81,24 +86,6 @@ public class TransactionService
 			return tk.get().getTransaction();
 		else
 			return null; //error stuff
-	}
-
-	/* SPECIAL TRANS KEY METHOD FOR ONE TIME KEY GENERATION
-		WHEN SWITCHING TO USER ACCOUNT INTEGRATION
-	 */
-	public void postTransKeys(String userId) {
-		List<Transaction> allTrans = repo.findAll();
-		Optional<UserAccount> u = userRepo.findByUserId(userId);
-
-		if (!u.isPresent())
-			return;
-
-		for (Transaction t : allTrans) {
-				t.setTrueId(u.get().getUserId(), t.getTId());
-				repo.save(t);
-				TransactionKey tk = new TransactionKey(t, u.get());
-				keyRepo.save(tk);
-		} //END FOR
 	}
 	
 	public List<Transaction> searchVendors(final String userId, String name) {
@@ -150,27 +137,81 @@ public class TransactionService
 	//########### END GET METHODS ############
 	
 	//Save Data
-	public Transaction saveTransaction(Transaction tx) {
+	public Transaction saveTransaction(Transaction tx, UserAccount u) {
+		keyRepo.save(new TransactionKey(tx, u));
 		return repo.save(tx);
 	}
-	
-	public void saveTransactions(List<Transaction> tx) {
-		repo.saveAll(tx);
-	}
+
 	
 	//Delete Transaction by ID
-	public void deleteTransactionById(final long id) {
-		repo.deleteById(id);		
+	public void deleteTransactionById(final String userId, final long tid) {
+		Optional<TransactionKey> tk = keyRepo.findByUserIdAndTid(userId, tid);
+		if(!tk.isPresent())
+			throw new ResourceNotFoundException("ERROR: No Transaction found with True ID: " +
+					tk.get().getTransaction().getTrueId());
+
+		keyRepo.deleteByTrueId(tk.get().getTransaction().getTrueId());
+		repo.deleteByTrueId(tk.get().getTransaction().getTrueId());
 	}
 	
 	public Transaction updateTransaction(Transaction tx) throws ResourceNotFoundException {
 		System.out.println("Attempting to save: " + tx);
-		if(!repo.existsById(tx.getTId()))
-			throw new ResourceNotFoundException("No Transaction found with ID: " + tx.getTId());
-		
-		//old.get().updateData(tx);
-		//return old.get();
+		if(!repo.existsById(tx.getTrueId()))
+			throw new ResourceNotFoundException("ERROR: No Transaction found with True ID: " + tx.getTrueId());
+
+		Transaction oldTrans = repo.findByTrueId(tx.getTrueId());
+		if(!Transaction.compareIds(tx, oldTrans))
+			throw new IllegalArgumentException(String.format("ERROR: You may not change the tid or the trueId in a PATCH call" +
+					" for transaction in database as tid: %s, trueId: %s", oldTrans.getTId(), oldTrans.getTrueId()));
+
 		return repo.save(tx);
 	}
+
+	public long getDefaultReimburses(final String userId) {
+		return this.getTransactionByID(userId, 0L).getTrueId();		//Each user has default transaction at tid==0
+	}
+
+	/*
+		SPECIAL TRANS KEY METHOD FOR ONE TIME KEY GENERATION
+    	WHEN SWITCHING TO USER ACCOUNT INTEGRATION
+ 	*/
+	public void postTransKeys(String userId) {
+		List<Transaction> allTrans = repo.findAll();
+		Optional<UserAccount> u = userRepo.findByUserId(userId);
+
+		if (!u.isPresent())
+			return;
+
+		for (Transaction t : allTrans) {
+			t.setTrueId(u.get().getUserId(), t.getTId());
+			repo.save(t);
+			TransactionKey tk = new TransactionKey(t, u.get());
+			keyRepo.save(tk);
+		} //END FOR
+	}
+
+	public void postPmKeys(String userId) {
+		List<Transaction> allTrans = repo.findAllByUserId(userId);
+		Optional<UserAccount> u = userRepo.findByUserId(userId);
+
+		if (!u.isPresent())
+			return;
+
+		for (Transaction t : allTrans) {
+			PayMethod pm = new PayMethod(userId, t.getPayMethodString(), "SIMPLE");
+			PayMethodKey pmk = new PayMethodKey(pm, u.get());
+
+			if(!pmkRepo.findByPmId(pm.getPmId()).isPresent()) {
+				pmRepo.save(pm);
+				pmkRepo.save(pmk);
+			}
+
+			t.setPayMethod(pm);
+			repo.save(t);
+		} //END FOR
+
+	}
+
+
 }
 //END CLASS TRANSACTIONSERVICE

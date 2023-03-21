@@ -2,6 +2,8 @@ package com.jack.controller;
 
 
 //Spring Imports
+import ch.qos.logback.core.net.SyslogOutputStream;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -116,6 +118,7 @@ public class TransactionController {
 	public ResponseEntity postTransKeys(@PathVariable("userId") final String userId) {
 		// **TURNED OFF**
 		//ts.postTransKeys(userId);
+		ts.postPmKeys(userId.toUpperCase());
 		return new ResponseEntity<String>("NOT IMPLEMENTED - ENABLE IN SOURCE", HttpStatus.BAD_REQUEST);
 	}
 	
@@ -219,16 +222,35 @@ public class TransactionController {
 		if(!user.isPresent())
 			return new ResponseEntity<>("No user found with id: "+userId, HttpStatus.BAD_REQUEST);
 
+		HttpStatus status = HttpStatus.OK;
+		final StringBuilder body = new StringBuilder();
 
 		//Build Transactions to save
 		List<Transaction> refined = new ArrayList<>();
-		tx.forEach( (t) -> {
-			vs.saveVendor(new Vendor(t.getVendor(), 0d, t.getCategory(), t.isIncome()));
-			refined.add(ts.saveTransaction( new Transaction(user.get(), t,
-											ts.countByPurchaseDate(userId,
-											t.getPurchaseDate() ) ) ) ); } ); 
-		
-		final StringBuilder body = new StringBuilder("Transactions successfully posted: \n"); 
+		try {
+
+			for (Transaction t : tx ) {
+				vs.saveVendor(new Vendor(t.getVendor(), 0d, t.getCategory(), t.isIncome()));
+				long reimburses = (t.getReimburses() != 0) ? t.getReimburses() : ts.getDefaultReimburses(userId);
+				UserAccount u = us.getUserAccountById(userId).get();
+
+				try {
+					refined.add(ts.saveTransaction( new Transaction(user.get(), t,
+							ts.countByPurchaseDate(userId,
+									t.getPurchaseDate() ), reimburses ), u ) );
+
+				} catch (Exception e) {
+					body.append("ERROR saving transaction: \n" + MAPPER.writeValueAsString(t));
+					body.append("\nERROR reported as:  " + e.getLocalizedMessage());
+					body.append(",\n");
+				}
+			} //END FOR
+
+		} catch (JsonProcessingException e) {
+			System.out.println("Error Proccessing Transaction in batch");
+		}
+
+		body.append("\n\nSuccessfully posted transactions with tids: \n");
 		refined.forEach((trans) -> body.append(trans.getTId() + "\n"));
 		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), HttpStatus.OK);
 
@@ -245,7 +267,7 @@ public class TransactionController {
 	@PatchMapping
 	public ResponseEntity<String> patchTransactions(@RequestBody final List<Transaction> tx)
 	{
-		StringBuilder body = new StringBuilder("Patched Transactions: \n");
+		StringBuilder body = new StringBuilder("Patched Transactions: [\n");
 		HttpStatus status = HttpStatus.OK;
 		List<Transaction> refined = new ArrayList<>();
 		try {
@@ -253,18 +275,24 @@ public class TransactionController {
 		} catch(ResourceNotFoundException e) {
 			body = new StringBuilder(e.getMessage());
 			body.append("\n\nTransactions successfully patched: \n");
-			status = HttpStatus.NOT_FOUND;
+			status = HttpStatus.BAD_REQUEST;
+		} catch(IllegalArgumentException e) {
+			body = new StringBuilder(e.getMessage());
+			body.append("\n\nTransactions successfully patched: \n");
+			status = HttpStatus.BAD_REQUEST;
 		}
-		
+
+		String openBrace = "[";
 		for(Transaction t : refined ) {
 			try {
+				body.append(openBrace); openBrace=","; //if multiple transactions, they will be seperated by commas, JSON format
 				body.append(MAPPER.writeValueAsString(t) + "\n");
 			} catch (JsonProcessingException e) {
 				System.out.println(e);
 				body.append("Error converting transaction to JSON with id: " + t.getTId());
 			}
 		}
-		
+		body.append("]"); //Closing brace for JSON
 		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), status);
 		return rsp;
 	}
@@ -279,35 +307,44 @@ public class TransactionController {
 	 * 	EXCEPTIONS:
 	 * 		- NoSuchIDException
 	 */
-	@DeleteMapping(value="transactions/{id}")
-	public ResponseEntity<String> deleteTransaction(@RequestParam final long id) {
-		System.out.println("ID to delete:  " + id);
-		ts.deleteTransactionById(id);
+	@DeleteMapping(value="/{tid}")
+	@ResponseBody
+	public ResponseEntity<String> deleteTransaction(@PathVariable("userId") final String userId,
+													@PathVariable("tid") final Long tid) {
+		System.out.println("ID to delete:  " + tid);
+		ts.deleteTransactionById(userId, tid);
 		
-		final String body = "Transaction with id: " + id + " deleted";
+		final String body = "Transaction with id: " + tid + " deleted";
 		ResponseEntity<String> rsp = new ResponseEntity<>(body, HttpStatus.OK);
 		return rsp;
 	}
-	
+
 	
 	/*
 	 * Non-restful, need a method for mass deletion in case of impropper additions
 	 * 
 	 */
-	@PostMapping(value="/deleteAll")
-	public ResponseEntity<String> deleteTransactions(@RequestBody final List<Long> ids) 
+	@PatchMapping(value="/deleteAll")
+	public ResponseEntity<String> deleteTransactions(@PathVariable("userId") final String userId,
+													 @RequestBody final List<Long> tids)
 	{
+		HttpStatus status = HttpStatus.OK;
+
 		StringBuilder s = new StringBuilder();
-		for(Long id : ids) 
+		for(Long tid : tids)
 		{
 			try {
-				s.append( deleteTransaction(id).getBody() );
+				s.append( deleteTransaction(userId, tid).getBody() );
+			} catch(ResourceNotFoundException e) {
+				s.append("Error deleting tid " + tid + ", tid not found");
+				status = HttpStatus.BAD_REQUEST;
 			} catch (Exception e) {
-				s.append("Error deleting id " + id + ", may not exist");
+				s.append("Error deleting tid " + tid + ", may not exist");
+				status = HttpStatus.BAD_REQUEST;
 			}
 			s.append("\n");
 		}
-		ResponseEntity<String> rsp = new ResponseEntity<>(s.toString(), HttpStatus.OK);
+		ResponseEntity<String> rsp = new ResponseEntity<>(s.toString(), status);
 		return rsp;
 	}
 }

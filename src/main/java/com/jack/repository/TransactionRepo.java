@@ -27,8 +27,11 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 {
 	//#0
 	//simple find tranasction like id
-	public Transaction findByTrueId(String trueId);
+	public Transaction findByTrueId(long trueId);
 
+	//#0a Delete by trueId
+	@Query(value="DELETE FROM transactions WHERE true_id=:true_id", nativeQuery=true)
+	public void deleteByTrueId(@Param("true_id") long trueId);
 
 	//#1
 	//simple find all transactions by userId

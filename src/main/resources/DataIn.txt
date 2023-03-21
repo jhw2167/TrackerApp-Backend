@@ -1,0 +1,60 @@
+11/1/22 - MCKINNEY AVE. CLEANERS - 20.94 - Lifestyle - Cap1 ----- 10/28- Dry Cleaning
+11/1/22 - Trader Joes - 15.73 - Groceries - Cap1
+11/1/22 - M Line Tower - 2050.44 - Domestic - Georgetown
+11/2/22 - SHELL OIL - 7.55 - Snacks - Cap1
+11/2/22  - Whole Foods - 24.36 - Groceries - Cap1
+11/2/22  - Whole Foods - 19.20 - Groceries - Cap1
+11/2/22 - Krispy Kreme - 4.99 - Breakfast - Cap1
+11/3/22 - Amazon Web Services - 0.54 - Business - American ------ Monthly website usage JackHenryWelsh.com
+11/3/22 - Trader Joes - 35.88 - Groceries - Cap1
+11/4/22 - Revature - 1901.83 - Income - Georgetown --- TRUE
+11/5/22  - Whole Foods - 33.88 - Groceries - Cap1
+11/6/22 - Trader Joes - 17.00 - Groceries - Cap1
+11/6/22 - Smoothie King - 8.76 - Breakfast - Cap1
+11/6/22 - Einstein bagels - 8.32 - Breakfast - Cap1
+11/8/22  - Kroger - 10.57 - Groceries - Cap1
+11/9/22  - Whole Foods - 23.40 - Groceries - Cap1
+11/10/22 - Varsity Energy - 79.50 - Domestic - Cap1
+11/10/22 - Krispy Kreme - 4.99 - Breakfast - Cap1
+11/10/22 - Tracfone Services - 16.74 - Lifestyle - Cap1
+11/12/22 - Jack Box - 4.43 - Snacks - Cap1
+11/12/22 - Local Tap and Table - 26.62 - Dinner - Cap1
+11/12/22 - Krispy Kreme - 4.99 - Breakfast - Cap1
+11/14/22 - Zalat - 20.56 - Diner - Cap1
+11/14/22 - Dallas Grilled Cheese - 14.06 - Dinner - Cap1
+11/14/22 - SHELL OIL - 5.17 - Snacks - Cap1
+11/14/22 - Trader Joes - 10.72 - Groceries - Cap1
+11/15/22 - Matitos - 21.65 - Dinner - Cap1
+11/15/22 - Trader Joes - 10.72 - Groceries - Cap1
+11/17/22 - Trader Joes - 14.03 - Groceries - Cap1
+11/17/22 - Jack Box - 9.29 - Snacks - Cap1
+11/17/22 - Eataly - 5.30 - Snacks - Savor
+11/17/22 - Eataly - 27.98 - Dinner - Savor
+11/18/22 - Revature - 1901.83 - Income - Georgetown --- TRUE
+11/18/22 - Sal's Pizza - 18.37 - Dinner - Cap1
+11/18/22 - Spotify - 12.99 - Entertainment - Cap1 
+11/19/22 - Dallas Grilled Cheese - 20.54 - Dinner - Savor
+11/21/22 - 7 Eleven - 10.90 - Snacks - Savor
+11/21/22 - Haywire - 54.44 - Dinner - Savor - Date
+11/21/22 - Walmart - 10.86 - Groceries - Savor
+11/21/22 - Whole Foods - 23.40 - Groceries - Savor
+11/21/22 - AT&T Internet - 56.07 - Domestic - American
+11/21/22 - Costco - 70.35 - Entertainment - Chase Sapphire ------ TV warranty
+11/21/22 - Costco - 1012.13 - Entertainment- Chase Sapphire ----- 11/27 - Samsung TV
+11/21/22 - Alamo Drafthouse -  - Snacks - Savor - Date ----- Snacks for theatre Date
+11/21/22 - Canopy Hilton - 20.40 - Entertainment - Savor
+11/21/22 - Amazon - 51.45 - Lifestyle - Parents CC ------ Computer charger
+11/21/22 - Amazon - 30.65 - Lifestyle - Parents CC ------ Body hair trimmer
+11/22/22 - Jack Box - 9.23 - Snacks - Cap1
+11/22/22 - GNC - 76.49 - Groceries - Cap1 ------ Protein, 60 day subscr
+11/22/22 - Lyft - 21.53 - Local Travel - American ----- 11/25 - to DFW
+11/23/22 - Cabanita - 41.85 - Dinner - Chase Sapphire 
+11/27/22 - Target - 566.23 - Entertainment - Chase Sapphire ------  Nintendo switch + games
+11/28/22 - Buffalo Wild Wings - 46.10 - Lunch - Chase Sapphire
+11/28/22 - Pinkberry - 3.85 - Snacks - Chase Sapphire
+11/28/22 - Amazon - 154.50 - Lifestyle - Parents CC ------ Headset, screen protector, switch case, Sandisk
+11/28/22 - Amazon - 84.92 - Lifestyle - Parents CC ------ Powerstrip, tv mount, charger
+11/28/22 - Amazon - 30.28 - Lifestyle - Parents CC ------ USBC and Phone Case
+11/29/22 - Chipotle - 9.69 - Lunch - Chase Sapphire 
+11/30/22 - Google Store - 810.79 - Lifestyle - Chase Sapphire ----- 11/28 - Pixel 7
+11/30/22 - Bank of America - 3803.85 - Income - Georgetown --- TRUE

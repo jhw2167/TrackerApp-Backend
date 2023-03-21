@@ -1,4 +1,4 @@
-package com.jack.repository;
+package com.jack.repository.subrepo;
 
 
 import com.jack.model.Transaction;
@@ -35,4 +35,6 @@ public interface TransactionKeyRepo extends JpaRepository<TransactionKey, Long>
 			") ", nativeQuery = true)
 	public Optional<TransactionKey> findByUserIdAndTid(@Param("user_id") String userId, @Param("t_id") long tid);
 
+	@Query(value="DELETE FROM transaction_keys WHERE true_id=:true_id", nativeQuery=true)
+	public void deleteByTrueId(@Param("true_id") long trueId);
 }

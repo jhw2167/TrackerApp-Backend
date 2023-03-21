@@ -44,7 +44,7 @@ SELECT * FROM
 	TRANSACTIONS B 
 	ON B.TRUE_ID = A.TRUE_ID
 ) AS T 
-WHERE t.purchase_date >= '2022-12-15' AND t.purchase_date < '2022-12-30' ORDER BY t.purchase_date DESC;
+WHERE t.purchase_date >= '2022-11-21' AND t.purchase_date < '2022-11-21' ORDER BY t.purchase_date DESC;
 
 ----
 

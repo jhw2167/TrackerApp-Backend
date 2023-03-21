@@ -1,0 +1,902 @@
+[
+{
+"tId": "",
+"purchaseDate": "2022-11-01",
+"vendor": "MCKINNEY AVE. CLEANERS",
+"amount": "20.94",
+"category": "Lifestyle",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "2021-10-28",
+"notes": "Dry Cleaning"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-01",
+"vendor": "Trader Joes",
+"amount": "15.73",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-01",
+"vendor": "M Line Tower",
+"amount": "2050.44",
+"category": "Domestic",
+"payMethod": "Georgetown",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-02",
+"vendor": "SHELL OIL",
+"amount": "7.55",
+"category": "Snacks",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-02",
+"vendor": "Whole Foods",
+"amount": "24.36",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-02",
+"vendor": "Whole Foods",
+"amount": "19.20",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-02",
+"vendor": "Krispy Kreme",
+"amount": "4.99",
+"category": "Breakfast",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-03",
+"vendor": "Amazon Web Services",
+"amount": "0.54",
+"category": "Business",
+"payMethod": "American",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "Monthly website usage JackHenryWelsh.com"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-03",
+"vendor": "Trader Joes",
+"amount": "35.88",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-04",
+"vendor": "Revature",
+"amount": "1901.83",
+"category": "Income",
+"payMethod": "Georgetown",
+"boughtFor": "",
+"payStatus": "",
+"income": "TRUE",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-05",
+"vendor": "Whole Foods",
+"amount": "33.88",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-06",
+"vendor": "Trader Joes",
+"amount": "17.00",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-06",
+"vendor": "Smoothie King",
+"amount": "8.76",
+"category": "Breakfast",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-06",
+"vendor": "Einstein bagels",
+"amount": "8.32",
+"category": "Breakfast",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-08",
+"vendor": "Kroger",
+"amount": "10.57",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-09",
+"vendor": "Whole Foods",
+"amount": "23.40",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-10",
+"vendor": "Varsity Energy",
+"amount": "79.50",
+"category": "Domestic",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-10",
+"vendor": "Krispy Kreme",
+"amount": "4.99",
+"category": "Breakfast",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-10",
+"vendor": "Tracfone Services",
+"amount": "16.74",
+"category": "Lifestyle",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-12",
+"vendor": "Jack Box",
+"amount": "4.43",
+"category": "Snacks",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-12",
+"vendor": "Local Tap and Table",
+"amount": "26.62",
+"category": "Dinner",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-12",
+"vendor": "Krispy Kreme",
+"amount": "4.99",
+"category": "Breakfast",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-14",
+"vendor": "Zalat",
+"amount": "20.56",
+"category": "Diner",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-14",
+"vendor": "Dallas Grilled Cheese",
+"amount": "14.06",
+"category": "Dinner",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-14",
+"vendor": "SHELL OIL",
+"amount": "5.17",
+"category": "Snacks",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-14",
+"vendor": "Trader Joes",
+"amount": "10.72",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-15",
+"vendor": "Matitos",
+"amount": "21.65",
+"category": "Dinner",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-15",
+"vendor": "Trader Joes",
+"amount": "10.72",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-17",
+"vendor": "Trader Joes",
+"amount": "14.03",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-17",
+"vendor": "Jack Box",
+"amount": "9.29",
+"category": "Snacks",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-17",
+"vendor": "Eataly",
+"amount": "5.30",
+"category": "Snacks",
+"payMethod": "Savor",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-17",
+"vendor": "Eataly",
+"amount": "27.98",
+"category": "Dinner",
+"payMethod": "Savor",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-18",
+"vendor": "Revature",
+"amount": "1901.83",
+"category": "Income",
+"payMethod": "Georgetown",
+"boughtFor": "",
+"payStatus": "",
+"income": "TRUE",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-18",
+"vendor": "Sal's Pizza",
+"amount": "18.37",
+"category": "Dinner",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-18",
+"vendor": "Spotify",
+"amount": "12.99",
+"category": "Entertainment",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-19",
+"vendor": "Dallas Grilled Cheese",
+"amount": "20.54",
+"category": "Dinner",
+"payMethod": "Savor",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "7 Eleven",
+"amount": "10.90",
+"category": "Snacks",
+"payMethod": "Savor",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "Haywire",
+"amount": "54.44",
+"category": "Dinner",
+"payMethod": "Savor",
+"boughtFor": "Date",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "Walmart",
+"amount": "10.86",
+"category": "Groceries",
+"payMethod": "Savor",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "Whole Foods",
+"amount": "23.40",
+"category": "Groceries",
+"payMethod": "Savor",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "AT&T Internet",
+"amount": "56.07",
+"category": "Domestic",
+"payMethod": "American",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "Costco",
+"amount": "70.35",
+"category": "Entertainment",
+"payMethod": "Chase Sapphire",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "TV warranty"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "Costco",
+"amount": "1012.13",
+"category": "Entertainment",
+"payMethod": "Chase Sapphire",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "2021-11-27",
+"notes": "Samsung TV"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "Alamo Drafthouse",
+"amount": "",
+"category": "Snacks",
+"payMethod": "Savor",
+"boughtFor": "Date",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "Snacks for theatre Date"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "Canopy Hilton",
+"amount": "20.40",
+"category": "Entertainment",
+"payMethod": "Savor",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "Amazon",
+"amount": "51.45",
+"category": "Lifestyle",
+"payMethod": "Parents CC",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "Computer charger"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-21",
+"vendor": "Amazon",
+"amount": "30.65",
+"category": "Lifestyle",
+"payMethod": "Parents CC",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "Body hair trimmer"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-22",
+"vendor": "Jack Box",
+"amount": "9.23",
+"category": "Snacks",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-22",
+"vendor": "GNC",
+"amount": "76.49",
+"category": "Groceries",
+"payMethod": "Cap1",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "Protein, 60 day subscr"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-22",
+"vendor": "Lyft",
+"amount": "21.53",
+"category": "Local Travel",
+"payMethod": "American",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "2021-11-25",
+"notes": "to DFW"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-23",
+"vendor": "Cabanita",
+"amount": "41.85",
+"category": "Dinner",
+"payMethod": "Chase Sapphire",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-27",
+"vendor": "Target",
+"amount": "566.23",
+"category": "Entertainment",
+"payMethod": "Chase Sapphire",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "Nintendo switch + games"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-28",
+"vendor": "Buffalo Wild Wings",
+"amount": "46.10",
+"category": "Lunch",
+"payMethod": "Chase Sapphire",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-28",
+"vendor": "Pinkberry",
+"amount": "3.85",
+"category": "Snacks",
+"payMethod": "Chase Sapphire",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-28",
+"vendor": "Amazon",
+"amount": "154.50",
+"category": "Lifestyle",
+"payMethod": "Parents CC",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "Headset, screen protector, switch case, Sandisk"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-28",
+"vendor": "Amazon",
+"amount": "84.92",
+"category": "Lifestyle",
+"payMethod": "Parents CC",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "Powerstrip, tv mount, charger"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-28",
+"vendor": "Amazon",
+"amount": "30.28",
+"category": "Lifestyle",
+"payMethod": "Parents CC",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": "USBC and Phone Case"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-29",
+"vendor": "Chipotle",
+"amount": "9.69",
+"category": "Lunch",
+"payMethod": "Chase Sapphire",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-30",
+"vendor": "Google Store",
+"amount": "810.79",
+"category": "Lifestyle",
+"payMethod": "Chase Sapphire",
+"boughtFor": "",
+"payStatus": "",
+"income": "",
+"reimburses": "",
+"postedDate": "2021-11-28",
+"notes": "Pixel 7"
+},
+
+{
+"tId": "",
+"purchaseDate": "2022-11-30",
+"vendor": "Bank of America",
+"amount": "3803.85",
+"category": "Income",
+"payMethod": "Georgetown",
+"boughtFor": "",
+"payStatus": "",
+"income": "TRUE",
+"reimburses": "",
+"postedDate": "",
+"notes": ""
+},
+
+]

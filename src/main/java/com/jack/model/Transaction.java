@@ -21,11 +21,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /* Transaction model class for holding data in each transaction as read from the database
  * we will annotate our values with JPA to be persisted correctly
- 
- //I am committing to the camel case paradigm in SQL as it is in Java and JSON
- 	SQL COL DEFINITIONS:
- 
- 	tId 			INTEGER 		PRIMARY KEY,
+
+*
+ 	t_id 			INTEGER 		PRIMARY KEY,
+	true_id			INTEGER 		NOT NULL,
 	purchase_date 	VARCHAR(12) 	NOT NULL DEFAULT CURRENT_DATE,
 	amount 			NUMERIC(10, 2) 	NOT NULL DEFAULT '0' CHECK (amount>=0),
 	vendor 			VARCHAR(50) 	REFERENCES vendors(vendor),
@@ -63,38 +62,43 @@ public class Transaction {
 	@Column(name="t_id", columnDefinition="NUMERIC NOT NULL")
 	private long tId;
 	
-	@Column(columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
+	@Column(name="purchase_date", columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
 	private LocalDate purchaseDate;
 	
-	@Column(columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
+	@Column(name="amount", columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
 	private double amount;
 	
-	@Column(columnDefinition="VARCHAR(50) NOT NULL")	//references vendors
+	@Column(name="vendor", columnDefinition="VARCHAR(50) NOT NULL")	//references vendors
 	private String vendor;
 	
-	@Column(columnDefinition="VARCHAR(50) NOT NULL DEFAULT 'Misc'")
+	@Column(name="category", columnDefinition="VARCHAR(50) NOT NULL DEFAULT 'Misc'")
 	private String category;
 	
-	@Column(columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'PERSONAL'")
+	@Column(name="bought_for", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'PERSONAL'")
 	private String boughtFor;
-	
-	@Column(columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'CASH'")	//references pay_methods
-	private String payMethod;
-	
-	@Column(columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'COMPLETE'")
+
+	@Column(name="pay_method", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'CASH'")	//references pay_methods
+	private String payMethodString;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
+	@JsonProperty("pmId")
+	private PayMethod payMethod;
+
+	@Column(name="pay_status", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'COMPLETE'")
 	private String payStatus;
 	
-	@Column(columnDefinition="BOOLEAN DEFAULT FALSE")
+	@Column(name="is_income", columnDefinition="BOOLEAN DEFAULT FALSE")
 	@JsonProperty("income")
 	private boolean isIncome;
 	
-	@Column(columnDefinition="INTEGER REFERENCES transactions(t_id) DEFAULT 0")
+	@Column(name="reimburses", columnDefinition="INTEGER REFERENCES transactions(t_id) DEFAULT 0")
 	private long reimburses;
 	
-	@Column(columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
+	@Column(name="posted_date", columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
 	private LocalDate postedDate;
 	
-	@Column(columnDefinition="VARCHAR(1024) DEFAULT NULL")
+	@Column(name="notes", columnDefinition="VARCHAR(1024) DEFAULT NULL")
 	private String notes;
 
 	//End State Vars
@@ -126,23 +130,23 @@ public class Transaction {
 		-Create transaction from immature transaction submitted in POST calls
 		"Immature" transactions need their TIDs created
 	 */
-	public Transaction(final UserAccount u, final Transaction t, final long transOnDate) {
+	public Transaction(final UserAccount u, final Transaction t, final long transOnDate, final long reimburses) {
 		super();
 		//System.out.println("My Constructor");
 		settId(t.purchaseDate.toString(), transOnDate);
 		setTrueId(u.getUserId(), this.tId);
 		this.purchaseDate = t.purchaseDate;
-		this.amount = t.amount;
+		setAmount(t.amount);
 
 		setVendor(t.vendor);
 		setCategory(t.category);
 		setBoughtFor(t.boughtFor);
-		setPayMethod(t.payMethod);
+		setPayMethodString(t.payMethodString);
 		setPayStatus(t.payStatus);
 		setIncome(t.isIncome);
-		this.reimburses = t.reimburses;
+		setReimburses(reimburses);
 		setPostedDate(t.postedDate);
-		this.notes = t.notes;
+		setNotes(t.notes);
 	}
 
 	public void updateData(Transaction t) {
@@ -152,7 +156,7 @@ public class Transaction {
 		this.setCategory(t.getCategory());
 		this.setIncome(t.isIncome());
 		this.setNotes(t.getNotes());
-		this.setPayMethod(t.getPayMethod());
+		this.setPayMethodString(t.getPayMethodString());
 		this.setPayStatus(t.getPayStatus());
 		this.setPurchaseDate(t.getPurchaseDate());
 		this.setPostedDate(t.getPostedDate());
@@ -197,9 +201,9 @@ public class Transaction {
 		this.payStatus = payStatus2.equals("") ? "COMPLETE" : payStatus2.toUpperCase();
 	}
 
-	private void setPayMethod(String payMethod2) {
+	/*private void setPayMethod(String payMethod2) {
 		this.payMethod = payMethod2.equals("") ? "CASH" : payMethod2.toUpperCase();
-	}
+	}*/
 
 	private void setBoughtFor(String boughtFor2) {
 		this.boughtFor = boughtFor2.equals("") ? "PERSONAL" : boughtFor2.toUpperCase();
@@ -212,8 +216,12 @@ public class Transaction {
 	//END SETTERS
 
 
-	/* Overrides */
+	//Utility Methods
+	public static boolean compareIds(Transaction a, Transaction b) {
+		return (a.trueId==b.trueId) && (a.tId==b.tId);
+	}
 
+	/* Overrides */
 
 	public boolean equals(Object obj) {
 		if (obj == null) {
@@ -227,5 +235,6 @@ public class Transaction {
 		final Transaction t = (Transaction) obj;
 		return this.trueId==t.getTrueId();
 	}
+
 }
 //END CLASS
