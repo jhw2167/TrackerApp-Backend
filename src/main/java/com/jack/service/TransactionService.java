@@ -202,8 +202,9 @@ public class TransactionService
 			PayMethodKey pmk = new PayMethodKey(pm, u.get());
 
 			if(!pmkRepo.existsByPayMethod(pm)) {
-				pmRepo.save(pm);
-				pmkRepo.save(pmk);
+				//pmRepo.save(pm);
+				//pmkRepo.save(pmk);
+				System.out.println("Here");
 			}
 
 			t.setPayMethod(pm);
