@@ -265,7 +265,8 @@ public class TransactionController {
 	
 	//Patch a list of transactions entry
 	@PatchMapping
-	public ResponseEntity<String> patchTransactions(@RequestBody final List<Transaction> tx)
+	public ResponseEntity<String> patchTransactions(@PathVariable("userId") final String userId,
+			@RequestBody final List<Transaction> tx)
 	{
 		StringBuilder body = new StringBuilder("Patched Transactions: [\n");
 		HttpStatus status = HttpStatus.OK;

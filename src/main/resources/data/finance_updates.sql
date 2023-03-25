@@ -128,6 +128,9 @@ WHERE amount=33.05
 ---------------- TRANSACTIONS UPDATES ----------------
 
 
+SELECT * FROM  ( (SELECT * FROM TRANSACTION_KEYS TK  WHERE USER_ID =20230303JackHenryWelsh@gmail.com
+) 
+AS A JOIN  TRANSACTIONS T  ON T.TRUE_ID = A.TRUE_ID  AND T.t_id=20221121010)
 
 ---
 
