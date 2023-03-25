@@ -80,12 +80,13 @@ public class TransactionService
 		return repo.findAllByPurchaseDate(userId, purchaseDate);
 	}
 	
-	public Transaction getTransactionByID(final String userId, final Long tId) {
+	public Transaction getTransactionByID(final String userId, final Long tId) throws ResourceNotFoundException {
 		Optional<TransactionKey> tk = keyRepo.findByUserIdAndTid(userId, tId);
+
 		if(tk.isPresent())
 			return tk.get().getTransaction();
 		else
-			return null; //error stuff
+			throw new ResourceNotFoundException(String.format("Could not find transaction %s under user %s", tId, userId));
 	}
 	
 	public List<Transaction> searchVendors(final String userId, String name) {

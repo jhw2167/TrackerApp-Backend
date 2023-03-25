@@ -10,9 +10,9 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+
 //Java Imports
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +25,12 @@ import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import javax.servlet.http.HttpServletRequest;
+
 //Project Imports
 import com.jack.model.*;
 import com.jack.service.*;
+
 
 
 //
@@ -78,7 +81,14 @@ public class TransactionController {
 	
 	
 	/* Utility Methods */
-	
+
+	@RequestMapping(value="/{tid}", method=RequestMethod.GET)
+	public ResponseEntity<Transaction> getTransactionByID(@PathVariable("userId") final String userId, @PathVariable("tid") final long tId) {
+		return new ResponseEntity<Transaction>(ts.getTransactionByID(userId, tId), HttpStatus.OK);
+	}
+	//END GET TRANSACTION BY ID
+
+
 	/**
 	 *	Get all transactions, default sorted by date, descending (most recent to oldest) 
 	 * 
@@ -102,23 +112,12 @@ public class TransactionController {
 		return new ResponseEntity<>(ts.searchVendors(userId, name), HttpStatus.OK);
 	}
 	//END GET VENDOR SEARCH
-	
-	
-	//Get vendors by searching vendor nam
-	/**
-	 * @return ResponseEntity<Vendor>
-	 */
-	@RequestMapping(value="/{tid}", method=RequestMethod.GET)
-	public ResponseEntity<Transaction> getVendorByID(@PathVariable("userId") final String userId, @PathVariable("tid") final long tId) {
-		return new ResponseEntity<>(ts.getTransactionByID(userId, tId), HttpStatus.OK);
-	}
-	//END GET VENDOR SEARCH BY ID
 
 	@RequestMapping(value="/updateKeys", method=RequestMethod.POST)
 	public ResponseEntity postTransKeys(@PathVariable("userId") final String userId) {
 		// **TURNED OFF**
 		//ts.postTransKeys(userId);
-		ts.postPmKeys(userId.toUpperCase());
+		//ts.postPmKeys(userId.toUpperCase());
 		return new ResponseEntity<String>("NOT IMPLEMENTED - ENABLE IN SOURCE", HttpStatus.BAD_REQUEST);
 	}
 	
