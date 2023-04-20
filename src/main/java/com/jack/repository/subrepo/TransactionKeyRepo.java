@@ -37,4 +37,7 @@ public interface TransactionKeyRepo extends JpaRepository<TransactionKey, Long>
 
 	@Query(value="DELETE FROM transaction_keys WHERE true_id=:true_id", nativeQuery=true)
 	public void deleteByTrueId(@Param("true_id") long trueId);
+
+	@Query(value="SELECT USER_ID FROM TRANSACTION_KEYS TK WHERE TRUE_ID=:true_id", nativeQuery=true)
+	public String findUserIdByTrueId(@Param("true_id") long trueId);
 }

@@ -38,25 +38,32 @@ public class PayMethod {
 	@JsonProperty("pmId")
 	private long pmId;
 
-	@Column(columnDefinition="VARCHAR NOT NULL DEFAULT 'CASH'")
-	private String pay_method;
+	@JsonProperty("payMethod")
+	@Column(name="pay_method", columnDefinition="VARCHAR NOT NULL DEFAULT 'CASH'")
+	private String payMethod;
 
-	@Column(columnDefinition="VARCHAR NOT NULL DEFAULT 'SIMPLE'")
-	private String institution_type;
+	@JsonProperty("institutionType")
+	@Column(name="institution_type", columnDefinition="VARCHAR NOT NULL DEFAULT 'SIMPLE'")
+	private String institutionType;
 
-	@Column(columnDefinition="NUMERIC")
+	@JsonProperty("balance")
+	@Column(name="balance", columnDefinition="NUMERIC")
 	private Double balance;
 
-	@Column(columnDefinition="NUMERIC")
-	private Double credit_line;
+	@JsonProperty("creditLine")
+	@Column(name="credit_line", columnDefinition="NUMERIC")
+	private Double creditLine;
 
-	@Column(columnDefinition="NUMERIC")
-	private Double cash_back;
+	@JsonProperty("cashBack")
+	@Column(name="cash_back", columnDefinition="NUMERIC")
+	private Double cashBack;
 
-	@Column(columnDefinition="VARCHAR")
+	@JsonProperty("description")
+	@Column(name="description", columnDefinition="VARCHAR")
 	private String description;
 
-	@Column(columnDefinition="VARCHAR")
+	@JsonProperty("website")
+	@Column(name="website", columnDefinition="VARCHAR")
 	private String website;
 
 
@@ -68,33 +75,39 @@ public class PayMethod {
 	public PayMethod(PayMethod pm) {
 		super();
 		this.pmId = pm.pmId;
-		this.pay_method = pm.pay_method;
-		this.institution_type = pm.institution_type;
+		setPayMethod(pm.payMethod);
+		setInstitutionType(pm.institutionType);
 		this.balance = pm.balance;
-		this.credit_line = pm.credit_line;
-		this.cash_back = pm.cash_back;
+		this.creditLine = pm.creditLine;
+		this.cashBack = pm.cashBack;
 		this.description = pm.description;
 		this.website = pm.website;
 	}
 
+
 	//For generating a new pm_id
 	public PayMethod(PayMethod pm, String userId) {
 		super();
-		this.pmId = generatePm_id(pm.pay_method, userId);
-		this.pay_method = pm.pay_method;
-		this.institution_type = pm.institution_type;
+		setPayMethod(pm.payMethod);
+		setInstitutionType(pm.institutionType);
+		this.pmId = generatePmId(pm.payMethod, userId);
 		this.balance = pm.balance;
-		this.credit_line = pm.credit_line;
-		this.cash_back = pm.cash_back;
+		this.creditLine = pm.creditLine;
+		this.cashBack = pm.cashBack;
 		this.description = pm.description;
 		this.website = pm.website;
 	}
 
 	public PayMethod(String userId, String pay_method, String institution_type) {
 		super();
-		this.pmId = generatePm_id(pay_method, userId);
-		this.pay_method = pay_method;
-		this.institution_type = institution_type;
+		setPayMethod(pay_method);
+		setInstitutionType(institution_type);
+		this.pmId = generatePmId(this.payMethod, userId);
+		this.balance = null;
+		this.creditLine = null;
+		this.cashBack = null;
+		this.description = null;
+		this.website = null;
 	}
 
 	/* END CONSTRUCTORS */
@@ -102,7 +115,15 @@ public class PayMethod {
 
 	//SETTERS
 
-	private long generatePm_id(String pay_method, String userId) {
+	public void setPayMethod(String pm) {
+		this.payMethod = (pm==null || pm.isEmpty()) ? "CASH" : pm;
+	}
+
+	public void setInstitutionType(String instType) {
+		this.payMethod = (instType==null || instType.isEmpty()) ? "SIMPLE" : instType;
+	}
+
+	private long generatePmId(String pay_method, String userId) {
 		return General.mergeHash(pay_method.hashCode(), userId.hashCode());
 	}
 }

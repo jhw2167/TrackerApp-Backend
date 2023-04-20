@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 //Project Imports
 import com.jack.model.PayMethod;
@@ -28,7 +29,25 @@ public interface PayMethodRepo extends JpaRepository<PayMethod, Long>
 	public PayMethod findByPmId(long pmId);
 	
 	//find all that partially match name
-	@Query(value="SELECT * FROM pay_methods pm WHERE pm.pay_method LIKE :method", nativeQuery=true)
-	public List<PayMethod> findAllLikeVendorName(@Param("method") String payMethod);
-	
+	@Query(value="SELECT * FROM " +
+			"(" +
+			"(SELECT PMK.PM_ID AS key_pm_id, USER_ID FROM PAY_METHOD_KEYS PMK " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN " +
+			"PAY_METHODS PM " +
+			"ON A.key_pm_id = PM.PM_ID " +
+			") AS M " +
+			"WHERE M.PAY_METHOD=:method", nativeQuery=true)
+	public Optional<PayMethod> findByMethodName(@Param("user_id") String userId, @Param("method") String payMethod);
+
+	@Query(value="SELECT * FROM " +
+			"(" +
+			"(SELECT PMK.PM_ID AS key_pm_id, USER_ID FROM PAY_METHOD_KEYS PMK " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN " +
+			"PAY_METHODS PM " +
+			"ON A.key_pm_id = PM.PM_ID " +
+			") AS M " +
+			"WHERE M.PM_ID=:pm_id", nativeQuery=true)
+	public Optional<PayMethod> findByPmId(@Param("user_id") String userId, @Param("pm_id") String pmId);
 }

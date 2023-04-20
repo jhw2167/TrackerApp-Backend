@@ -6,8 +6,10 @@ import java.time.LocalDate;
 //JAVA Imports
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 //Spring Imports
+import com.jack.model.submodel.TransactionKey;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
@@ -28,6 +30,16 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	//#0
 	//simple find tranasction like id
 	public Transaction findByTrueId(long trueId);
+
+	@Query(value = "SELECT * FROM  " +
+			"( " +
+			"(SELECT * FROM TRANSACTION_KEYS TK  " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN  " +
+			"TRANSACTIONS T  " +
+			"ON T.TRUE_ID = A.TRUE_ID  AND T.t_id= :t_id" +
+			") ", nativeQuery = true)
+	public Optional<Transaction> findByUserIdAndTid(@Param("user_id") String userId, @Param("t_id") long tid);
 
 	//#0a Delete by trueId
 	@Query(value="DELETE FROM transactions WHERE true_id=:true_id", nativeQuery=true)
@@ -192,6 +204,18 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 			") AS T " +
 			"GROUP BY pay_status", nativeQuery=true)
 	public List<String> findPayStatusGroupByPayStatus(@Param("user_id") String userId);
+
+	//#14
+	@Query(value="SELECT * FROM " +
+			"(" +
+			"(SELECT TRUE_ID AS TK_TRUE_ID, USER_ID FROM TRANSACTION_KEYS TK " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN " +
+			"TRANSACTIONS B " +
+			"ON B.TRUE_ID = A.TK_TRUE_ID " +
+			") AS T " +
+			"WHERE T.true_Id=:true_id", nativeQuery=true)
+	public Optional<Transaction> findByUserIdAndTrueId(@Param("user_id") String userId, @Param("true_id") long trueId);
 	
 	
 }

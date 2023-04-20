@@ -61,43 +61,53 @@ public class Transaction {
 	@JsonProperty("tid")
 	@Column(name="t_id", columnDefinition="NUMERIC NOT NULL")
 	private long tId;
-	
+
+	@JsonProperty("purchaseDate")
 	@Column(name="purchase_date", columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
 	private LocalDate purchaseDate;
-	
+
+	@JsonProperty("amount")
 	@Column(name="amount", columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
 	private double amount;
-	
+
+	@JsonProperty("vendor")
 	@Column(name="vendor", columnDefinition="VARCHAR(50) NOT NULL")	//references vendors
 	private String vendor;
-	
+
+	@JsonProperty("category")
 	@Column(name="category", columnDefinition="VARCHAR(50) NOT NULL DEFAULT 'Misc'")
 	private String category;
-	
+
+	@JsonProperty("boughtFor")
 	@Column(name="bought_for", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'PERSONAL'")
 	private String boughtFor;
 
-	@Column(name="pay_method", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'CASH'")	//references pay_methods
+	@Transient
+	@JsonProperty("payMethod")
 	private String payMethodString;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
 	@JsonProperty("pmId")
+	@ManyToOne//(cascade = CascadeType.)
+	@JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
 	private PayMethod payMethod;
 
+	@JsonProperty("payStatus")
 	@Column(name="pay_status", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'COMPLETE'")
 	private String payStatus;
-	
-	@Column(name="is_income", columnDefinition="BOOLEAN DEFAULT FALSE")
+
 	@JsonProperty("income")
+	@Column(name="is_income", columnDefinition="BOOLEAN DEFAULT FALSE")
 	private boolean isIncome;
-	
+
+	@JsonProperty("reimburses")
 	@Column(name="reimburses", columnDefinition="INTEGER REFERENCES transactions(t_id) DEFAULT 0")
 	private long reimburses;
-	
+
+	@JsonProperty("postedDate")
 	@Column(name="posted_date", columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
 	private LocalDate postedDate;
-	
+
+	@JsonProperty("notes")
 	@Column(name="notes", columnDefinition="VARCHAR(1024) DEFAULT NULL")
 	private String notes;
 
@@ -130,21 +140,22 @@ public class Transaction {
 		-Create transaction from immature transaction submitted in POST calls
 		"Immature" transactions need their TIDs created
 	 */
-	public Transaction(final UserAccount u, final Transaction t, final long transOnDate, final long reimburses) {
+	public Transaction(final UserAccount u, final Transaction t, final long transOnDate) {
 		super();
 		//System.out.println("My Constructor");
 		settId(t.purchaseDate.toString(), transOnDate);
 		setTrueId(u.getUserId(), this.tId);
-		this.purchaseDate = t.purchaseDate;
+		setPurchaseDate(t.purchaseDate);
 		setAmount(t.amount);
 
 		setVendor(t.vendor);
 		setCategory(t.category);
 		setBoughtFor(t.boughtFor);
 		setPayMethodString(t.payMethodString);
+		setPayMethod(t.payMethod);
 		setPayStatus(t.payStatus);
 		setIncome(t.isIncome);
-		setReimburses(reimburses);
+		setReimburses(t.reimburses);
 		setPostedDate(t.postedDate);
 		setNotes(t.notes);
 	}
@@ -195,6 +206,10 @@ public class Transaction {
 	
 	private void setPostedDate(LocalDate postedDate2) {
 		this.postedDate = postedDate2==null ? this.purchaseDate : postedDate2;		
+	}
+
+	private void setPayMethodString(String pms) {
+		this.payMethodString = pms.equals("") ? "CASH" : pms.toUpperCase();
 	}
 
 	private void setPayStatus(String payStatus2) {

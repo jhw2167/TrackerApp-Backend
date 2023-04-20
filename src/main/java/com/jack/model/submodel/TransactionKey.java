@@ -32,12 +32,12 @@ public class TransactionKey {
     private long keyId;     //necessary dummy key to avoid annoying legacy composite key code
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne//(cascade = CascadeType.ALL)
     @JoinColumn(name = "true_id", referencedColumnName = "true_id", columnDefinition="NUMERIC NOT NULL")
     @JsonProperty("trueId")
     private Transaction transaction;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne//(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
     @JsonProperty("userId")
     private UserAccount user;

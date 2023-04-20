@@ -21,6 +21,7 @@ import com.jack.repository.*;
 import com.jack.model.*;
 import com.jack.model.submodel.*;
 import com.jack.repository.subrepo.*;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /* Service class for transactions handels all BUSINESS logic and is called from the 
  * controller class
@@ -47,6 +48,9 @@ public class TransactionService
 	PayMethodRepo pmRepo;
 	@Autowired
 	PayMethodKeyRepo pmkRepo;
+
+	@Autowired
+	PayMethodService pmService;
 	
 	//END STATE VARS
 
@@ -86,7 +90,7 @@ public class TransactionService
 		if(tk.isPresent())
 			return tk.get().getTransaction();
 		else
-			throw new ResourceNotFoundException(String.format("Could not find transaction %s under user %s", tId, userId));
+			throw new ResourceNotFoundException(String.format("Could not find transaction: %s under user: %s", tId, userId));
 	}
 	
 	public List<Transaction> searchVendors(final String userId, String name) {
@@ -139,24 +143,15 @@ public class TransactionService
 	
 	//Save Data
 	public Transaction saveTransaction(Transaction tx, UserAccount u) {
+		setDefaultReimburses(tx, u);
+		repo.save(tx);
 		keyRepo.save(new TransactionKey(tx, u));
-		return repo.save(tx);
-	}
-
-	
-	//Delete Transaction by ID
-	public void deleteTransactionById(final String userId, final long tid) {
-		Optional<TransactionKey> tk = keyRepo.findByUserIdAndTid(userId, tid);
-		if(!tk.isPresent())
-			throw new ResourceNotFoundException("ERROR: No Transaction found with True ID: " +
-					tk.get().getTransaction().getTrueId());
-
-		keyRepo.deleteByTrueId(tk.get().getTransaction().getTrueId());
-		repo.deleteByTrueId(tk.get().getTransaction().getTrueId());
+		return tx;
 	}
 	
-	public Transaction updateTransaction(Transaction tx) throws ResourceNotFoundException {
-		System.out.println("Attempting to save: " + tx);
+	public Transaction updateTransaction(Transaction tx, UserAccount u) throws ResourceNotFoundException {
+		//System.out.println("Attempting to save: " + tx);
+		setDefaultReimburses(tx, u);
 		if(!repo.existsById(tx.getTrueId()))
 			throw new ResourceNotFoundException("ERROR: No Transaction found with True ID: " + tx.getTrueId());
 
@@ -168,8 +163,25 @@ public class TransactionService
 		return repo.save(tx);
 	}
 
-	public long getDefaultReimburses(final String userId) {
-		return this.getTransactionByID(userId, 0L).getTrueId();		//Each user has default transaction at tid==0
+	//Delete Transaction by ID
+	public void deleteTransactionById(final String userId, final long tid) {
+		Optional<TransactionKey> tk = keyRepo.findByUserIdAndTid(userId, tid);
+		if(!tk.isPresent())
+			throw new ResourceNotFoundException("ERROR: No Transaction found with True ID: " +
+					tk.get().getTransaction().getTrueId());
+
+		repo.deleteByTrueId(tk.get().getTransaction().getTrueId());
+		keyRepo.deleteByTrueId(tk.get().getTransaction().getTrueId());
+	}
+
+	/* We make sure that the reimburses id is valid for this user, if not,
+	it defaults to (userId, tid=0), the default base transaction in each user's account
+	 */
+	public void setDefaultReimburses(Transaction tx, UserAccount u) {
+		Optional<Transaction> reimbTrans = repo.findByUserIdAndTrueId(u.getUserId(), tx.getReimburses());
+		if (!reimbTrans.isPresent()) {
+			tx.setReimburses( 	this.getTransactionByID(u.getUserId(), 0L).getTrueId()	);//Each user has default transaction at tid==0
+		}
 	}
 
 	/*

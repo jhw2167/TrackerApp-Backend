@@ -41,28 +41,55 @@ public class Vendor {
 	
 	public Vendor(Vendor v) {
 		super();
-		this.vendor = v.vendor;
-		this.amount = v.amount;
-		this.category = v.category;
-		this.isTypicallyIncome = v.isTypicallyIncome;
+		setVendor(v.vendor);
+		setAmount(v.amount);
+		setCategory(v.category);
+		setTypicallyIncome(v.isTypicallyIncome);
 	}
 
 	public Vendor(String v) {
 		super();
-		setVendor(v.replace("'", "").toUpperCase());
-		setAmount(0);
+		setVendor(v);
+		setAmount(0d);
 		setCategory("MISC");
 		setTypicallyIncome(false);
 	}
 
 	public Vendor(String v, Double a, String c, Boolean inc) {
 		super();
-		setVendor(v.replace("'", "").toUpperCase());
+		setVendor(v);
 		setAmount(a);
 		setCategory(c);
 		setTypicallyIncome(inc);
 	}
-	
-	
-	
+
+	public Vendor(Transaction t) {
+		this(t.getVendor(), 0.d, t.getCategory(), t.isIncome());
+	}
+
+	/* SETTERS */
+	public void setVendor(String v) {
+		if(v==null || v.isEmpty())
+			v="UNKOWN";
+		this.vendor = v.replace("'", "").toUpperCase();
+	}
+
+	public void setCategory(String c) {
+		if(c==null || c.isEmpty())
+			c="MISC";
+		this.category = c.toUpperCase();
+	}
+
+	public void setAmount(Double d) {
+		if(d==null)
+			d=0d;
+		this.amount = d;
+	}
+
+	public void setTypicallyIncome(Boolean inc) {
+		if(inc==null)
+			inc=false;
+		this.isTypicallyIncome = inc;
+	}
+
 }

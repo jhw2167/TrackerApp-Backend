@@ -57,7 +57,11 @@ public class TransactionController {
 
 	@Autowired
 	UserAccountService us;
-	
+
+	@Autowired
+	PayMethodService pms;
+
+
 	/* Static variables */
 	static final ObjectMapper MAPPER = new ObjectMapper();
 	static {
@@ -65,14 +69,6 @@ public class TransactionController {
 		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		MAPPER.setDateFormat(df);
 	}
-
-	/*
-	@Autowired
-	TransactionController(TransactionService ts, VendorService vs) {
-		this.ts = ts;
-		this.vs = vs;
-	}
-	*/
 	
 	/* End State Variable Declarations */
 //##################################################################
@@ -81,7 +77,10 @@ public class TransactionController {
 	
 	
 	/* Utility Methods */
-
+	/**
+	 *	Get all transaction by userId and tid
+	 * @return ResponseEntity<Transaction>
+	 */
 	@RequestMapping(value="/{tid}", method=RequestMethod.GET)
 	public ResponseEntity<Transaction> getTransactionByID(@PathVariable("userId") final String userId, @PathVariable("tid") final long tId) {
 		return new ResponseEntity<Transaction>(ts.getTransactionByID(userId, tId), HttpStatus.OK);
@@ -217,26 +216,25 @@ public class TransactionController {
 												   @RequestBody final List<Transaction> tx)
 	{
 		//Make sure user exists else exit
-		Optional<UserAccount> user = us.getUserAccountById(userId);
-		if(!user.isPresent())
-			return new ResponseEntity<>("No user found with id: "+userId, HttpStatus.BAD_REQUEST);
-
+		UserAccount user = us.getUserAccountById(userId);
 		HttpStatus status = HttpStatus.OK;
 		final StringBuilder body = new StringBuilder();
+		final StringBuilder errorBody = new StringBuilder();
 
 		//Build Transactions to save
 		List<Transaction> refined = new ArrayList<>();
 		try {
 
 			for (Transaction t : tx ) {
-				vs.saveVendor(new Vendor(t.getVendor(), 0d, t.getCategory(), t.isIncome()));
-				long reimburses = (t.getReimburses() != 0) ? t.getReimburses() : ts.getDefaultReimburses(userId);
-				UserAccount u = us.getUserAccountById(userId).get();
+				UserAccount u = us.getUserAccountById(userId);
+				vs.saveVendor(new Vendor(t));
+				pms.savePayMethod(t.getPayMethod(), t, u);
+
 
 				try {
-					refined.add(ts.saveTransaction( new Transaction(user.get(), t,
+					refined.add(ts.saveTransaction( new Transaction(user, t,
 							ts.countByPurchaseDate(userId,
-									t.getPurchaseDate() ), reimburses ), u ) );
+									t.getPurchaseDate() ) ), u ) );
 
 				} catch (Exception e) {
 					body.append("ERROR saving transaction: \n" + MAPPER.writeValueAsString(t));
@@ -246,7 +244,7 @@ public class TransactionController {
 			} //END FOR
 
 		} catch (JsonProcessingException e) {
-			System.out.println("Error Proccessing Transaction in batch");
+			System.out.println("Error Proccessing Transaction in Batch");
 		}
 
 		body.append("\n\nSuccessfully posted transactions with tids: \n");
@@ -268,10 +266,16 @@ public class TransactionController {
 			@RequestBody final List<Transaction> tx)
 	{
 		StringBuilder body = new StringBuilder("Patched Transactions: [\n");
+
+		UserAccount u = us.getUserAccountById(userId);
 		HttpStatus status = HttpStatus.OK;
 		List<Transaction> refined = new ArrayList<>();
 		try {
-			tx.forEach( (t) -> refined.add(ts.updateTransaction(t)) );
+			for (Transaction t : tx ) {
+				vs.saveVendor(new Vendor(t));
+				pms.savePayMethod(t.getPayMethod(), t, u);
+				refined.add(ts.updateTransaction(t, u));
+			}
 		} catch(ResourceNotFoundException e) {
 			body = new StringBuilder(e.getMessage());
 			body.append("\n\nTransactions successfully patched: \n");
