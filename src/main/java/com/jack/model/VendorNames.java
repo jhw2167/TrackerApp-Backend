@@ -13,9 +13,10 @@ public class VendorNames {
 	@Column(name = "cc_id")
 	private String ccId;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "vendor", referencedColumnName = "vendor")
-	private Vendor vendor;
+	//@ManyToOne
+    //@JoinColumn(name = "vendor", referencedColumnName = "vendor")
+	@Column(name = "vendor")
+	private String vendor;
 
 	
 	/* CONSTRUCTORS */

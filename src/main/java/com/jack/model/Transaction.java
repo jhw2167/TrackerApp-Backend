@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import javax.persistence.*;
 
 import com.jack.utility.General;
-import org.springframework.stereotype.Component;
 
 //Lombok Imports
 import lombok.*;
@@ -86,10 +85,11 @@ public class Transaction {
 	@JsonProperty("payMethod")
 	private String payMethodString;
 
+	//@ManyToOne
+	//@JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
+	@Column(name = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
 	@JsonProperty("pmId")
-	@ManyToOne//(cascade = CascadeType.)
-	@JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
-	private PayMethod payMethod;
+	private long payMethodId;
 
 	@JsonProperty("payStatus")
 	@Column(name="pay_status", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'COMPLETE'")
@@ -128,7 +128,7 @@ public class Transaction {
 		this.vendor = t.vendor;
 		this.category = t.category;
 		this.boughtFor = t.boughtFor;
-		this.payMethod = t.payMethod;
+		this.payMethodId = t.payMethodId;
 		this.payStatus = t.payStatus;
 		this.isIncome = t.isIncome;
 		this.reimburses = t.reimburses;
@@ -152,7 +152,7 @@ public class Transaction {
 		setCategory(t.category);
 		setBoughtFor(t.boughtFor);
 		setPayMethodString(t.payMethodString);
-		setPayMethod(t.payMethod);
+		setPayMethodId(t.payMethodId);
 		setPayStatus(t.payStatus);
 		setIncome(t.isIncome);
 		setReimburses(t.reimburses);

@@ -5,8 +5,6 @@ package com.jack.model.submodel;
 //Project imports
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
@@ -32,23 +30,25 @@ public class TransactionKey {
     private long keyId;     //necessary dummy key to avoid annoying legacy composite key code
 
 
-    @OneToOne//(cascade = CascadeType.ALL)
-    @JoinColumn(name = "true_id", referencedColumnName = "true_id", columnDefinition="NUMERIC NOT NULL")
+    //@OneToOne//(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "true_id", referencedColumnName = "true_id", columnDefinition="NUMERIC NOT NULL")
+    @Column(name = "true_id", columnDefinition="NUMERIC NOT NULL UNIQUE")
     @JsonProperty("trueId")
-    private Transaction transaction;
+    private long trueId;
 
-    @ManyToOne//(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
+    //@ManyToOne//(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
+    @Column(name = "user_id", columnDefinition="VARCHAR NOT NULL")
     @JsonProperty("userId")
-    private UserAccount user;
+    private String userId;
 
     public TransactionKey() {
         //dummy constr
     }
 
-    public TransactionKey(Transaction t, UserAccount u) {
-        this.transaction = t;
-        this.user = u;
+    public TransactionKey(long t, String u) {
+        this.trueId = t;
+        this.userId = u;
     }
 
     @Override
@@ -62,6 +62,6 @@ public class TransactionKey {
         }
 
         final TransactionKey tk = (TransactionKey) obj;
-        return this.transaction.equals(tk.getTransaction());
+        return this.trueId==tk.getTrueId();
     }
 }

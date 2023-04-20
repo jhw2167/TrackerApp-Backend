@@ -14,11 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlingControllerAdvice {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(ResourceNotFoundException ex) {
-        return response("Resource not found", ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
+    /* UTILITY AND BASE METHODS */
     private static String createJson(String message, String reason) {
         return "{\"error\" : \"" + message + "\"," +
                 "\"reason\" : \"" + reason  + "\"}";
@@ -30,5 +26,12 @@ public class ExceptionHandlingControllerAdvice {
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(json, headers, httpStatus);
     }
+
+    /* EXCEPTION LIST */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(ResourceNotFoundException ex) {
+        return response("Resource not found", ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
 
 }

@@ -33,12 +33,14 @@ public class PayMethodService {
 
     /* METHODS */
 
-    public PayMethod savePayMethod(PayMethod pm, Transaction t, UserAccount u) {
+    public PayMethod savePayMethod(Transaction t, UserAccount u) {
 
-        long pmId = 0;
-        if(pm!=null)
-            pmId = pm.getPmId();
+        PayMethod pm = null;
+        long pmId = t.getPayMethodId();
         String providedPm = t.getPayMethodString();
+
+        if(pmId!=0)
+            pmId = pm.getPmId();
 
         if(pmId==0) { //default, use provided pm string
             if(providedPm==null || providedPm.isEmpty()) {
@@ -49,10 +51,10 @@ public class PayMethodService {
         } else {
             pm = repo.getById(pmId);
         }
-        t.setPayMethod(pm);
+        t.setPayMethodId(pm.getPmId());
 
         if(!repo.existsById(pm.getPmId()))
-            keyRepo.save(new PayMethodKey(pm, u));
+            keyRepo.save(new PayMethodKey(pm.getPmId(), u.getUserId()));
         return repo.save(pm);
     }
 

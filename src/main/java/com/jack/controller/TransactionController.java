@@ -2,11 +2,8 @@ package com.jack.controller;
 
 
 //Spring Imports
-import ch.qos.logback.core.net.SyslogOutputStream;
-import org.apache.catalina.mapper.Mapper;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -14,18 +11,15 @@ import java.time.LocalDate;
 //Java Imports
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import javax.servlet.http.HttpServletRequest;
 
 //Project Imports
 import com.jack.model.*;
@@ -228,7 +222,7 @@ public class TransactionController {
 			for (Transaction t : tx ) {
 				UserAccount u = us.getUserAccountById(userId);
 				vs.saveVendor(new Vendor(t));
-				pms.savePayMethod(t.getPayMethod(), t, u);
+				pms.savePayMethod(t, u);
 
 
 				try {
@@ -273,7 +267,7 @@ public class TransactionController {
 		try {
 			for (Transaction t : tx ) {
 				vs.saveVendor(new Vendor(t));
-				pms.savePayMethod(t.getPayMethod(), t, u);
+				pms.savePayMethod(t, u);
 				refined.add(ts.updateTransaction(t, u));
 			}
 		} catch(ResourceNotFoundException e) {

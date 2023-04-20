@@ -29,21 +29,23 @@ public class PayMethodKey {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long keyId;     //necessary dummy key to avoid annoying legacy composite key code
 
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL")
+    //@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    //@JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL")
+    @Column(name = "pm_id", columnDefinition="NUMERIC NOT NULL")
     @JsonProperty("pmId")
-    private PayMethod payMethod;
+    private long payMethod;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
+    //@ManyToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
+    @Column(name = "user_id", columnDefinition="VARCHAR NOT NULL")
     @JsonProperty("userId")
-    private UserAccount user;
+    private String user;
 
     public PayMethodKey() {
         //dummy constr
     }
 
-    public PayMethodKey(PayMethod p, UserAccount u) {
+    public PayMethodKey(long p, String u) {
         this.payMethod = p;
         this.user = u;
     }
@@ -59,6 +61,6 @@ public class PayMethodKey {
         }
 
         final PayMethodKey tk = (PayMethodKey) obj;
-        return this.payMethod.equals(tk.getPayMethod());
+        return this.payMethod==tk.getPayMethod();
     }
 }

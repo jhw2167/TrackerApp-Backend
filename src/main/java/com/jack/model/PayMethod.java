@@ -98,10 +98,14 @@ public class PayMethod {
 		this.website = pm.website;
 	}
 
-	public PayMethod(String userId, String pay_method, String institution_type) {
+	public PayMethod(String userId, String pay_method) {
+		this(userId, pay_method, "");
+	}
+
+	public PayMethod(String userId, String pay_method, String institutionType) {
 		super();
 		setPayMethod(pay_method);
-		setInstitutionType(institution_type);
+		setInstitutionType(institutionType);
 		this.pmId = generatePmId(this.payMethod, userId);
 		this.balance = null;
 		this.creditLine = null;

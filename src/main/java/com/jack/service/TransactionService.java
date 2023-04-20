@@ -21,7 +21,6 @@ import com.jack.repository.*;
 import com.jack.model.*;
 import com.jack.model.submodel.*;
 import com.jack.repository.subrepo.*;
-import org.springframework.web.bind.annotation.PathVariable;
 
 /* Service class for transactions handels all BUSINESS logic and is called from the 
  * controller class
@@ -88,7 +87,7 @@ public class TransactionService
 		Optional<TransactionKey> tk = keyRepo.findByUserIdAndTid(userId, tId);
 
 		if(tk.isPresent())
-			return tk.get().getTransaction();
+			return repo.getById(tk.get().getTrueId());
 		else
 			throw new ResourceNotFoundException(String.format("Could not find transaction: %s under user: %s", tId, userId));
 	}
@@ -144,8 +143,8 @@ public class TransactionService
 	//Save Data
 	public Transaction saveTransaction(Transaction tx, UserAccount u) {
 		setDefaultReimburses(tx, u);
-		repo.save(tx);
-		keyRepo.save(new TransactionKey(tx, u));
+		tx = repo.save(tx);
+		keyRepo.save(new TransactionKey(tx.getTrueId(), u.getUserId()));
 		return tx;
 	}
 	
@@ -167,11 +166,10 @@ public class TransactionService
 	public void deleteTransactionById(final String userId, final long tid) {
 		Optional<TransactionKey> tk = keyRepo.findByUserIdAndTid(userId, tid);
 		if(!tk.isPresent())
-			throw new ResourceNotFoundException("ERROR: No Transaction found with True ID: " +
-					tk.get().getTransaction().getTrueId());
+			throw new ResourceNotFoundException("ERROR: No Transaction found with tid: " + tid);
 
-		repo.deleteByTrueId(tk.get().getTransaction().getTrueId());
-		keyRepo.deleteByTrueId(tk.get().getTransaction().getTrueId());
+		keyRepo.deleteById(tk.get().getKeyId());
+		repo.deleteById(tk.get().getTrueId());
 	}
 
 	/* We make sure that the reimburses id is valid for this user, if not,
@@ -198,11 +196,14 @@ public class TransactionService
 		for (Transaction t : allTrans) {
 			t.setTrueId(u.get().getUserId(), t.getTId());
 			repo.save(t);
-			TransactionKey tk = new TransactionKey(t, u.get());
+			TransactionKey tk = new TransactionKey(t.getTrueId(), u.get().getUserId());
 			keyRepo.save(tk);
 		} //END FOR
 	}
 
+	/*
+		@deprecated Old method for refactoring tables, this one for pay method tables redo
+	 */
 	public void postPmKeys(String userId) {
 		List<Transaction> allTrans = repo.findAllByUserId(userId);
 		Optional<UserAccount> u = userRepo.findByUserId(userId);
@@ -211,16 +212,16 @@ public class TransactionService
 			return;
 
 		for (Transaction t : allTrans) {
-			PayMethod pm = new PayMethod(userId, t.getPayMethodString(), "SIMPLE");
-			PayMethodKey pmk = new PayMethodKey(pm, u.get());
-
-			if(!pmkRepo.existsByPayMethod(pm)) {
-				//pmRepo.save(pm);
-				//pmkRepo.save(pmk);
-				System.out.println("Here");
+			long pmId = 0;
+			if(t.getPayMethodId() != 0) {
+				pmId = t.getPayMethodId();
+			} else if (pmRepo.findByMethodName(userId, t.getPayMethodString()).isPresent()) {
+				pmId = pmRepo.findByMethodName(userId, t.getPayMethodString()).get().getPmId();
+				return;
+			} else {
+				pmId = pmService.savePayMethod(t, u.get()).getPmId();
 			}
-
-			t.setPayMethod(pm);
+			t.setPayMethodId(pmId);
 			repo.save(t);
 		} //END FOR
 

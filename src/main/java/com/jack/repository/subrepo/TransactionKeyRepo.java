@@ -3,6 +3,7 @@ package com.jack.repository.subrepo;
 
 import com.jack.model.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -35,8 +36,19 @@ public interface TransactionKeyRepo extends JpaRepository<TransactionKey, Long>
 			") ", nativeQuery = true)
 	public Optional<TransactionKey> findByUserIdAndTid(@Param("user_id") String userId, @Param("t_id") long tid);
 
-	@Query(value="DELETE FROM transaction_keys WHERE true_id=:true_id", nativeQuery=true)
-	public void deleteByTrueId(@Param("true_id") long trueId);
+	@Query(value = "SELECT COUNT(*)>0 FROM  " +
+			"( " +
+			"(SELECT * FROM TRANSACTION_KEYS TK  " +
+			"WHERE USER_ID =:user_id) AS A " +
+			"JOIN  " +
+			"TRANSACTIONS T  " +
+			"ON T.TRUE_ID = A.TRUE_ID  AND T.t_id= :t_id" +
+			") ", nativeQuery = true)
+	public Boolean existsByUserIdAndTid(@Param("user_id") String userId, @Param("t_id") long tid);
+
+	//@Modifying
+	//@Query(value="DELETE FROM transaction_keys WHERE true_id=:true_id", nativeQuery=true)
+	//public void deleteByTrueId(@Param("true_id") long trueId);
 
 	@Query(value="SELECT USER_ID FROM TRANSACTION_KEYS TK WHERE TRUE_ID=:true_id", nativeQuery=true)
 	public String findUserIdByTrueId(@Param("true_id") long trueId);

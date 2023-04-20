@@ -10,6 +10,7 @@ import java.util.Optional;
 
 //Spring Imports
 import com.jack.model.submodel.TransactionKey;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
@@ -42,8 +43,9 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	public Optional<Transaction> findByUserIdAndTid(@Param("user_id") String userId, @Param("t_id") long tid);
 
 	//#0a Delete by trueId
-	@Query(value="DELETE FROM transactions WHERE true_id=:true_id", nativeQuery=true)
-	public void deleteByTrueId(@Param("true_id") long trueId);
+	//@Modifying
+	//@Query(value="DELETE FROM transactions WHERE true_id=:true_id", nativeQuery=true)
+	//public void deleteByTrueId(@Param("true_id") long trueId);
 
 	//#1
 	//simple find all transactions by userId
