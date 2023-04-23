@@ -1,4 +1,4 @@
-package com.jack.misc;
+package com.jack.model.misc;
 
 public class DataWriter {
 

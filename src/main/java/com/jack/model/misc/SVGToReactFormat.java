@@ -1,4 +1,4 @@
-package com.jack.misc;
+package com.jack.model.misc;
 
 import java.io.*;
 import java.util.Arrays;

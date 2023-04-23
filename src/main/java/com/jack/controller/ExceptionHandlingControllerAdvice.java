@@ -27,6 +27,7 @@ public class ExceptionHandlingControllerAdvice {
         message = message.replace('"', (char) 39);
 
         String json = createJson(message, reason);
+        //System.out.println(json);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(json, headers, httpStatus);
