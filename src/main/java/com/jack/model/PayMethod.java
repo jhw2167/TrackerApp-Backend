@@ -38,6 +38,10 @@ public class PayMethod {
 	@JsonProperty("pmId")
 	private long pmId;
 
+	@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
+	@JsonProperty("userId")
+	private String userId;
+
 	@JsonProperty("payMethod")
 	@Column(name="pay_method", columnDefinition="VARCHAR NOT NULL DEFAULT 'CASH'")
 	private String payMethod;
@@ -74,44 +78,31 @@ public class PayMethod {
 
 	public PayMethod(PayMethod pm) {
 		super();
-		this.pmId = pm.pmId;
+		setPmId(pm.pmId);
 		setPayMethod(pm.payMethod);
 		setInstitutionType(pm.institutionType);
-		this.balance = pm.balance;
-		this.creditLine = pm.creditLine;
-		this.cashBack = pm.cashBack;
-		this.description = pm.description;
-		this.website = pm.website;
+		setBalance(pm.balance);
+		setCreditLine(pm.creditLine);
+		setCashBack(pm.cashBack);
+		setDescription(pm.description);
+		setWebsite(pm.website);
 	}
 
 
 	//For generating a new pm_id
-	public PayMethod(PayMethod pm, String userId) {
-		super();
-		setPayMethod(pm.payMethod);
-		setInstitutionType(pm.institutionType);
+	public PayMethod(PayMethod pm, UserAccount u) {
+		this(pm);
 		this.pmId = generatePmId(pm.payMethod, userId);
-		this.balance = pm.balance;
-		this.creditLine = pm.creditLine;
-		this.cashBack = pm.cashBack;
-		this.description = pm.description;
-		this.website = pm.website;
 	}
 
-	public PayMethod(String userId, String pay_method) {
-		this(userId, pay_method, "");
+	public PayMethod(UserAccount u, String payMethod) {
+		this(u, payMethod, null);
 	}
 
-	public PayMethod(String userId, String pay_method, String institutionType) {
-		super();
-		setPayMethod(pay_method);
+	public PayMethod(UserAccount u, String payMethod, String institutionType) {
+		setPmId(generatePmId(payMethod, userId));
+		setPayMethod(payMethod);
 		setInstitutionType(institutionType);
-		this.pmId = generatePmId(this.payMethod, userId);
-		this.balance = null;
-		this.creditLine = null;
-		this.cashBack = null;
-		this.description = null;
-		this.website = null;
 	}
 
 	/* END CONSTRUCTORS */

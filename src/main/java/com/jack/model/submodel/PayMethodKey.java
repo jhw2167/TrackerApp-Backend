@@ -1,3 +1,4 @@
+/*
 package com.jack.model.submodel;
 
 //Java Imports
@@ -13,12 +14,14 @@ import lombok.Data;
 import javax.persistence.*;
 
 
+*/
 /*
     Join Table/ID table for users and transactions allowing us to use one true id
     to uniquely identify each transaction as it is owned by each user. This avoids
     having to use a composite key on the transactions table
 
- */
+ *//*
+
 
 @Data
 @Entity @Table(name="pay_method_keys")
@@ -64,3 +67,4 @@ public class PayMethodKey {
         return this.payMethod==tk.getPayMethod();
     }
 }
+*/

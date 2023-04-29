@@ -18,6 +18,11 @@ SELECT * FROM
 	ON T.TRUE_ID = A.TRUE_ID 
 );
 
+SELECT t.*, p.pay_method 
+FROM TRANSACTIONS t 
+JOIN PAY_METHODS p ON t.pm_id = p.pm_id
+WHERE t.user_id = '20230303JACKHENRYWELSH@GMAIL.COM';
+
 ----
 
 -- 2. Select all transactions by User Id, order by date
@@ -30,6 +35,13 @@ SELECT * FROM
 	TRANSACTIONS T 
 	ON T.TRUE_ID = A.TRUE_ID
 ) ORDER BY T.PURCHASE_DATE DESC;
+
+SELECT t.*, p.pay_method
+FROM TRANSACTIONS t 
+JOIN PAY_METHODS p ON t.pm_id = p.pm_id
+WHERE t.user_id = '20230303JACKHENRYWELSH@GMAIL.COM'
+ORDER BY T.PURCHASE_DATE DESC;
+
 
 ----
 
@@ -44,7 +56,13 @@ SELECT * FROM
 	TRANSACTIONS B 
 	ON B.TRUE_ID = A.TRUE_ID
 ) AS T 
-WHERE t.purchase_date >= '2022-11-21' AND t.purchase_date < '2022-11-21' ORDER BY t.purchase_date DESC;
+WHERE t.purchase_date >= '2022-11-21' AND t.purchase_date < '2022-11-22' ORDER BY t.purchase_date DESC;
+
+SELECT t.*, p.pay_method
+	FROM TRANSACTIONS t 
+	JOIN PAY_METHODS p ON t.pm_id = p.pm_id
+WHERE t.user_id = '20230303JACKHENRYWELSH@GMAIL.COM'
+AND t.purchase_date >= '2022-11-21' AND t.purchase_date < '2022-11-22' ORDER BY t.purchase_date DESC;
 
 ----
 
@@ -59,6 +77,12 @@ SELECT * FROM
 	ON B.TRUE_ID = A.TRUE_ID
 ) AS T 
 WHERE t.purchase_date='2022-12-30' ORDER BY t.purchase_date DESC;
+
+SELECT t.*, p.pay_method
+	FROM TRANSACTIONS t 
+	JOIN PAY_METHODS p ON t.pm_id = p.pm_id
+WHERE t.user_id = '20230303JACKHENRYWELSH@GMAIL.COM'
+AND t.purchase_date='2022-12-30' ORDER BY t.T_ID ASC;
 
 ----
 

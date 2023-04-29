@@ -67,10 +67,14 @@ category VARCHAR(50) NOT NULL DEFAULT 'Misc'
 is_typically_income BOOLEAN DEFAULT FALSE,
 website varchar(50) DEFAULT NULL,
 notes VARCHAR(1024) DEFAULT NULL
+VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'
 );
 
-
 SELECT * FROM VENDORS V
+
+ALTER TABLE VENDORS DROP CONSTRAINT "vendors_userId_fkey";
+alter table VENDORS add constraint vendors_userId_fkey foreign key (user_id) references user_accounts
+
 
 -- DROP and create table vendor_names
 --DROP TABLE IF EXISTS vendor_names CASCADE; !!!
@@ -80,6 +84,7 @@ vendor VARCHAR(50) REFERENCES vendors(vendor),
 );
 
 SELECT * FROM VENDOR_NAMES V 
+
 
 -- DROP and create table pay_methods
 DROP TABLE IF EXISTS pay_methods;
@@ -92,12 +97,16 @@ balance NUMERIC DEFAULT NULL,
 credit_line NUMERIC DEFAULT NULL,
 cash_back NUMERIC DEFAULT NULL,
 description VARCHAR(1023) DEFAULT NULL
+user_id VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'
 );
+
+ALTER TABLE PAY_METHODS DROP CONSTRAINT payMethods_userId_fkey;
+alter table PAY_METHODS add constraint payMethods_userId_fkey foreign key (user_id) references user_accounts
 
 
 DROP TABLE IF EXISTS pay_method_keys;
 
-CREATE TABLE pay_methods (
+CREATE TABLE pay_method_keys (
 key_id NUMERIC PRIMARY KEY,
 pm_id NUMERIC NOT NULL REFERENCES PAY_METHODS (pm_id),
 user_id VARCHAR NOT NULL REFERENCES PAY_METHODS (user_id)
@@ -107,9 +116,11 @@ INSERT INTO PAY_METHODS (pm_id, pay_method, institution_type) VALUES (0, 'CASH',
 INSERT INTO PAY_METHOD_keys (key_id, pm_id, USER_ID) VALUES (0, 0, '20230303JACKHENRYWELSH@GMAIL.COM')
 
 SELECT * FROM pay_method_keys pmk WHERE pm_id=0
+SELECT * FROM pay_methods
 
 
--- DROP and create table vendors
+
+-- DROP and create table transactions
 DROP TABLE IF EXISTS transactions CASCADE;
 CREATE TABLE transactions (
 	true_id VARCHAR PRIMARY KEY,
@@ -134,6 +145,8 @@ ALTER TABLE transactions ADD constraint transactions_unique_t_id UNIQUE (t_id);
 SELECT TRUE_ID FROM TRANSACTIONS T ORDER BY TRUE_ID 
 SELECT TRUE_ID FROM TRANSACTION_KEYS T ORDER BY TRUE_ID 
 
+ALTER TABLE TRANSACTIONS DROP COLUMN pay_method_string;
+
 SELECT * 
   FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
  WHERE TABLE_NAME = 'transactions'
@@ -141,6 +154,10 @@ SELECT *
 SELECT * 
   FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
  WHERE TABLE_NAME = 'transaction_keys'
+
+ 
+ ALTER TABLE TRANSACTIONS DROP CONSTRAINT transactions_userId_fkey;
+alter table TRANSACTIONS add constraint tranasactions_userId_fkey foreign key (user_id) references user_accounts
 
  
 ALTER TABLE TRANSACTIONS DROP CONSTRAINT "transactions_reimburses_fkey";

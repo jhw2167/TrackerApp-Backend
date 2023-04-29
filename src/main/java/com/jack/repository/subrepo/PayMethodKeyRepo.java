@@ -1,3 +1,4 @@
+/*
 package com.jack.repository.subrepo;
 
 
@@ -11,10 +12,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
+*/
 /* CRUD repository of spring provides basic "find by ___ criteria to search transactions in DB"
  * - we will also make use of sorted criteria to provide outgoing info in sorted format
  * - 
- */
+ *//*
+
 
 public interface PayMethodKeyRepo extends JpaRepository<PayMethodKey, Long>
 {
@@ -26,3 +29,4 @@ public interface PayMethodKeyRepo extends JpaRepository<PayMethodKey, Long>
 
 	public boolean existsByPayMethod(PayMethod pm);
 }
+*/

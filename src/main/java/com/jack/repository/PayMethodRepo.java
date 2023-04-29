@@ -24,30 +24,24 @@ public interface PayMethodRepo extends JpaRepository<PayMethod, Long>
 	
 	//simple find all pay methods
 	public List<PayMethod> findAll();
-	
+
+	//simple find all pay methods by userId
+	public List<PayMethod> findAllByUserId(String userId);
+
+
 	//finds pay method by given id
 	public PayMethod findByPmId(long pmId);
 	
 	//find all that partially match name
-	@Query(value="SELECT * FROM " +
-			"(" +
-			"(SELECT PMK.PM_ID AS key_pm_id, USER_ID FROM PAY_METHOD_KEYS PMK " +
-			"WHERE USER_ID =:user_id) AS A " +
-			"JOIN " +
-			"PAY_METHODS PM " +
-			"ON A.key_pm_id = PM.PM_ID " +
-			") AS M " +
-			"WHERE M.PAY_METHOD=:method", nativeQuery=true)
-	public Optional<PayMethod> findByMethodName(@Param("user_id") String userId, @Param("method") String payMethod);
 
-	@Query(value="SELECT * FROM " +
-			"(" +
-			"(SELECT PMK.PM_ID AS key_pm_id, USER_ID FROM PAY_METHOD_KEYS PMK " +
-			"WHERE USER_ID =:user_id) AS A " +
-			"JOIN " +
-			"PAY_METHODS PM " +
-			"ON A.key_pm_id = PM.PM_ID " +
-			") AS M " +
-			"WHERE M.PM_ID=:pm_id", nativeQuery=true)
-	public Optional<PayMethod> findByPmId(@Param("user_id") String userId, @Param("pm_id") String pmId);
+	/*
+	When we want to validate the PayMethod exists under this particular user
+	 */
+	public Optional<PayMethod> findByUserIdAndPmId(String userId, long pmId);
+
+	/*
+		Find Pay Method by this name under this user
+	 */
+	public Optional<PayMethod> findByUserIdAndPayMethod(String payMethod, String userId);
+
 }

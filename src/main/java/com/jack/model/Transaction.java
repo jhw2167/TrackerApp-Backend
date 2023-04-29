@@ -2,6 +2,8 @@ package com.jack.model;
 
 //Java imports
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 //Spring Imports
 
@@ -42,7 +44,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Data 									//We want lombok to write getters and setters
 @Entity @Table(name="transactions")		//Want JPA to pick it up
 public class Transaction {
-	
+
+	public static final Map<String, String> DEF_VALUES = new HashMap<String, String>() {{
+		put("PAY_METHOD", "CASH");
+		put("PAY_STATUS", "COMPLETE");
+		put("CATEGORY", "MISC");
+		put("BOUGHT_FOR", "PERSONAL");
+	}};
+
 	/* PERSISTED  STATE VARIABLES */
 
 	@Id
@@ -52,11 +61,12 @@ public class Transaction {
 
 	/* This addition prevents this table from being 3NF, as (tid, user_id) -> is a primary key,
 	however, it makes our code implementation and queries much easier
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
+	@ManyToOne(cascade = CascadeType.ALL) */
+	//@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL)
+	@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
 	@JsonProperty("userId")
-	private UserAccount user;
-	*/
+	private String userId;
+
 	@JsonProperty("tid")
 	@Column(name="t_id", columnDefinition="NUMERIC NOT NULL")
 	private long tId;
@@ -81,9 +91,9 @@ public class Transaction {
 	@Column(name="bought_for", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'PERSONAL'")
 	private String boughtFor;
 
-	@Transient
-	@JsonProperty("payMethod")
-	private String payMethodString;
+//	@Transient
+//	@JsonProperty("payMethod")
+//	private String payMethodString;
 
 	//@ManyToOne
 	//@JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
@@ -121,37 +131,16 @@ public class Transaction {
 	
 	public Transaction(final Transaction t) {
 		super();
-		this.trueId=t.trueId;
-		this.tId = t.tId;
-		this.purchaseDate = t.purchaseDate;
-		this.amount = t.amount;
-		this.vendor = t.vendor;
-		this.category = t.category;
-		this.boughtFor = t.boughtFor;
-		this.payMethodId = t.payMethodId;
-		this.payStatus = t.payStatus;
-		this.isIncome = t.isIncome;
-		this.reimburses = t.reimburses;
-		this.postedDate = t.postedDate;
-		this.notes = t.notes;
-	}
-
-	/*
-		-Create transaction from immature transaction submitted in POST calls
-		"Immature" transactions need their TIDs created
-	 */
-	public Transaction(final UserAccount u, final Transaction t, final long transOnDate) {
-		super();
-		//System.out.println("My Constructor");
-		settId(t.purchaseDate.toString(), transOnDate);
-		setTrueId(u.getUserId(), this.tId);
+		settId(t.tId);
+		setTrueId(t.trueId);
+		setUserId(t.userId);
 		setPurchaseDate(t.purchaseDate);
 		setAmount(t.amount);
 
 		setVendor(t.vendor);
 		setCategory(t.category);
 		setBoughtFor(t.boughtFor);
-		setPayMethodString(t.payMethodString);
+		//setPayMethodString(t.payMethodString);
 		setPayMethodId(t.payMethodId);
 		setPayStatus(t.payStatus);
 		setIncome(t.isIncome);
@@ -160,20 +149,17 @@ public class Transaction {
 		setNotes(t.notes);
 	}
 
-	public void updateData(Transaction t) {
-		this.setTrueId(t.getTrueId());
-		this.setAmount(t.getAmount());
-		this.setBoughtFor(t.getBoughtFor());
-		this.setCategory(t.getCategory());
-		this.setIncome(t.isIncome());
-		this.setNotes(t.getNotes());
-		this.setPayMethodString(t.getPayMethodString());
-		this.setPayStatus(t.getPayStatus());
-		this.setPurchaseDate(t.getPurchaseDate());
-		this.setPostedDate(t.getPostedDate());
-		this.setReimburses(t.getReimburses());
-		this.setVendor(t.getVendor());
+	/*
+		-Create transaction from immature transaction submitted in POST calls
+		"Immature" transactions need their TIDs created
+	 */
+	public Transaction(final UserAccount u, final Transaction t, final long transOnDate) {
+		this(t);
+		//System.out.println("My Constructor");
+		settId(t.purchaseDate.toString(), transOnDate);
+		setTrueId(u.getUserId(), this.tId);
 	}
+
 	/* END CONSTRUCTORS */
 
 	
@@ -208,20 +194,22 @@ public class Transaction {
 		this.postedDate = postedDate2==null ? this.purchaseDate : postedDate2;		
 	}
 
-	private void setPayMethodString(String pms) {
+	/*private void setPayMethodString(String pms) {
 		this.payMethodString = pms.equals("") ? "CASH" : pms.toUpperCase();
 	}
+	*/
 
-	private void setPayStatus(String payStatus2) {
-		this.payStatus = payStatus2.equals("") ? "COMPLETE" : payStatus2.toUpperCase();
+	private void setPayStatus(String ps) {
+		this.payStatus = (ps==null || ps.equals("")) ? DEF_VALUES.get("PAY_STATUS")
+				: ps.toUpperCase();
 	}
 
-	private void setBoughtFor(String boughtFor2) {
-		this.boughtFor = boughtFor2.equals("") ? "PERSONAL" : boughtFor2.toUpperCase();
+	private void setBoughtFor(String bf) {
+		this.boughtFor = bf.equals("") ? DEF_VALUES.get("BOUGHT_FOR") : bf.toUpperCase();
 	}
 
-	private void setCategory(String category2) {
-		this.category = category2.equals("") ? "MISC" : category2.toUpperCase();	
+	private void setCategory(String cat) {
+		this.category = cat.equals("") ? DEF_VALUES.get("CATEGORY") : cat.toUpperCase();
 	}
 	
 	//END SETTERS

@@ -1,18 +1,22 @@
 package com.jack.service;
 
 //Java Imports
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.stereotype.Service;
 
 //Spring Imports
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 //Project imports
 import com.jack.repository.*;
 import com.jack.model.*;
 import com.jack.model.submodel.*;
+import com.jack.model.dto.*;
 import com.jack.repository.subrepo.*;
+
+
 
 /* Service class for Pay Method relation handles all BUSINESS logic and is called from the
  * controller class
@@ -28,34 +32,32 @@ public class PayMethodService {
 
     @Autowired
     PayMethodRepo repo;
-    @Autowired
-    PayMethodKeyRepo keyRepo;
+
 
     /* METHODS */
 
     public PayMethod savePayMethod(Transaction t, UserAccount u) {
 
-        PayMethod pm = null;
-        long pmId = t.getPayMethodId();
-        String providedPm = t.getPayMethodString();
+        String providedPm = Transaction.DEF_VALUES.get("PAY_METHOD");
+        try {
+            providedPm = (String) t.getClass().getMethod("getPayMethodString").invoke(null);
+        } catch (Exception reflectionException) { /* BLANK */ }
 
-        if(pmId!=0)
-            pmId = pm.getPmId();
-
-        if(pmId==0) { //default, use provided pm string
-            if(providedPm==null || providedPm.isEmpty()) {
-                //nothing, use existing pm
-            } else if(repo.findByMethodName(u.getUserId(), providedPm).isPresent()) {
-                pm = repo.findByMethodName(u.getUserId(), providedPm).get();
-            }
+        //If transaction has provided pay method and it exists under this user
+        Optional<PayMethod> pmById = repo.findByUserIdAndPmId(u.getUserId(), t.getPayMethodId());
+        Optional<PayMethod> pmByName = repo.findByUserIdAndPayMethod(u.getUserId(), providedPm);
+        PayMethod newPayMethod = null;
+        if(pmById.isPresent()) {
+            return pmById.get(); //All good
+        } else if(pmByName.isPresent()) {
+            t.setPayMethodId(pmByName.get().getPmId());
+            return pmByName.get();
         } else {
-            pm = repo.getById(pmId);
+            newPayMethod = new PayMethod(u, providedPm);
+            repo.save(newPayMethod);
         }
-        t.setPayMethodId(pm.getPmId());
 
-        if(!repo.existsById(pm.getPmId()))
-            keyRepo.save(new PayMethodKey(pm.getPmId(), u.getUserId()));
-        return repo.save(pm);
+        return newPayMethod;
     }
 
 }

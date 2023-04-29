@@ -1,3 +1,4 @@
+/*
 package com.jack.model.submodel;
 
 //Java Imports
@@ -13,12 +14,14 @@ import com.jack.model.Transaction;
 import com.jack.model.UserAccount;
 
 
+*/
 /*
     Join Table/ID table for users and transactions allowing us to use one true id
     to uniquely identify each transaction as it is owned by each user. This avoids
     having to use a composite key on the transactions table
 
- */
+ *//*
+
 
 @Data
 @Entity @Table(name="transaction_keys")
@@ -65,3 +68,4 @@ public class TransactionKey {
         return this.trueId==tk.getTrueId();
     }
 }
+*/

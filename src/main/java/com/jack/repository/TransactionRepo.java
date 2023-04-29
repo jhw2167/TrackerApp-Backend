@@ -28,6 +28,12 @@ import com.jack.model.*;
 
 public interface TransactionRepo extends JpaRepository<Transaction, Long>
 {
+	/*
+		Base SP for creating view of user's transactions
+	 */
+	@Procedure(value = "")
+	public void createUserTransactionsView(@Param("user_id") String userId);
+
 	//#0
 	//simple find tranasction like id
 	public Transaction findByTrueId(long trueId);

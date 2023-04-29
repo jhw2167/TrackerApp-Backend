@@ -45,8 +45,10 @@ public class TransactionService
 
 	@Autowired
 	PayMethodRepo pmRepo;
-	@Autowired
+
+	/*@Autowired
 	PayMethodKeyRepo pmkRepo;
+	*/
 
 	@Autowired
 	PayMethodService pmService;
@@ -215,10 +217,10 @@ public class TransactionService
 			long pmId = 0;
 			if(t.getPayMethodId() != 0) {
 				pmId = t.getPayMethodId();
-			} else if (pmRepo.findByMethodName(userId, t.getPayMethodString()).isPresent()) {
-				pmId = pmRepo.findByMethodName(userId, t.getPayMethodString()).get().getPmId();
-				return;
-			} else {
+			} //else if (pmRepo.findByMethodName(userId, t.getPayMethodString()).isPresent()) {
+				//pmId = pmRepo.findByMethodName(userId, t.getPayMethodString()).get().getPmId();
+				//return; }
+			else {
 				pmId = pmService.savePayMethod(t, u.get()).getPmId();
 			}
 			t.setPayMethodId(pmId);

@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 //JPA Imports
 import javax.persistence.*;
 
+import com.jack.utility.General;
 import org.springframework.stereotype.Component;
 
 //Lombok Imports
@@ -21,8 +22,13 @@ import com.jack.repository.*;
 @Entity @Table(name="vendors")
 public class Vendor {
 
+
 	@Id
 	private String vendor;
+
+	@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
+	@JsonProperty("userId")
+	private String userId;
 	
 	@Column(columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
 	private double amount;
@@ -40,19 +46,11 @@ public class Vendor {
 	}
 	
 	public Vendor(Vendor v) {
-		super();
-		setVendor(v.vendor);
-		setAmount(v.amount);
-		setCategory(v.category);
-		setTypicallyIncome(v.isTypicallyIncome);
+		this(v.vendor, v.amount, v.category, v.isTypicallyIncome);
 	}
 
-	public Vendor(String v) {
-		super();
-		setVendor(v);
-		setAmount(0d);
-		setCategory("MISC");
-		setTypicallyIncome(false);
+	public Vendor(String vendorName) {
+		this(vendorName, 0d, null, false);
 	}
 
 	public Vendor(String v, Double a, String c, Boolean inc) {
@@ -68,6 +66,11 @@ public class Vendor {
 	}
 
 	/* SETTERS */
+
+	private long generateVendorId(String vendor, String userId) {
+		return General.mergeHash(vendor.hashCode(), userId.hashCode());
+	}
+
 	public void setVendor(String v) {
 		if(v==null || v.isEmpty())
 			v="UNKOWN";
