@@ -2,6 +2,37 @@
  * Queries for TransactionRepo
  */
 
+-- CREATE VIEW FUNCTION
+
+CREATE OR REPLACE FUNCTION create_user_transactions_view(user_view_name TEXT, user_id TEXT) RETURNS VOID AS $$
+BEGIN
+  EXECUTE format('CREATE OR REPLACE VIEW %s AS
+                  SELECT t.*, p.pay_method
+                  FROM transactions t
+                  JOIN pay_methods p ON t.pm_id = p.pm_id
+                  WHERE t.user_id = %L',
+                 user_view_name,
+                 user_id);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION drop_user_transactions_view(user_view_name TEXT) RETURNS VOID AS $$
+BEGIN
+  EXECUTE format('DROP VIEW %s',
+                 user_view_name);
+END;
+$$ LANGUAGE plpgsql;
+
+
+SELECT * FROM create_user_transactions_view('TRANSACTIONS_VIEW_20230303JACKHENRYWELSHGMAILCOM', 
+'20230303JACKHENRYWELSH@GMAIL.COM');
+
+SELECT drop_user_transactions_view('TRANSACTIONS_VIEW_20230303JACKHENRYWELSHGMAILCOM');
+
+
+SELECT * FROM FINANCES.TRANSACTIONS_VIEW_20230303JACKHENRYWELSHGMAILCOM;
+
+
 -- 0. Select all transactions by TRUEID
 
 SELECT * FROM TRANSACTIONS T WHERE TRUE_ID = ?;
@@ -19,8 +50,7 @@ SELECT * FROM
 );
 
 SELECT t.*, p.pay_method 
-FROM TRANSACTIONS t 
-JOIN PAY_METHODS p ON t.pm_id = p.pm_id
+
 WHERE t.user_id = '20230303JACKHENRYWELSH@GMAIL.COM';
 
 ----
@@ -98,6 +128,12 @@ SELECT COUNT(*) FROM
 	ON B.TRUE_ID = A.TRUE_ID
 ) AS T 
 WHERE t.purchase_date='2022-12-30';
+
+SELECT t.*, p.pay_method
+	FROM TRANSACTIONS t 
+	JOIN PAY_METHODS p ON t.pm_id = p.pm_id
+WHERE t.user_id = '20230303JACKHENRYWELSH@GMAIL.COM'
+AND t.purchase_date='2022-12-30' ORDER BY t.T_ID ASC;
 
 ----
 

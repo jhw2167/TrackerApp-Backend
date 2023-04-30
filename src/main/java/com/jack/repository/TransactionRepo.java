@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 
 //Spring Imports
-import com.jack.model.submodel.TransactionKey;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -31,8 +30,13 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	/*
 		Base SP for creating view of user's transactions
 	 */
-	@Procedure(value = "")
-	public void createUserTransactionsView(@Param("user_id") String userId);
+	@Procedure(procedureName = "create_user_transactions_view")
+	public void createUserTransactionsView(@Param("user_view_name") String userViewName,
+										   @Param("user_id") String userId);
+
+	@Procedure(procedureName = "drop_user_transactions_view")
+	public void dropUserTransactionsView(@Param("user_view_name") String userViewName);
+
 
 	//#0
 	//simple find tranasction like id
