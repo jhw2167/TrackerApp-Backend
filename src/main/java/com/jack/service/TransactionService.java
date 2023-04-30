@@ -37,8 +37,8 @@ public class TransactionService
 	@Autowired
 	TransactionRepo repo;
 
-	@Autowired
-	TransactionKeyRepo keyRepo;
+/*	@Autowired
+	TransactionKeyRepo keyRepo;*/
 
 	@Autowired
 	UserAccountRepo userRepo;
@@ -86,10 +86,10 @@ public class TransactionService
 	}
 	
 	public Transaction getTransactionByID(final String userId, final Long tId) throws ResourceNotFoundException {
-		Optional<TransactionKey> tk = keyRepo.findByUserIdAndTid(userId, tId);
+		Optional<Transaction> t = repo.findByUserIdAndTid(userId, tId);
 
-		if(tk.isPresent())
-			return repo.getById(tk.get().getTrueId());
+		if(t.isPresent())
+			return t.get();
 		else
 			throw new ResourceNotFoundException(String.format("Could not find transaction: %s under user: %s", tId, userId));
 	}
@@ -146,7 +146,6 @@ public class TransactionService
 	public Transaction saveTransaction(Transaction tx, UserAccount u) {
 		setDefaultReimburses(tx, u);
 		tx = repo.save(tx);
-		keyRepo.save(new TransactionKey(tx.getTrueId(), u.getUserId()));
 		return tx;
 	}
 	
@@ -166,12 +165,11 @@ public class TransactionService
 
 	//Delete Transaction by ID
 	public void deleteTransactionById(final String userId, final long tid) {
-		Optional<TransactionKey> tk = keyRepo.findByUserIdAndTid(userId, tid);
-		if(!tk.isPresent())
+		Optional<Transaction> t = repo.findByUserIdAndTid(userId, tid);
+		if(!t.isPresent())
 			throw new ResourceNotFoundException("ERROR: No Transaction found with tid: " + tid);
 
-		keyRepo.deleteById(tk.get().getKeyId());
-		repo.deleteById(tk.get().getTrueId());
+		repo.deleteById(t.get().getTrueId());
 	}
 
 	/* We make sure that the reimburses id is valid for this user, if not,
@@ -198,8 +196,6 @@ public class TransactionService
 		for (Transaction t : allTrans) {
 			t.setTrueId(u.get().getUserId(), t.getTId());
 			repo.save(t);
-			TransactionKey tk = new TransactionKey(t.getTrueId(), u.get().getUserId());
-			keyRepo.save(tk);
 		} //END FOR
 	}
 

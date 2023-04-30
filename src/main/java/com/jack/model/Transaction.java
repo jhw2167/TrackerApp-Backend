@@ -4,21 +4,20 @@ package com.jack.model;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.*;
 
 //Spring Imports
 
 
 //JPA Imports
-import javax.persistence.*;
 
-import com.jack.utility.General;
 
 //Lombok Imports
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 //Project imports
-
+import com.jack.utility.General;
 
 /* Transaction model class for holding data in each transaction as read from the database
  * we will annotate our values with JPA to be persisted correctly

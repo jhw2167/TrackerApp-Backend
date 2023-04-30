@@ -13,7 +13,6 @@ import com.jack.model.Transaction;
 import com.jack.service.TransactionService;
 import com.jack.service.UserAccountService;
 import com.jack.repository.TransactionRepo;
-import com.jack.repository.subrepo.TransactionKeyRepo;
 
 
 @Aspect
@@ -28,8 +27,6 @@ public class TransactionControllerAspect {
 
     @Autowired
     TransactionRepo tRepo;
-    @Autowired
-    TransactionKeyRepo tkRepo;
 
 
     @Pointcut("execution(* com.jack.controller.TransactionController.*(..)) && args(String, ..)")

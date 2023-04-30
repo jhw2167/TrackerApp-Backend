@@ -1,3 +1,4 @@
+/*
 package com.jack.repository.subrepo;
 
 
@@ -15,10 +16,12 @@ import java.util.Optional;
 //Project Imports
 import com.jack.model.submodel.TransactionKey;
 
+*/
 /* CRUD repository of spring provides basic "find by ___ criteria to search transactions in DB"
  * - we will also make use of sorted criteria to provide outgoing info in sorted format
  * - 
- */
+ *//*
+
 
 public interface TransactionKeyRepo extends JpaRepository<TransactionKey, Long>
 {
@@ -53,3 +56,4 @@ public interface TransactionKeyRepo extends JpaRepository<TransactionKey, Long>
 	@Query(value="SELECT USER_ID FROM TRANSACTION_KEYS TK WHERE TRUE_ID=:true_id", nativeQuery=true)
 	public String findUserIdByTrueId(@Param("true_id") long trueId);
 }
+*/

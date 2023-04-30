@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jack.repository.subrepo.TransactionKeyRepo;
 import org.mockito.Mock;
 
 //Other Imports
@@ -31,9 +30,6 @@ public class TransactionServiceTest {
 	/* Variables we need to mock */
 	@Mock
 	TransactionRepo repoMock;
-
-	@Mock
-	TransactionKeyRepo keyRepoMock;
 	
 	
 	/* Class to Test */

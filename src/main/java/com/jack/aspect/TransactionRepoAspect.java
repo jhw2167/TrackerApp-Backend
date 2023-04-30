@@ -29,7 +29,8 @@ public class TransactionRepoAspect {
 
     //All methods beloning to transaction repo interface except the method where we actually create the view
     @Pointcut("execution(* com.example.TransactionRepo+.*(..)) && args(String,..) &&" +
-            " !execution(* com.example.TransactionRepo+.createUserTransactionsView(..))")
+            " !execution(* com.example.TransactionRepo+.createUserTransactionsView(..))  &&" +
+            " !execution(* com.example.TransactionRepo+.dropUserTransactionsView(..))")
     public void transactionRepoWithStringArgsPointCut(){}
 
     /*          ADVICE         */
