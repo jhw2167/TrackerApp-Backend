@@ -4,7 +4,7 @@
 
 -- CREATE VIEW FUNCTION
 
-CREATE OR REPLACE FUNCTION create_user_transactions_view(user_view_name TEXT, user_id TEXT) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION create_user_transactions_view(user_view_name TEXT, user_id TEXT) RETURNS BOOLEAN AS $$
 BEGIN
   EXECUTE format('CREATE OR REPLACE VIEW %s AS
                   SELECT t.*, p.pay_method
@@ -13,16 +13,25 @@ BEGIN
                   WHERE t.user_id = %L',
                  user_view_name,
                  user_id);
+  RETURN TRUE;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION drop_user_transactions_view(user_view_name TEXT) RETURNS VOID AS $$
+DROP FUNCTION create_user_transactions_view(user_view_name TEXT, user_id TEXT)
+
+-- DROP VIEW FUNCTION
+
+CREATE OR REPLACE FUNCTION drop_user_transactions_view(user_view_name TEXT) RETURNS BOOLEAN AS $$
 BEGIN
   EXECUTE format('DROP VIEW %s',
                  user_view_name);
+  RETURN TRUE;
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION drop_user_transactions_view(user_view_name TEXT)
+
+-- TEST
 
 SELECT * FROM create_user_transactions_view('TRANSACTIONS_VIEW_20230303JACKHENRYWELSHGMAILCOM', 
 '20230303JACKHENRYWELSH@GMAIL.COM');

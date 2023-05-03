@@ -17,6 +17,7 @@ import com.jack.repository.TransactionRepo;
 import com.jack.service.UserAccountService;
 
 
+/* REMEMBER TO ADD BEAN TO SPRING CONFIG CLASS */
 @Aspect
 public class TransactionRepoAspect {
 
@@ -28,15 +29,20 @@ public class TransactionRepoAspect {
     TransactionRepo repo;
 
     //All methods beloning to transaction repo interface except the method where we actually create the view
-    @Pointcut("execution(* com.example.TransactionRepo+.*(..)) && args(String,..) &&" +
-            " !execution(* com.example.TransactionRepo+.createUserTransactionsView(..))  &&" +
-            " !execution(* com.example.TransactionRepo+.dropUserTransactionsView(..))")
+    @Pointcut("execution(* com.jack.repository.TransactionRepo+.*(..))  && args(String,..) &&" +
+            " !execution(* com.jack.repository.TransactionRepo+.createUserTransactionsView(..))  &&" +
+            " !execution(* com.jack.repository.TransactionRepo+.dropUserTransactionsView(..))")
     public void transactionRepoWithStringArgsPointCut(){}
+
+
+    /*
+
+     */
 
     /*          ADVICE         */
 
     //AROUND to intercept any controller operation that takes a userId as string path variable
-    @Around("transactionRepoWithStringArgsPointCut()")
+    /*@Around("transactionRepoWithStringArgsPointCut()")*/
     private Object createUserTransactionView(ProceedingJoinPoint joinPoint) throws Throwable {
         Logger logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName());
 
@@ -73,6 +79,7 @@ public class TransactionRepoAspect {
         }
 
         Object results = joinPoint.proceed(args);
+
         //DROP USER TRANSACTIONS TABLE
         try {
             repo.dropUserTransactionsView(userTransViewName);
@@ -91,11 +98,13 @@ public class TransactionRepoAspect {
         3. must nto exceed max char length of 63
         4. Must be unique in its schema
         5. Cannot be reserved keyword
+
+        Regex describes the technical rules below
      */
     private static final int PSQL_VIEW_LENGTH_LIMIT = 63;
     private String cleanUserIdForViewName(String id) {
         id = "TRANSACTIONS_VIEW_" + id;
-        id = id.replaceAll("[^a-zA-Z0-9_]|^(.{0,63}).*$", "$1");
+        id = id.replaceAll("[^a-zA-Z0-9_]|^(?![a-zA-Z0-9_]{0,63}$)", "");
         return id;
     }
 

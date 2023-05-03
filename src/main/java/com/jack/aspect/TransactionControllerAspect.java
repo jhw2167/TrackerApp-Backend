@@ -15,6 +15,7 @@ import com.jack.service.UserAccountService;
 import com.jack.repository.TransactionRepo;
 
 
+/* REMEMBER TO ADD BEAN TO SPRING CONFIG CLASS */
 @Aspect
 public class TransactionControllerAspect {
 

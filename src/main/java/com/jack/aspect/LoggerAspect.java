@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 //logging
 
 
+/* REMEMBER TO ADD BEAN TO SPRING CONFIG CLASS */
 @Aspect
 public class LoggerAspect {
 
@@ -31,7 +32,7 @@ public class LoggerAspect {
     public void servicePointcut(){}
 
     //REPO LOGGING
-    @Pointcut("within(com.jack.repository..*)")
+    @Pointcut("execution(* com.jack.repository.*+.*(..)) && !execution(* java.lang.Object+.*(..))\n")
     public void repoPointcut(){}
 
 

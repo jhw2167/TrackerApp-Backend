@@ -31,11 +31,10 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 		Base SP for creating view of user's transactions
 	 */
 	@Procedure(procedureName = "create_user_transactions_view")
-	public void createUserTransactionsView(@Param("user_view_name") String userViewName,
-										   @Param("user_view_name") String userId);
-
+	public Boolean createUserTransactionsView(@Param("user_view_name") String userViewName,
+										   @Param("user_id") String userId);
 	@Procedure(procedureName = "drop_user_transactions_view")
-	public void dropUserTransactionsView(@Param("user_view_name") String userViewName);
+	public Boolean dropUserTransactionsView(@Param("user_view_name") String userViewName);
 
 
 	//#0
@@ -77,7 +76,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 
 	//#4
 	//findAll transactions with matching purchaseDate
-	@Query(value = "SELECT COUNT(*) FROM :user_view_name t " +
+	@Query(value = "SELECT * FROM :user_view_name t " +
 			"WHERE t.purchase_date=:purchase_date " +
 			"ORDER BY t.purchase_date DESC", nativeQuery = true)
 	public List<Transaction> findAllByPurchaseDate(@Param("user_view_name") String userId,
@@ -85,9 +84,9 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 
 	//#5
 	//count transactions with matching purchaseDate
-	@Query(value = "SELECT COUNT(*) FROM :user_view_name t " +
+	@Query(value = "SELECT COUNT(*) FROM %s t " +
 			"WHERE t.purchase_date=:purchase_date", nativeQuery = true)
-	public long countByPurchaseDate(@Param("user_view_name") String userId,
+	public long countByPurchaseDate(String userId,
 			@Param("purchase_date") LocalDate purchaseDate);
 
 	//#6a

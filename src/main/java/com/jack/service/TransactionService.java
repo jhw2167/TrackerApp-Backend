@@ -99,7 +99,8 @@ public class TransactionService
 	}
 	
 	public long countByPurchaseDate(final String userId, LocalDate purchaseDate) {
-		return repo.countByPurchaseDate(userId, purchaseDate);
+		/*return repo.countByPurchaseDate(userId, purchaseDate);*/
+		return repo.countByPurchaseDate("TRANSACTIONS_VIEW_20230303JACKHENRYWELSHGMAILCOM", purchaseDate);
 	}
 	
 	/* SIMPLE GETS FOR COL VALUES*/

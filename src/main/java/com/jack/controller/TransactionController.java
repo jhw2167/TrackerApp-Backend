@@ -234,6 +234,7 @@ public class TransactionController {
 					body.append("ERROR saving transaction: \n" + MAPPER.writeValueAsString(t));
 					body.append("\nERROR reported as:  " + e.getLocalizedMessage());
 					body.append(",\n");
+					status = HttpStatus.INTERNAL_SERVER_ERROR;
 				}
 			} //END FOR
 
@@ -243,7 +244,7 @@ public class TransactionController {
 
 		body.append("\n\nSuccessfully posted transactions with tids: \n");
 		refined.forEach((trans) -> body.append(trans.getTId() + "\n"));
-		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), HttpStatus.OK);
+		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), status);
 
 		return rsp;
 	}
