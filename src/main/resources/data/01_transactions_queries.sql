@@ -52,6 +52,38 @@ SELECT * FROM TRANSACTIONS_VIEW_20230303JACKHENRYWELSHGMAILCOM T WHERE TRUE_ID =
 SELECT * FROM TRANSACTIONS_VIEW_20230303JACKHENRYWELSHGMAILCOM t
 WHERE t.user_id = '20230303JACKHENRYWELSH@GMAIL.COM';
 
+DROP FUNCTION find_all_by_user_id;
+
+CREATE OR REPLACE FUNCTION find_all_by_user_id(user_view_name TEXT) 
+	RETURNS TABLE (
+		t_id 			BIGINT,
+		amount 			NUMERIC(10, 2),
+		bought_for 		VARCHAR(50),
+		category		VARCHAR(50),
+		is_income 		BOOLEAN,
+		notes 			VARCHAR(1024),
+		pay_status 		VARCHAR(50),
+		posted_date 	VARCHAR(12),
+		purchase_date 	VARCHAR(12),
+		timestamp_ 		VARCHAR(1024),
+	vendor 			VARCHAR(50),
+	true_id			BIGINT,
+	reimburses 		BIGINT,
+	pm_id			BIGINT,
+	user_id 		VARCHAR(1024),
+	pay_method 		VARCHAR(50))
+	
+	AS $$
+BEGIN
+  RETURN QUERY EXECUTE format('SELECT *
+                  FROM %s',
+                 user_view_name);
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT * FROM find_all_by_user_id('TRANSACTIONS_VIEW_20230303JACKHENRYWELSHGMAILCOM');
+
+
 ----
 
 -- 2. Select all transactions by User Id, order by date
