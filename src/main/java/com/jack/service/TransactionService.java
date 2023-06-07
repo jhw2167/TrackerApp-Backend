@@ -9,18 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+//Spring Imports
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-
-//Spring Imports
 
 
 //Project imports
 import com.jack.repository.*;
 import com.jack.model.*;
-import com.jack.model.submodel.*;
-import com.jack.repository.subrepo.*;
 
 /* Service class for transactions handels all BUSINESS logic and is called from the 
  * controller class
@@ -59,34 +57,35 @@ public class TransactionService
 	
 	//Return all transactions, unsorted
 	public List<Transaction> getAllUserTransactions(final String userId) {
-		return repo.findAllByUserId(userId);
+		return repo.findAllByUserUserId(userId);
 	}
 	
 	
 	//Return all Transactions sorted
 	public List<Transaction> getAllTransactonsSorted(final String userId) {
-		return repo.findAllByOrderByPurchaseDateDesc(userId);
+		return repo.findByUserUserIdOrderByPurchaseDateDesc(userId);
 	}
 	
 	
 	//Return Transactions pageable by start, end
 	public List<Transaction> getAllTransactionsPageableID(final String userId,
-												  Long limit, Long offset) {
-		return repo.findAllByOrderByTidDescPageable(userId, limit, offset);
+												  int limit, int offset) {
+		Pageable pageable = PageRequest.of(offset, limit, Sort.by("tid").descending());
+		return repo.findByUserUserIdOrderByTIdDesc(userId, pageable);
 	}
 	
 	public List<Transaction> getAllTransactionsBetweenPurchaseDate(final String userId,
 																   LocalDate from, LocalDate to) {
-		return repo.findAllBetweenPurchaseDatesOrderByPurchaseDateDesc(userId, from, to);
+		return repo.findByUserUserIdAndPurchaseDateBetweenOrderByPurchaseDateDesc(userId, from, to);
 	}
 	
 	public List<Transaction> getAllTransactionsByPurchaseDate(final String userId,
 															  LocalDate purchaseDate) {
-		return repo.findAllByPurchaseDate(userId, purchaseDate);
+		return repo.findByUserUserIdAndPurchaseDate(userId, purchaseDate);
 	}
 	
 	public Transaction getTransactionByID(final String userId, final Long tId) throws ResourceNotFoundException {
-		Optional<Transaction> t = repo.findByUserIdAndTid(userId, tId);
+		Optional<Transaction> t = repo.findByUserUserIdAndTId(userId, tId);
 
 		if(t.isPresent())
 			return t.get();
@@ -95,29 +94,29 @@ public class TransactionService
 	}
 	
 	public List<Transaction> searchVendors(final String userId, String name) {
-		return repo.findAllLikeVendorName(userId, "%" + name + "%");
+		return repo.findAllByUserUserIdLikeVendor(userId, "%" + name + "%");
 	}
 	
 	public long countByPurchaseDate(final String userId, LocalDate purchaseDate) {
 		/*return repo.countByPurchaseDate(userId, purchaseDate);*/
-		return repo.countByPurchaseDate("TRANSACTIONS_VIEW_20230303JACKHENRYWELSHGMAILCOM", purchaseDate);
+		return repo.countByUserUserIdAndPurchaseDate(userId, purchaseDate);
 	}
 	
 	/* SIMPLE GETS FOR COL VALUES*/
 	public List<String> getAllCategories(final String userId) {
-		return repo.findCategoryGroupByCategory(userId);
+		return repo.findCategoryByUserUserIdAndGroupByCategory(userId);
 	}
 	
-	public List<String> getPayMethods(final String userId) {
-		return repo.findPayMethodsGroupByPayMethod(userId);
+	public List<PayMethod> getPayMethods(final String userId) {
+		return repo.findPayMethodByUserUserIdGroupByPayMethod(userId);
 	}
 	
 	public List<String> getBoughtFor(final String userId) {
-		return repo.findBoughtForGroupByBoughtFor(userId);
+		return repo.findBeneficiaryByUserUserIdGroupByBeneficiary(userId);
 	}
 	
 	public List<String> getPayStatus(final String userId) {
-		return repo.findPayStatusGroupByPayStatus(userId);
+		return repo.findPayStatusByUserUserIdGroupByPayStatus(userId);
 	}
 
 	
@@ -166,7 +165,7 @@ public class TransactionService
 
 	//Delete Transaction by ID
 	public void deleteTransactionById(final String userId, final long tid) {
-		Optional<Transaction> t = repo.findByUserIdAndTid(userId, tid);
+		Optional<Transaction> t = repo.findByUserUserIdAndTId(userId, tid);
 		if(!t.isPresent())
 			throw new ResourceNotFoundException("ERROR: No Transaction found with tid: " + tid);
 
@@ -177,7 +176,7 @@ public class TransactionService
 	it defaults to (userId, tid=0), the default base transaction in each user's account
 	 */
 	public void setDefaultReimburses(Transaction tx, UserAccount u) {
-		Optional<Transaction> reimbTrans = repo.findByUserIdAndTrueId(u.getUserId(), tx.getReimburses());
+		Optional<Transaction> reimbTrans = repo.findByUserUserIdAndTrueId(u.getUserId(), tx.getReimburses());
 		if (!reimbTrans.isPresent()) {
 			tx.setReimburses( 	this.getTransactionByID(u.getUserId(), 0L).getTrueId()	);//Each user has default transaction at tid==0
 		}
@@ -186,10 +185,10 @@ public class TransactionService
 	/*
 		SPECIAL TRANS KEY METHOD FOR ONE TIME KEY GENERATION
     	WHEN SWITCHING TO USER ACCOUNT INTEGRATION
- 	*/
+ 	//* /
 	public void postTransKeys(String userId) {
 		List<Transaction> allTrans = repo.findAll();
-		Optional<UserAccount> u = userRepo.findByUserId(userId);
+		Optional<UserAccount> u = userRepo.findByUserUserId(userId);
 
 		if (!u.isPresent())
 			return;
@@ -199,33 +198,33 @@ public class TransactionService
 			repo.save(t);
 		} //END FOR
 	}
-
+*/
 	/*
 		@deprecated Old method for refactoring tables, this one for pay method tables redo
-	 */
+
 	public void postPmKeys(String userId) {
-		List<Transaction> allTrans = repo.findAllByUserId(userId);
-		Optional<UserAccount> u = userRepo.findByUserId(userId);
+		List<Transaction> allTrans = repo.findAllByUserUserId(userId);
+		Optional<UserAccount> u = userRepo.findByUserUserId(userId);
 
 		if (!u.isPresent())
 			return;
 
 		for (Transaction t : allTrans) {
 			long pmId = 0;
-			if(t.getPayMethodId() != 0) {
-				pmId = t.getPayMethodId();
+			if(t.getPayMethod() != 0) {
+				pmId = t.getPayMethod();
 			} //else if (pmRepo.findByMethodName(userId, t.getPayMethodString()).isPresent()) {
 				//pmId = pmRepo.findByMethodName(userId, t.getPayMethodString()).get().getPmId();
 				//return; }
 			else {
 				pmId = pmService.savePayMethod(t, u.get()).getPmId();
 			}
-			t.setPayMethodId(pmId);
+			t.setPayMethod(pmId);
 			repo.save(t);
 		} //END FOR
 
 	}
-
+	*/
 
 }
 //END CLASS TRANSACTIONSERVICE

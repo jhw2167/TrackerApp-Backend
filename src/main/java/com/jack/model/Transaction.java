@@ -59,12 +59,12 @@ public class Transaction {
 	private long trueId;
 
 	/* This addition prevents this table from being 3NF, as (tid, user_id) -> is a primary key,
-	however, it makes our code implementation and queries much easier
-	@ManyToOne(cascade = CascadeType.ALL) */
-	//@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL)
-	@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
+	however, it makes our code implementation and queries much easier */
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
+	//@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
 	@JsonProperty("userId")
-	private String userId;
+	private UserAccount user;
 
 	@JsonProperty("tid")
 	@Column(name="t_id", columnDefinition="NUMERIC NOT NULL")
@@ -88,17 +88,17 @@ public class Transaction {
 
 	@JsonProperty("boughtFor")
 	@Column(name="bought_for", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'PERSONAL'")
-	private String boughtFor;
+	private String beneficiary;
 
 //	@Transient
 //	@JsonProperty("payMethod")
 //	private String payMethodString;
 
-	//@ManyToOne
-	//@JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
-	@Column(name = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
+	@ManyToOne
+	@JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
+	//@Column(name = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
 	@JsonProperty("pmId")
-	private long payMethodId;
+	private PayMethod payMethod;
 
 	@JsonProperty("payStatus")
 	@Column(name="pay_status", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'COMPLETE'")
@@ -132,15 +132,15 @@ public class Transaction {
 		super();
 		settId(t.tId);
 		setTrueId(t.trueId);
-		setUserId(t.userId);
+		setUser(t.user);
 		setPurchaseDate(t.purchaseDate);
 		setAmount(t.amount);
 
 		setVendor(t.vendor);
 		setCategory(t.category);
-		setBoughtFor(t.boughtFor);
+		setBeneficiary(t.beneficiary);
 		//setPayMethodString(t.payMethodString);
-		setPayMethodId(t.payMethodId);
+		setPayMethod(t.payMethod);
 		setPayStatus(t.payStatus);
 		setIncome(t.isIncome);
 		setReimburses(t.reimburses);
@@ -203,8 +203,8 @@ public class Transaction {
 				: ps.toUpperCase();
 	}
 
-	private void setBoughtFor(String bf) {
-		this.boughtFor = bf.equals("") ? DEF_VALUES.get("BOUGHT_FOR") : bf.toUpperCase();
+	private void setBeneficiary(String bf) {
+		this.beneficiary = bf.equals("") ? DEF_VALUES.get("BOUGHT_FOR") : bf.toUpperCase();
 	}
 
 	private void setCategory(String cat) {

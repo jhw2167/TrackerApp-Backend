@@ -137,8 +137,8 @@ public class TransactionController {
 	@GetMapping(params = {"limit", "offset"} )
 	@RequestMapping("/recent")
 	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(@PathVariable("userId") final String userId,
-			@RequestParam final String start, @RequestParam final Long limit, @RequestParam(required=false) final Long offset) {
-		List<Transaction> tx = ts.getAllTransactionsPageableID(userId, limit, (offset != null) ? offset : 0L);
+			@RequestParam final String start, @RequestParam final Integer limit, @RequestParam(required=false) final Integer offset) {
+		List<Transaction> tx = ts.getAllTransactionsPageableID(userId, limit, (offset != null) ? offset : 0);
 		return new ResponseEntity<>(tx, HttpStatus.OK);
 	}
 	
@@ -175,9 +175,9 @@ public class TransactionController {
 	
 	@GetMapping
 	@RequestMapping("/payMethods")
-	public ResponseEntity<List<String>> getPayMethods(@PathVariable("userId") final String userId) {
-		List<String> vals = ts.getPayMethods(userId);
-		return new ResponseEntity<List<String>>(vals, HttpStatus.OK);
+	public ResponseEntity<List<PayMethod>> getPayMethods(@PathVariable("userId") final String userId) {
+		List<PayMethod> vals = ts.getPayMethods(userId);
+		return new ResponseEntity<>(vals, HttpStatus.OK);
 	}
 	//END GET Categories
 	

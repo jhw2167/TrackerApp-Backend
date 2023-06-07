@@ -23,7 +23,7 @@ import org.springframework.security.core.Transient;
 public class UserTransaction extends Transaction {
 
     @JsonProperty("payMethod")
-    private String payMethod;
+    private String payMethodString;
 
  /*  CONSTRUCTORS  */
 
@@ -35,7 +35,7 @@ public class UserTransaction extends Transaction {
      /*  SETTERS  */
 
     private void setPayMethodString(String pms) {
-		this.payMethod = (pms==null || pms.equals("")) ? Transaction.DEF_VALUES.get("PAY_METHOD")
+		this.payMethodString = (pms==null || pms.equals("")) ? Transaction.DEF_VALUES.get("PAY_METHOD")
                 : pms.toUpperCase();
 	}
 

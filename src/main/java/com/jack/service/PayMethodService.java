@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 //Project imports
 import com.jack.repository.*;
 import com.jack.model.*;
-import com.jack.model.submodel.*;
-import com.jack.model.dto.*;
-import com.jack.repository.subrepo.*;
 
 
 
@@ -44,13 +41,13 @@ public class PayMethodService {
         } catch (Exception reflectionException) { /* BLANK */ }
 
         //If transaction has provided pay method and it exists under this user
-        Optional<PayMethod> pmById = repo.findByUserIdAndPmId(u.getUserId(), t.getPayMethodId());
+        Optional<PayMethod> pmById = repo.findByUserIdAndPmId(u.getUserId(), t.getPayMethod().getPmId());
         Optional<PayMethod> pmByName = repo.findByUserIdAndPayMethod(u.getUserId(), providedPm);
         PayMethod newPayMethod = null;
         if(pmById.isPresent()) {
             return pmById.get(); //All good
         } else if(pmByName.isPresent()) {
-            t.setPayMethodId(pmByName.get().getPmId());
+            t.setPayMethod(pmByName.get());
             return pmByName.get();
         } else {
             newPayMethod = new PayMethod(u, providedPm);

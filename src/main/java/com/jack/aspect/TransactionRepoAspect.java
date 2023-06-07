@@ -28,21 +28,26 @@ public class TransactionRepoAspect {
     @Autowired
     TransactionRepo repo;
 
-    //All methods beloning to transaction repo interface except the method where we actually create the view
-    @Pointcut("execution(* com.jack.repository.TransactionRepo+.*(..))  && args(String,..) &&" +
-            " !execution(* com.jack.repository.TransactionRepo+.createUserTransactionsView(..))  &&" +
-            " !execution(* com.jack.repository.TransactionRepo+.dropUserTransactionsView(..))")
-    public void transactionRepoWithStringArgsPointCut(){}
-
-
     /*
 
      */
 
+    //All methods beloning to transaction repo interface except the method where we actually create the view
+    @Pointcut("execution(* com.jack.repository.TransactionRepo+.*(..))  && args(String,..) &&" +
+            " !execution(* com.jack.repository.TransactionRepo+.createUserTransactionsView(..))  &&" +
+            " !execution(* com.jack.repository.TransactionRepo+.dropUserTransactionsView(..))")
+    public void transactionRepoWithStringArgsPointcut(){}
+
+
+    @Pointcut("execution(* com.jack.repository.TransactionRepo+.findIncomeAggregatedByCategoryAndBoughtFor(..)) ||" +
+            " execution(* com.jack.repository.TransactionRepo+.findExpensesAggregatedByCategoryAndBoughtFor(..))")
+    public void transactionRepoSummariesPointcut(){}
+
     /*          ADVICE         */
 
     //AROUND to intercept any controller operation that takes a userId as string path variable
-    /*@Around("transactionRepoWithStringArgsPointCut()")*/
+    /*@Around("transactionRepoWithStringArgsPointcut()")*/
+    @Around("transactionRepoSummariesPointcut()")
     private Object createUserTransactionView(ProceedingJoinPoint joinPoint) throws Throwable {
         Logger logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName());
 
