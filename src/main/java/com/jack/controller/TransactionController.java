@@ -243,7 +243,7 @@ public class TransactionController {
 		}
 
 		body.append("\n\nSuccessfully posted transactions with tids: \n");
-		refined.forEach((trans) -> body.append(trans.getTId() + "\n"));
+		refined.forEach((trans) -> body.append(trans.getTid() + "\n"));
 		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), status);
 
 		return rsp;
@@ -288,7 +288,7 @@ public class TransactionController {
 				body.append(MAPPER.writeValueAsString(t) + "\n");
 			} catch (JsonProcessingException e) {
 				System.out.println(e);
-				body.append("Error converting transaction to JSON with id: " + t.getTId());
+				body.append("Error converting transaction to JSON with id: " + t.getTid());
 			}
 		}
 		body.append("]"); //Closing brace for JSON

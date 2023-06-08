@@ -45,14 +45,6 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	@Query(value="DELETE FROM transactions WHERE true_id=:true_id", nativeQuery=true)
 	public void deleteByTrueId(@Param("true_id") long trueId);
 
-	/** @param userId - transformed into user_view_name via TransactionRepoAspect
-	 *  @param trueId - true id of the transaction
-	 */
-	@Query(value = "SELECT * FROM :user_view_name T WHERE TRUE_ID = :true_id", nativeQuery = true)
-	Transaction findFullTransactionByTrueId(String userId,
-												   @Param("true_id") long trueId);
-
-
 	//#1
 	//simple find all transactions by userId
 	//@Query(value = "SELECT * FROM :user_view_name t", nativeQuery = true)
@@ -78,7 +70,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 
 	//#6a
 	//find all transactions sorted between user_view_name and t_id OFFESET AND LIMIT
-	List<Transaction> findByUserUserIdOrderByTIdDesc(String userId, Pageable pageable);
+	List<Transaction> findByUserUserIdOrderByTidDesc(String userId, Pageable pageable);
 
 
 
@@ -86,7 +78,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	//find all that partially match name
 	//@Query(value = "SELECT * FROM :user_view_name t " +
 	//		"WHERE t.vendor LIKE UPPER(:name)", nativeQuery=true)
-	public List<Transaction> findAllByUserUserIdLikeVendor(String userId, String vendor);
+	public List<Transaction> findAllByUserUserIdAndVendorLike(String userId, String vendor);
 
 	//#8
 	//Find income tuple:
@@ -107,16 +99,16 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 
 	//#10
 	//Find all categories in transactions table
-	public List<String> findCategoryByUserUserIdAndGroupByCategory(String userId);
+	public List<String> findDistinctCategoryByUserUserId(String userId);
 
 	//#11 Find and Group By Pay Method
-	public List<PayMethod> findPayMethodByUserUserIdGroupByPayMethod(String userId);
+	public List<PayMethod> findDistinctPayMethodByUserUserId(String userId);
 
 	//#12 Find and Group By Bought For
-	public List<String> findBeneficiaryByUserUserIdGroupByBeneficiary(String userId);
+	public List<String> findDistinctBeneficiaryByUserUserId(String userId);
 
 	//#13 Find and Group By Pay status
-	public List<String> findPayStatusByUserUserIdGroupByPayStatus(String userId);
+	public List<String> findDistinctPayStatusByUserUserId(String userId);
 
 	//#14 Find by userId and TrueId
 	/*@Query(value = "SELECT * FROM :user_view_name t " +
@@ -126,5 +118,5 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	//#15 Find by userId and t_id
 	/*@Query(value = "SELECT * FROM :user_view_name t " +
 			"WHERE T.t_id=:t_id", nativeQuery = true)
-	*/public Optional<Transaction> findByUserUserIdAndTId(String userId, long tId);
+	*/public Optional<Transaction> findByUserUserIdAndTid(String userId, long tid);
 }

@@ -68,7 +68,7 @@ public class Transaction {
 
 	@JsonProperty("tid")
 	@Column(name="t_id", columnDefinition="NUMERIC NOT NULL")
-	private long tId;
+	private long tid;
 
 	@JsonProperty("purchaseDate")
 	@Column(name="purchase_date", columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
@@ -130,7 +130,7 @@ public class Transaction {
 	
 	public Transaction(final Transaction t) {
 		super();
-		settId(t.tId);
+		setTid(t.tid);
 		setTrueId(t.trueId);
 		setUser(t.user);
 		setPurchaseDate(t.purchaseDate);
@@ -156,7 +156,7 @@ public class Transaction {
 		this(t);
 		//System.out.println("My Constructor");
 		settId(t.purchaseDate.toString(), transOnDate);
-		setTrueId(u.getUserId(), this.tId);
+		setTrueId(u.getUserId(), this.tid);
 	}
 
 	/* END CONSTRUCTORS */
@@ -169,8 +169,8 @@ public class Transaction {
 		this.trueId = Math.abs(trueId);
 		System.out.println("Merged id: " + trueId);
 	}
-	public void settId(long tId) {
-		this.tId = tId;
+	public void setTid(long tid) {
+		this.tid = tid;
 	}
 	public void settId(String _purchaseDate, long transOnDate) {
 		//parse date string into coherent string
@@ -178,7 +178,7 @@ public class Transaction {
 		
 		//add above result, buffered by "000"
 		String id = date + String.format("%03d", transOnDate);
-		this.tId = Long.parseLong(id);
+		this.tid = Long.parseLong(id);
 		//System.out.println("Set id is: " + tId);
 	}
 
@@ -216,7 +216,7 @@ public class Transaction {
 
 	//Utility Methods
 	public static boolean compareIds(Transaction a, Transaction b) {
-		return (a.trueId==b.trueId) && (a.tId==b.tId);
+		return (a.trueId==b.trueId) && (a.tid ==b.tid);
 	}
 
 	/* Overrides */

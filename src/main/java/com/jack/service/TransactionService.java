@@ -71,7 +71,7 @@ public class TransactionService
 	public List<Transaction> getAllTransactionsPageableID(final String userId,
 												  int limit, int offset) {
 		Pageable pageable = PageRequest.of(offset, limit, Sort.by("tid").descending());
-		return repo.findByUserUserIdOrderByTIdDesc(userId, pageable);
+		return repo.findByUserUserIdOrderByTidDesc(userId, pageable);
 	}
 	
 	public List<Transaction> getAllTransactionsBetweenPurchaseDate(final String userId,
@@ -85,7 +85,7 @@ public class TransactionService
 	}
 	
 	public Transaction getTransactionByID(final String userId, final Long tId) throws ResourceNotFoundException {
-		Optional<Transaction> t = repo.findByUserUserIdAndTId(userId, tId);
+		Optional<Transaction> t = repo.findByUserUserIdAndTid(userId, tId);
 
 		if(t.isPresent())
 			return t.get();
@@ -94,7 +94,7 @@ public class TransactionService
 	}
 	
 	public List<Transaction> searchVendors(final String userId, String name) {
-		return repo.findAllByUserUserIdLikeVendor(userId, "%" + name + "%");
+		return repo.findAllByUserUserIdAndVendorLike(userId, "%" + name + "%");
 	}
 	
 	public long countByPurchaseDate(final String userId, LocalDate purchaseDate) {
@@ -104,19 +104,19 @@ public class TransactionService
 	
 	/* SIMPLE GETS FOR COL VALUES*/
 	public List<String> getAllCategories(final String userId) {
-		return repo.findCategoryByUserUserIdAndGroupByCategory(userId);
+		return repo.findDistinctCategoryByUserUserId(userId);
 	}
 	
 	public List<PayMethod> getPayMethods(final String userId) {
-		return repo.findPayMethodByUserUserIdGroupByPayMethod(userId);
+		return repo.findDistinctPayMethodByUserUserId(userId);
 	}
 	
 	public List<String> getBoughtFor(final String userId) {
-		return repo.findBeneficiaryByUserUserIdGroupByBeneficiary(userId);
+		return repo.findDistinctBeneficiaryByUserUserId(userId);
 	}
 	
 	public List<String> getPayStatus(final String userId) {
-		return repo.findPayStatusByUserUserIdGroupByPayStatus(userId);
+		return repo.findDistinctPayStatusByUserUserId(userId);
 	}
 
 	
@@ -158,14 +158,14 @@ public class TransactionService
 		Transaction oldTrans = repo.findByTrueId(tx.getTrueId());
 		if(!Transaction.compareIds(tx, oldTrans))
 			throw new IllegalArgumentException(String.format("ERROR: You may not change the tid or the trueId in a PATCH call" +
-					" for transaction in database as tid: %s, trueId: %s", oldTrans.getTId(), oldTrans.getTrueId()));
+					" for transaction in database as tid: %s, trueId: %s", oldTrans.getTid(), oldTrans.getTrueId()));
 
 		return repo.save(tx);
 	}
 
 	//Delete Transaction by ID
 	public void deleteTransactionById(final String userId, final long tid) {
-		Optional<Transaction> t = repo.findByUserUserIdAndTId(userId, tid);
+		Optional<Transaction> t = repo.findByUserUserIdAndTid(userId, tid);
 		if(!t.isPresent())
 			throw new ResourceNotFoundException("ERROR: No Transaction found with tid: " + tid);
 
