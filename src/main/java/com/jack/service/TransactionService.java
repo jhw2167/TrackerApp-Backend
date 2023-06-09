@@ -92,6 +92,14 @@ public class TransactionService
 		else
 			throw new ResourceNotFoundException(String.format("Could not find transaction: %s under user: %s", tId, userId));
 	}
+
+	public Transaction getTransactionByTrueId(final Long trueId) throws ResourceNotFoundException {
+		Optional<Transaction> t = repo.findById(trueId);
+		if(t.isPresent())
+			return t.get();
+		else
+			throw new ResourceNotFoundException(String.format("Could not find transaction with id: %s", trueId));
+	}
 	
 	public List<Transaction> searchVendors(final String userId, String name) {
 		return repo.findAllByUserUserIdAndVendorLike(userId, "%" + name + "%");

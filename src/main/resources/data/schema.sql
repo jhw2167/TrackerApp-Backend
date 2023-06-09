@@ -104,6 +104,7 @@ ALTER TABLE PAY_METHODS DROP CONSTRAINT payMethods_userId_fkey;
 alter table PAY_METHODS add constraint payMethods_userId_fkey foreign key (user_id) references user_accounts
 
 
+/*
 DROP TABLE IF EXISTS pay_method_keys;
 
 CREATE TABLE pay_method_keys (
@@ -117,6 +118,7 @@ INSERT INTO PAY_METHOD_keys (key_id, pm_id, USER_ID) VALUES (0, 0, '20230303JACK
 
 SELECT * FROM pay_method_keys pmk WHERE pm_id=0
 SELECT * FROM pay_methods
+*/
 
 
 
@@ -169,6 +171,7 @@ ALTER TABLE TRANSACTIONS DROP CONSTRAINT "transactions_pkey";
 ALTER TABLE TRANSACTION_KEYS DROP CONSTRAINT "transaction_keys_pkey";
 
 TRUNCATE TABLE TRANSACTION_KEYS;
+DROP TABLE TRANSACTION_KEYS;
 
 
 SELECT * FROM TRANSACTIONS T ORDER BY T_ID 

@@ -160,8 +160,7 @@ CREATE OR REPLACE FUNCTION update_vendors()
 		UPDATE TRANSACTIONS
 		SET CATEGORY = UPPER(CATEGORY),
 		BOUGHT_FOR = UPPER(BOUGHT_FOR),
-		VENDOR = UPPER(VENDOR),
-		PAY_METHOD = UPPER(PAY_METHOD)
+		VENDOR = UPPER(VENDOR)
 		WHERE timestamp_ = (SELECT timestamp_ 
 			FROM TRANSACTIONS T 
 			ORDER BY timestamp_
@@ -258,9 +257,7 @@ CREATE OR REPLACE FUNCTION update_vendors()
 		END IF;
 	END
 	$inner$ language plpgsql;
-		RETURN NULL;
-	
-	
+			
 	-- DROP VIEWS	
 		DROP VIEW IF EXISTS BASE_INC cascade;
 		DROP VIEW  IF EXISTS cat_select cascade;
@@ -270,13 +267,20 @@ CREATE OR REPLACE FUNCTION update_vendors()
 		DROP VIEW IF EXISTS upd CASCADE;
 		DROP VIEW  IF EXISTS v3 cascade;
 	
+		RETURN NULL;
 	END
 	$$ LANGUAGE plpgsql;
 
 --Triggers run in alphabetical order, we want this one to run second
-DROP TRIGGER IF EXISTS VEND_UPD_ON_TRANS_INS ON TRANSACTIONs;
+DROP TRIGGER IF EXISTS VEND_UPD_ON_TRANS_INS ON TRANSACTIONS;
 CREATE TRIGGER VEND_UPD_ON_TRANS_INS AFTER INSERT
 ON transactions EXECUTE PROCEDURE update_vendors();
+
+SELECT * FROM TRANSACTIONS T 
+---------------- END TRIGGER ----------------
+
+
+
 
 SELECT * FROM TRANSACTIONS T ORDER BY TIMESTAMP_ DESC
 
@@ -289,7 +293,6 @@ WHERE vendor='SAMPLE_V';
 AND AMOUNT ='6.95'
 
 DROP TRIGGER VEND_UPD_ON_TRANS_INS ON TRANSACTIONs;
----------------- END TRIGGER ----------------
 
 
 -- Function and Trigger for capitalizing values as they enter DB

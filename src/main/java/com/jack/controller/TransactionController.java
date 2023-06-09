@@ -219,17 +219,14 @@ public class TransactionController {
 		//Make sure user exists else exit
 		UserAccount user = us.getUserAccountById(userId);
 		HttpStatus status = HttpStatus.OK;
-		final StringBuilder body = new StringBuilder();
+		List<Transaction> savedTransactions = new ArrayList<>();
 		final List<DataError> errors = new ArrayList<>();
 
-		//Build Transactions to save
-		List<Transaction> savedTransactions = new ArrayList<>();
 		try {
 
 			for (Transaction t : tx ) {
-				UserAccount u = us.getUserAccountById(userId);
 				vs.saveVendor(new Vendor(t));
-				pms.savePayMethod(t, u);
+				pms.savePayMethod(t, user);
 
 				Transaction savableTransaction = new Transaction(user, t,
 						ts.countByPurchaseDate(userId, t.getPurchaseDate())  );
@@ -327,7 +324,6 @@ public class TransactionController {
 													@PathVariable("tid") final Long tid) {
 		System.out.println("ID to delete:  " + tid);
 		ts.deleteTransactionById(userId, tid);
-		
 		final String body = "Transaction with id: " + tid + " deleted";
 		ResponseEntity<String> rsp = new ResponseEntity<>(body, HttpStatus.OK);
 		return rsp;

@@ -60,7 +60,7 @@ public class Transaction {
 
 	/* This addition prevents this table from being 3NF, as (tid, user_id) -> is a primary key,
 	however, it makes our code implementation and queries much easier */
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
 	//@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
 	@JsonProperty("userAccount")
@@ -155,6 +155,7 @@ public class Transaction {
 	public Transaction(final UserAccount u, final Transaction t, final long transOnDate) {
 		this(t);
 		//System.out.println("My Constructor");
+		setUser(u);
 		settId(t.purchaseDate.toString(), transOnDate);
 		setTrueId(u.getUserId(), this.tid);
 	}
