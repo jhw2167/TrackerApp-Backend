@@ -63,7 +63,7 @@ public class Transaction {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL")
 	//@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
-	@JsonProperty("userId")
+	@JsonProperty("userAccount")
 	private UserAccount user;
 
 	@JsonProperty("tid")
@@ -88,7 +88,7 @@ public class Transaction {
 
 	@JsonProperty("boughtFor")
 	@Column(name="bought_for", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'PERSONAL'")
-	private String beneficiary;
+	private String boughtFor;
 
 //	@Transient
 //	@JsonProperty("payMethod")
@@ -97,7 +97,7 @@ public class Transaction {
 	@ManyToOne
 	@JoinColumn(name = "pm_id", referencedColumnName = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
 	//@Column(name = "pm_id", columnDefinition="NUMERIC NOT NULL DEFAULT 0")
-	@JsonProperty("pmId")
+	@JsonProperty("payMethod")
 	private PayMethod payMethod;
 
 	@JsonProperty("payStatus")
@@ -138,7 +138,7 @@ public class Transaction {
 
 		setVendor(t.vendor);
 		setCategory(t.category);
-		setBeneficiary(t.beneficiary);
+		setBoughtFor(t.boughtFor);
 		//setPayMethodString(t.payMethodString);
 		setPayMethod(t.payMethod);
 		setPayStatus(t.payStatus);
@@ -203,8 +203,8 @@ public class Transaction {
 				: ps.toUpperCase();
 	}
 
-	private void setBeneficiary(String bf) {
-		this.beneficiary = bf.equals("") ? DEF_VALUES.get("BOUGHT_FOR") : bf.toUpperCase();
+	private void setBoughtFor(String bf) {
+		this.boughtFor = bf.equals("") ? DEF_VALUES.get("BOUGHT_FOR") : bf.toUpperCase();
 	}
 
 	private void setCategory(String cat) {

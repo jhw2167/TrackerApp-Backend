@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 //Java imports
 
@@ -37,6 +39,16 @@ public class ExceptionHandlingControllerAdvice {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleNotFound(ResourceNotFoundException ex) {
         return response("Resource not found", ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(HttpClientErrorException.BadRequest.class)
+    public ResponseEntity<String> handleBadRequestPost(Exception ex) {
+        return response("Error saving data due to bad request", ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpServerErrorException.InternalServerError.class)
+    public ResponseEntity<String> handleInternalServerErrorPost(Exception ex) {
+        return response("Error saving data due to internal processing exception", ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 

@@ -2,8 +2,13 @@ package com.jack.controller;
 
 
 //Spring Imports
+import com.jack.utility.DataError;
+import com.jack.utility.SuccessErrorMessage;
+import org.apache.catalina.mapper.Mapper;
+import org.hibernate.HibernateException;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -11,6 +16,7 @@ import java.time.LocalDate;
 //Java Imports
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -24,7 +30,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 //Project Imports
 import com.jack.model.*;
 import com.jack.service.*;
-
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 
 //
@@ -206,17 +213,17 @@ public class TransactionController {
 	
 	//Post new transactions to the database - data send in will be transaction objects
 	@PostMapping
-	public ResponseEntity<String> postTransactions(@PathVariable("userId") final String userId,
+	public ResponseEntity<SuccessErrorMessage> postTransactions(@PathVariable("userId") final String userId,
 												   @RequestBody final List<Transaction> tx)
 	{
 		//Make sure user exists else exit
 		UserAccount user = us.getUserAccountById(userId);
 		HttpStatus status = HttpStatus.OK;
 		final StringBuilder body = new StringBuilder();
-		final StringBuilder errorBody = new StringBuilder();
+		final List<DataError> errors = new ArrayList<>();
 
 		//Build Transactions to save
-		List<Transaction> refined = new ArrayList<>();
+		List<Transaction> savedTransactions = new ArrayList<>();
 		try {
 
 			for (Transaction t : tx ) {
@@ -224,29 +231,37 @@ public class TransactionController {
 				vs.saveVendor(new Vendor(t));
 				pms.savePayMethod(t, u);
 
-
+				Transaction savableTransaction = new Transaction(user, t,
+						ts.countByPurchaseDate(userId, t.getPurchaseDate())  );
 				try {
-					refined.add(ts.saveTransaction( new Transaction(user, t,
-							ts.countByPurchaseDate(userId,
-									t.getPurchaseDate() ) ), u ) );
+					savedTransactions.add(ts.saveTransaction( savableTransaction ) );
 
-				} catch (Exception e) {
-					body.append("ERROR saving transaction: \n" + MAPPER.writeValueAsString(t));
-					body.append("\nERROR reported as:  " + e.getLocalizedMessage());
-					body.append(",\n");
-					status = HttpStatus.INTERNAL_SERVER_ERROR;
+				} catch (HibernateException e) {
+					DataError d = new DataError(savableTransaction, e.getLocalizedMessage());
+					errors.add(d);
+				}
+				catch (Exception e) {
+					DataError d = new DataError(savableTransaction, e.getLocalizedMessage());
+					errors.add(d);
 				}
 			} //END FOR
 
-		} catch (JsonProcessingException e) {
-			System.out.println("Error Proccessing Transaction in Batch");
+			String savedMesssage = "Successfully saved transactions with the folowing tids: ";
+			List<Long> savedData = savedTransactions.stream().map(Transaction::getTid).collect(Collectors.toList());
+			SuccessErrorMessage response = new SuccessErrorMessage(savedMesssage, savedData);
+			/* Check for Errors */
+			if(!errors.isEmpty()) {
+				response.setErrorMessage("Error saving the following transactions: ");
+				response.setErrorData(errors);
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+
+			return new ResponseEntity<>(response, status);
+
+		} catch (Exception e) {
+			throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 
-		body.append("\n\nSuccessfully posted transactions with tids: \n");
-		refined.forEach((trans) -> body.append(trans.getTid() + "\n"));
-		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), status);
-
-		return rsp;
 	}
 	
 	

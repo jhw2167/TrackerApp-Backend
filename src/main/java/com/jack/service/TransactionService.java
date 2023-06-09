@@ -112,7 +112,7 @@ public class TransactionService
 	}
 	
 	public List<String> getBoughtFor(final String userId) {
-		return repo.findDistinctBeneficiaryByUserUserId(userId);
+		return repo.findDistinctBoughtForByUserUserId(userId);
 	}
 	
 	public List<String> getPayStatus(final String userId) {
@@ -143,15 +143,14 @@ public class TransactionService
 	//########### END GET METHODS ############
 	
 	//Save Data
-	public Transaction saveTransaction(Transaction tx, UserAccount u) {
-		setDefaultReimburses(tx, u);
-		tx = repo.save(tx);
-		return tx;
+	public Transaction saveTransaction(Transaction tx) {
+		setDefaultReimburses(tx);
+		return repo.save(tx);
 	}
 	
 	public Transaction updateTransaction(Transaction tx, UserAccount u) throws ResourceNotFoundException {
 		//System.out.println("Attempting to save: " + tx);
-		setDefaultReimburses(tx, u);
+		setDefaultReimburses(tx);
 		if(!repo.existsById(tx.getTrueId()))
 			throw new ResourceNotFoundException("ERROR: No Transaction found with True ID: " + tx.getTrueId());
 
@@ -175,7 +174,8 @@ public class TransactionService
 	/* We make sure that the reimburses id is valid for this user, if not,
 	it defaults to (userId, tid=0), the default base transaction in each user's account
 	 */
-	public void setDefaultReimburses(Transaction tx, UserAccount u) {
+	public void setDefaultReimburses(Transaction tx) {
+		UserAccount u = tx.getUser();
 		Optional<Transaction> reimbTrans = repo.findByUserUserIdAndTrueId(u.getUserId(), tx.getReimburses());
 		if (!reimbTrans.isPresent()) {
 			tx.setReimburses( 	this.getTransactionByID(u.getUserId(), 0L).getTrueId()	);//Each user has default transaction at tid==0

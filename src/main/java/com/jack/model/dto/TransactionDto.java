@@ -1,7 +1,6 @@
 package com.jack.model.dto;
 
 //Java Imports
-import javax.persistence.*;
 
 //Spring Imports
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,7 +8,6 @@ import lombok.Data;
 
 //Project imports
 import com.jack.model.Transaction;
-import org.springframework.security.core.Transient;
 
    /*
     Transaction which contains all useful information utilized by the frontend,
@@ -20,14 +18,14 @@ import org.springframework.security.core.Transient;
 
 
 @Data                                    //We want lombok to write getters and setters
-public class UserTransaction extends Transaction {
+public class TransactionDto extends Transaction {
 
     @JsonProperty("payMethod")
     private String payMethodString;
 
  /*  CONSTRUCTORS  */
 
-    UserTransaction() {
+    TransactionDto() {
         super();
         setPayMethodString(null);
     }

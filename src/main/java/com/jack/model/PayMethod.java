@@ -95,6 +95,9 @@ public class PayMethod {
 		this.pmId = generatePmId(pm.payMethod, userId);
 	}
 
+	public PayMethod(String payMethod) {
+		setPayMethod(payMethod);
+	}
 	public PayMethod(UserAccount u, String payMethod) {
 		this(u, payMethod, null);
 	}

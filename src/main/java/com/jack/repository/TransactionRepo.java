@@ -105,7 +105,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	public List<PayMethod> findDistinctPayMethodByUserUserId(String userId);
 
 	//#12 Find and Group By Bought For
-	public List<String> findDistinctBeneficiaryByUserUserId(String userId);
+	public List<String> findDistinctBoughtForByUserUserId(String userId);
 
 	//#13 Find and Group By Pay status
 	public List<String> findDistinctPayStatusByUserUserId(String userId);
