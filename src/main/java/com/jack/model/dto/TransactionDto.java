@@ -1,6 +1,7 @@
 package com.jack.model.dto;
 
 //Java Imports
+import java.time.LocalDate;
 
 //Spring Imports
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,6 +9,7 @@ import lombok.Data;
 
 //Project imports
 import com.jack.model.Transaction;
+
 
    /*
     Transaction which contains all useful information utilized by the frontend,
@@ -18,24 +20,28 @@ import com.jack.model.Transaction;
 
 
 @Data                                    //We want lombok to write getters and setters
-public class TransactionDto extends Transaction {
+public class TransactionDto {
 
-    @JsonProperty("payMethod")
-    private String payMethodString;
+    private long trueId;
+    private String userId;
+    private long tid;
 
- /*  CONSTRUCTORS  */
+    private LocalDate purchaseDate;
+    private double amount;
+    private String vendor;
+    private String category;
+    private String boughtFor;
+    private String payMethod;
+    private String payStatus;
+    private boolean isIncome;
+    private long reimburses;
+    private LocalDate postedDate;
+    private String notes;
 
-    TransactionDto() {
+    /*  CONSTRUCTORS  */
+
+    public TransactionDto() {
         super();
-        setPayMethodString(null);
     }
-
-     /*  SETTERS  */
-
-    private void setPayMethodString(String pms) {
-		this.payMethodString = (pms==null || pms.equals("")) ? Transaction.DEF_VALUES.get("PAY_METHOD")
-                : pms.toUpperCase();
-	}
-
 
 }

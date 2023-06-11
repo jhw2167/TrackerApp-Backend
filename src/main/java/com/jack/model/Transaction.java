@@ -13,6 +13,7 @@ import javax.persistence.*;
 
 
 //Lombok Imports
+import com.jack.model.dto.TransactionDto;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -158,6 +159,24 @@ public class Transaction {
 		setUser(u);
 		settId(t.purchaseDate.toString(), transOnDate);
 		setTrueId(u.getUserId(), this.tid);
+	}
+
+	public Transaction(final TransactionDto t, final UserAccount u, final PayMethod pm) {
+		setTid(t.getTid());
+		setTrueId(t.getTrueId());
+		setUser(u);
+		setPurchaseDate(t.getPurchaseDate());
+		setAmount(t.getAmount());
+
+		setVendor(t.getVendor());
+		setCategory(t.getCategory());
+		setBoughtFor(t.getBoughtFor());
+		setPayMethod(pm);
+		setPayStatus(t.getPayStatus());
+		setIncome(t.isIncome());
+		setReimburses(t.getReimburses());
+		setPostedDate(t.getPostedDate());
+		setNotes(t.getNotes());
 	}
 
 	/* END CONSTRUCTORS */

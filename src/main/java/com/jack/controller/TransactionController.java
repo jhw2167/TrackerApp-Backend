@@ -2,21 +2,24 @@ package com.jack.controller;
 
 
 //Spring Imports
+import com.jack.model.dto.TransactionDto;
 import com.jack.utility.DataError;
 import com.jack.utility.SuccessErrorMessage;
 import org.apache.catalina.mapper.Mapper;
 import org.hibernate.HibernateException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+
+//Java Imports
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-//Java Imports
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -30,8 +33,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 //Project Imports
 import com.jack.model.*;
 import com.jack.service.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
+import com.jack.model.dto.mapper.TransactionMapper;
+
 
 
 //
@@ -62,6 +65,10 @@ public class TransactionController {
 	@Autowired
 	PayMethodService pms;
 
+	//Other Useful classes
+	@Autowired
+	TransactionMapper transactionMapper;
+
 
 	/* Static variables */
 	static final ObjectMapper MAPPER = new ObjectMapper();
@@ -80,11 +87,13 @@ public class TransactionController {
 	/* Utility Methods */
 	/**
 	 *	Get all transaction by userId and tid
-	 * @return ResponseEntity<Transaction>
+	 * @return ResponseEntity<TransactionDto>
 	 */
 	@RequestMapping(value="/{tid}", method=RequestMethod.GET)
-	public ResponseEntity<Transaction> getTransactionByID(@PathVariable("userId") final String userId, @PathVariable("tid") final long tId) {
-		return new ResponseEntity<Transaction>(ts.getTransactionByID(userId, tId), HttpStatus.OK);
+	public ResponseEntity<TransactionDto> getTransactionByID(@PathVariable("userId") final String userId, @PathVariable("tid") final long tId) {
+		return new ResponseEntity<>(
+				transactionMapper.toDto( ts.getTransactionByID(userId, tId) ) ,
+				HttpStatus.OK);
 	}
 	//END GET TRANSACTION BY ID
 
@@ -92,12 +101,14 @@ public class TransactionController {
 	/**
 	 *	Get all transactions, default sorted by date, descending (most recent to oldest) 
 	 * 
-	 * @return ResponseEntity<List<Transaction>>
+	 * @return ResponseEntity<List<TransactionDto>>
 	 */
 	@GetMapping
 	//basic /transactions
-	public ResponseEntity<List<Transaction>> getUserTransactions(@PathVariable("userId") final String userId) {
-		return new ResponseEntity<List<Transaction>>(ts.getAllUserTransactions(userId), HttpStatus.OK);
+	public ResponseEntity<List<TransactionDto>> getUserTransactions(@PathVariable("userId") final String userId) {
+		List<Transaction> tx = ts.getAllUserTransactions(userId);
+		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	//END GET TRANSACTIONS
 	
@@ -107,9 +118,11 @@ public class TransactionController {
 	 * @return ResponseEntity<List<Vendor>>
 	 */
 	@RequestMapping(value="/query", params = {"name"}, method=RequestMethod.GET)
-	public ResponseEntity<List<Transaction>> searchTransactionsByVendorName(@PathVariable("userId") final String userId,
+	public ResponseEntity<List<TransactionDto>> searchTransactionsByVendorName(@PathVariable("userId") final String userId,
 			@RequestParam final String name) {
-		return new ResponseEntity<>(ts.searchVendors(userId, name), HttpStatus.OK);
+		List<Transaction> tx = ts.searchVendors(userId, name);
+		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	//END GET VENDOR SEARCH
 
@@ -123,30 +136,32 @@ public class TransactionController {
 	
 	//Get Transactions pageanated from params [start-end)
 	/**
-	 * @return ResponseEntity<List<Transaction>>
+	 * @return ResponseEntity<List<TransactionDto>>
 	 */
 	@GetMapping(params = {"start", "to"} )
 	@RequestMapping("/dates")
-	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(
+	public ResponseEntity<List<TransactionDto>> getTransactionsPageanatedByDate(
 			@PathVariable("userId") final String userId,
 			@RequestParam final String start,
 			@RequestParam final String to) {
 		List<Transaction> tx = ts.getAllTransactionsBetweenPurchaseDate(userId,
 				LocalDate.parse(start), LocalDate.parse(to));
-		return new ResponseEntity<>(tx, HttpStatus.OK);
+		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
 	
 	//Get Transactions pageanated from params [offset-limit)
 	/**
-	 * @return ResponseEntity<List<Transaction>>
+	 * @return ResponseEntity<List<TransactionDto>>
 	 */
 	@GetMapping(params = {"limit", "offset"} )
 	@RequestMapping("/recent")
-	public ResponseEntity<List<Transaction>> getTransactionsPageanatedByDate(@PathVariable("userId") final String userId,
-			@RequestParam final String start, @RequestParam final Integer limit, @RequestParam(required=false) final Integer offset) {
+	public ResponseEntity<List<TransactionDto>> getTransactionsPageanatedByDate(@PathVariable("userId") final String userId,
+			@RequestParam final Integer limit, @RequestParam(required=false) final Integer offset) {
 		List<Transaction> tx = ts.getAllTransactionsPageableID(userId, limit, (offset != null) ? offset : 0);
-		return new ResponseEntity<>(tx, HttpStatus.OK);
+		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
 	
