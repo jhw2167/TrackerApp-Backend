@@ -9,6 +9,13 @@ import org.springframework.stereotype.Component;
 import com.jack.model.Transaction;
 import com.jack.model.dto.TransactionDto;
 
+/**
+ * Transaction Mapper utility for mapping between DTO and Entity objects
+ *
+ * @author Jack Welsh 06/10/2023
+ */
+
+
 @Component
 public class TransactionMapper {
 

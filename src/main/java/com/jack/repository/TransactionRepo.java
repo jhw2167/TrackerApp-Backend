@@ -111,12 +111,11 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	public List<String> findDistinctPayStatusByUserUserId(String userId);
 
 	//#14 Find by userId and TrueId
-	/*@Query(value = "SELECT * FROM :user_view_name t " +
-			"WHERE T.true_Id=:true_id", nativeQuery = true)
-	*/public Optional<Transaction> findByUserUserIdAndTrueId(String userId, long trueId);
+	public Optional<Transaction> findByUserUserIdAndTrueId(String userId, long trueId);
 
 	//#15 Find by userId and t_id
-	/*@Query(value = "SELECT * FROM :user_view_name t " +
-			"WHERE T.t_id=:t_id", nativeQuery = true)
-	*/public Optional<Transaction> findByUserUserIdAndTid(String userId, long tid);
+	public Optional<Transaction> findByUserUserIdAndTid(String userId, long tid);
+
+	//#16 Find all transactions having given vendor
+	List<Transaction> findAllByVendor(Vendor v);
 }
