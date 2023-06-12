@@ -1,4 +1,4 @@
-package com.jack.aspect;
+package com.jack.aspect.TransactionAspect;
 
 //Spring Imports
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 //Project imports
 import com.jack.repository.TransactionRepo;
 import com.jack.service.UserAccountService;
+import com.jack.model.*;
 
 
 /* REMEMBER TO ADD BEAN TO SPRING CONFIG CLASS */
@@ -28,9 +29,11 @@ public class TransactionRepoAspect {
     @Autowired
     TransactionRepo repo;
 
-    /*
+    @Autowired
+    TransactionRepo vendorRepo;
 
-     */
+
+    /*      CREATE VIEW FOR INCOME/EPENDITURE SUMMARY       */
 
     //All methods beloning to transaction repo interface except the method where we actually create the view
     @Pointcut("execution(* com.jack.repository.TransactionRepo+.*(..))  && args(String,..) &&" +
@@ -65,6 +68,8 @@ public class TransactionRepoAspect {
             }
 
             //CREATE USER TRANSACTIONS TABLE
+            logger.info(" ATTEMPTING CREATION OF USER TRANSACTIONS VIEW WITH NAME: "
+                    + userTransViewName);
             repo.createUserTransactionsView(userTransViewName, userId);
             logger.info("CREATED USER TRANSACTIONS VIEW WITH NAME: "
                     + userTransViewName);
@@ -90,7 +95,7 @@ public class TransactionRepoAspect {
             repo.dropUserTransactionsView(userTransViewName);
             logger.info("DROPPED USER TRANSACTIONS VIEW WITH NAME: " + userTransViewName);
         } catch (Exception e) {
-            logger.warn("ERROR: DROPPED USER TRANSACTIONS VIEW WITH NAME: "
+            logger.warn("ERROR: FAILED TO DROP USER TRANSACTIONS VIEW WITH NAME: "
                     + userTransViewName);
         }
 
@@ -112,5 +117,41 @@ public class TransactionRepoAspect {
         id = id.replaceAll("[^a-zA-Z0-9_]|^(?![a-zA-Z0-9_]{0,63}$)", "");
         return id;
     }
+
+    /*  *********************************************  */
+
+    /*  TRIGGER VENDOR UPDATE ON INSERT/DELETE FROM TRANSACTIONS  */
+
+        /* Pointcuts */
+
+        //Update or Save Transaction
+        @Pointcut("execution(* com.jack.repository.TransactionRepo+.save(..))")
+        private void saveTransactionPointcut(){};
+
+        //Delete Transaction
+        @Pointcut("execution(* com.jack.repository.TransactionRepo+.deleteById(..))")
+        private void deleteTransactionPointcut(){};
+
+    /* Advice */
+    @Around("saveTransactionPointcut() || deleteTransactionPointcut()")
+    private Object triggerCalculateVendorAverageCostUpdate(ProceedingJoinPoint joinPoint) throws Throwable {
+        Logger logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName());
+        Object[] args = joinPoint.getArgs();
+        Transaction toUpdate = null;
+
+        if(args[0] instanceof Transaction) //We have a transaction
+            toUpdate = (Transaction) args[0];
+        else if (args[0] instanceof Long)
+            toUpdate = repo.getById((Long) args[0]);
+        else
+            logger.warn("triggerCalculateVendorAverageCostUpdate() encountered unfamiliar " +
+                    "transaction update method, vendor average cost will not be updated");
+        //Vendor v = vendorRepo.getById(toUpdate.getVendor());
+        Object results = joinPoint.proceed(joinPoint.getArgs());
+
+        return results;
+    }
+
+    /*  *********************************************  */
 
 }

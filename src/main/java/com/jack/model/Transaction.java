@@ -52,6 +52,13 @@ public class Transaction {
 		put("BOUGHT_FOR", "PERSONAL");
 	}};
 
+	public static final Map<String, String> PAY = new HashMap<String, String>() {{
+		put("PAY_METHOD", "CASH");
+		put("PAY_STATUS", "COMPLETE");
+		put("CATEGORY", "MISC");
+		put("BOUGHT_FOR", "PERSONAL");
+	}};
+
 	/* PERSISTED  STATE VARIABLES */
 
 	@Id

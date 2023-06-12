@@ -1,7 +1,8 @@
 package com.jack;
 
 //Spring Imports
-import com.jack.model.Transaction;
+import com.jack.aspect.TransactionAspect.TransactionControllerAspect;
+import com.jack.aspect.TransactionAspect.TransactionRepoAspect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;

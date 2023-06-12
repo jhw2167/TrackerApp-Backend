@@ -27,9 +27,10 @@ CREATE TYPE RECIPIENT AS ENUM ('PERSONAL', 'FRIEND', 'FAMILY', 'DATE', 'GROUP');
  *  PENDING - This transaction is not yet realeased
  *  COMPLETE - Most transactions; committed and realized at the point of contact
  *  OWED_PARTIAL - I am owed money on part of this transaction
+ *  CANCELLED - This transaction will not be involved in processes but is not removed from the DB 
  */
 DROP TYPE IF EXISTS STATUS_TYPE CASCADE;
-CREATE TYPE STATUS_TYPE AS ENUM ('COMPLETE', 'COVERED', 'OWED', 'PENDING', 'OWED_PARTIAL');
+CREATE TYPE STATUS_TYPE AS ENUM ('COMPLETE', 'COVERED', 'OWED', 'PENDING', 'OWED_PARTIAL', 'CANCELLED');
 
 
 -- create type institution_type indicated what type the pay_method is

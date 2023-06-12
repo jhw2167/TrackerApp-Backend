@@ -1,17 +1,20 @@
 package com.jack.service.algorithms.vendors;
 
+//java imports
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 //Spring
 import org.springframework.beans.factory.annotation.Autowired;
 
 //Project Imports
 import com.jack.model.*;
+import com.jack.model.enums.*;
 import com.jack.repository.TransactionRepo;
 import com.jack.repository.VendorRepo;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Vendor Average cost calculating class, handles logic for determining
@@ -33,7 +36,10 @@ public class AverageCost {
     public void calculateAverageCostOrIncomeByVendor(Vendor v) {
 
         //Get all transactions by this vendor
-        List<Transaction> txs = tr.findAllByVendor(v);
+        List<Transaction> allTransactions = tr.findAllByVendor(v);
+        List<Transaction> txs = allTransactions.stream()
+                .filter(t -> t.getPayStatus() != TransactionStatusType.CANCELLED.getLabel())
+                .collect(Collectors.toList());
 
         if(txs.isEmpty()) {
             v.setAmount(0D);
