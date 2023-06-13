@@ -3,6 +3,7 @@ package com.jack.model.dto.mapper;
 //Spring Imports
 import com.jack.model.PayMethod;
 import com.jack.model.UserAccount;
+import com.jack.model.Vendor;
 import org.springframework.stereotype.Component;
 
 //Project imports
@@ -19,8 +20,12 @@ import com.jack.model.dto.TransactionDto;
 @Component
 public class TransactionMapper {
 
-    public Transaction toEntity(final TransactionDto dto, final UserAccount u, final PayMethod pm) {
-        return new Transaction(dto, u, pm);
+    public Transaction toEntity(final TransactionDto dto,
+                                final UserAccount u,
+                                final PayMethod pm,
+                                final Vendor v) {
+
+        return new Transaction(dto, u, pm, v);
     }
 
     public TransactionDto toDto(Transaction t) {
@@ -32,10 +37,10 @@ public class TransactionMapper {
 
         dto.setPurchaseDate(t.getPurchaseDate());
         dto.setAmount(t.getAmount());
-        dto.setVendor(t.getVendor());
+        dto.setVendor(t.getVendor().getVendorName());
         dto.setCategory(t.getCategory());
         dto.setBoughtFor(t.getBoughtFor());
-        dto.setPayMethod(t.getPayMethod().getPayMethod());
+        dto.setPayMethod(t.getPayMethod().getPayMethodName());
         dto.setPayStatus(t.getPayStatus());
         dto.setIncome(t.isIncome());
         dto.setReimburses(t.getReimburses());

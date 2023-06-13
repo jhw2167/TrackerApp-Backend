@@ -229,7 +229,7 @@ public class TransactionController {
 	//Post new transactions to the database - data send in will be transaction objects
 	@PostMapping
 	public ResponseEntity<SuccessErrorMessage> postTransactions(@PathVariable("userId") final String userId,
-												   @RequestBody final List<Transaction> tx)
+												   @RequestBody final List<TransactionDto> tx)
 	{
 		//Make sure user exists else exit
 		UserAccount user = us.getUserAccountById(userId);
@@ -239,9 +239,9 @@ public class TransactionController {
 
 		try {
 
-			for (Transaction t : tx ) {
-				vs.saveVendor(new Vendor(t));
-				pms.savePayMethod(t, user);
+			for (TransactionDto t : tx ) {
+				vs.saveVendor(new Vendor(user, t));
+				pms.savePayMethod(new PayMethod(user, t.getPayMethod()));
 
 				Transaction savableTransaction = new Transaction(user, t,
 						ts.countByPurchaseDate(userId, t.getPurchaseDate())  );
@@ -285,7 +285,7 @@ public class TransactionController {
 	//Patch a list of transactions entry
 	@PatchMapping
 	public ResponseEntity<String> patchTransactions(@PathVariable("userId") final String userId,
-			@RequestBody final List<Transaction> tx)
+			@RequestBody final List<TransactionDto> tx)
 	{
 		StringBuilder body = new StringBuilder("Patched Transactions: [\n");
 
@@ -293,9 +293,9 @@ public class TransactionController {
 		HttpStatus status = HttpStatus.OK;
 		List<Transaction> refined = new ArrayList<>();
 		try {
-			for (Transaction t : tx ) {
-				vs.saveVendor(new Vendor(t));
-				pms.savePayMethod(t, u);
+			for (TransactionDto t : tx ) {
+				vs.saveVendor(new Vendor(u, t));
+				pms.savePayMethod(new PayMethod(u, t.getPayMethod()));
 				refined.add(ts.updateTransaction(t, u));
 			}
 		} catch(ResourceNotFoundException e) {

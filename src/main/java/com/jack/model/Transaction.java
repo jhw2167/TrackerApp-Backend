@@ -52,13 +52,6 @@ public class Transaction {
 		put("BOUGHT_FOR", "PERSONAL");
 	}};
 
-	public static final Map<String, String> PAY = new HashMap<String, String>() {{
-		put("PAY_METHOD", "CASH");
-		put("PAY_STATUS", "COMPLETE");
-		put("CATEGORY", "MISC");
-		put("BOUGHT_FOR", "PERSONAL");
-	}};
-
 	/* PERSISTED  STATE VARIABLES */
 
 	@Id
@@ -88,7 +81,7 @@ public class Transaction {
 
 	@JsonProperty("vendor")
 	@Column(name="vendor", columnDefinition="VARCHAR(50) NOT NULL")	//references vendors
-	private String vendor;
+	private Vendor vendor;
 
 	@JsonProperty("category")
 	@Column(name="category", columnDefinition="VARCHAR(50) NOT NULL DEFAULT 'Misc'")
@@ -168,14 +161,15 @@ public class Transaction {
 		setTrueId(u.getUserId(), this.tid);
 	}
 
-	public Transaction(final TransactionDto t, final UserAccount u, final PayMethod pm) {
+	public Transaction(final TransactionDto t, final UserAccount u, final PayMethod pm, final Vendor v)
+	{
 		setTid(t.getTid());
 		setTrueId(t.getTrueId());
 		setUser(u);
 		setPurchaseDate(t.getPurchaseDate());
 		setAmount(t.getAmount());
 
-		setVendor(t.getVendor());
+		setVendor(v);
 		setCategory(t.getCategory());
 		setBoughtFor(t.getBoughtFor());
 		setPayMethod(pm);
@@ -212,8 +206,9 @@ public class Transaction {
 	/*
 		- Removes all instance of ' from vendor and sends to upper case
 	 */
-	private void setVendor(String vendor2) {
-		this.vendor = vendor2.replace("'", "").toUpperCase();
+	private void setVendor(Vendor v) {
+		this.vendor = v;
+
 	}
 	
 	private void setPostedDate(LocalDate postedDate2) {

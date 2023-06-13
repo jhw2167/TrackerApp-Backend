@@ -7,10 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jack.utility.General;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 //Project imports
 
@@ -38,13 +35,14 @@ public class PayMethod {
 	@JsonProperty("pmId")
 	private long pmId;
 
+	@ManyToOne
 	@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
-	@JsonProperty("userId")
-	private String userId;
+	@JsonProperty("userAccount")
+	private UserAccount user;
 
 	@JsonProperty("payMethod")
 	@Column(name="pay_method", columnDefinition="VARCHAR NOT NULL DEFAULT 'CASH'")
-	private String payMethod;
+	private String payMethodName;
 
 	@JsonProperty("institutionType")
 	@Column(name="institution_type", columnDefinition="VARCHAR NOT NULL DEFAULT 'SIMPLE'")
@@ -79,7 +77,7 @@ public class PayMethod {
 	public PayMethod(PayMethod pm) {
 		super();
 		setPmId(pm.pmId);
-		setPayMethod(pm.payMethod);
+		setPayMethodName(pm.payMethodName);
 		setInstitutionType(pm.institutionType);
 		setBalance(pm.balance);
 		setCreditLine(pm.creditLine);
@@ -92,19 +90,19 @@ public class PayMethod {
 	//For generating a new pm_id
 	public PayMethod(PayMethod pm, UserAccount u) {
 		this(pm);
-		this.pmId = generatePmId(pm.payMethod, userId);
+		this.pmId = generatePmId(pm.payMethodName, user.getUserId());
 	}
 
 	public PayMethod(String payMethod) {
-		setPayMethod(payMethod);
+		setPayMethodName(payMethod);
 	}
 	public PayMethod(UserAccount u, String payMethod) {
 		this(u, payMethod, null);
 	}
 
 	public PayMethod(UserAccount u, String payMethod, String institutionType) {
-		setPmId(generatePmId(payMethod, userId));
-		setPayMethod(payMethod);
+		setPmId(generatePmId(payMethod, u.getUserId()));
+		setPayMethodName(payMethod);
 		setInstitutionType(institutionType);
 	}
 
@@ -113,12 +111,12 @@ public class PayMethod {
 
 	//SETTERS
 
-	public void setPayMethod(String pm) {
-		this.payMethod = (pm==null || pm.isEmpty()) ? "CASH" : pm;
+	public void setPayMethodName(String pm) {
+		this.payMethodName = (pm==null || pm.isEmpty()) ? "CASH" : pm;
 	}
 
 	public void setInstitutionType(String instType) {
-		this.payMethod = (instType==null || instType.isEmpty()) ? "SIMPLE" : instType;
+		this.payMethodName = (instType==null || instType.isEmpty()) ? "SIMPLE" : instType;
 	}
 
 	private long generatePmId(String pay_method, String userId) {

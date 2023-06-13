@@ -29,7 +29,9 @@ public interface VendorRepo extends JpaRepository<Vendor, Long>
 	public List<Vendor> findAll();
 	
 	//finds vendor object by exact match on string name
-	public Vendor findByVendor(String vendor);
+	public Vendor findByVendorName(String vendorName);
+
+	public Vendor findByUserUserIdAndVendorName(String userId, String vendorName);
 	
 	//find all that partially match name
 	@Query(value="SELECT * FROM VENDORS v WHERE v.vendor LIKE UPPER(:name)", nativeQuery=true)

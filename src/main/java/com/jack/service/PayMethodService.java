@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 
 //Project imports
+import static com.jack.utility.General.*;
 import com.jack.repository.*;
 import com.jack.model.*;
+
 
 
 
@@ -33,28 +35,27 @@ public class PayMethodService {
 
     /* METHODS */
 
-    public PayMethod savePayMethod(Transaction t, UserAccount u) {
-
-        String providedPm = Transaction.DEF_VALUES.get("PAY_METHOD");
-        try {
-            providedPm = (String) t.getClass().getMethod("getPayMethodString").invoke(null);
-        } catch (Exception reflectionException) { /* BLANK */ }
+    public PayMethod savePayMethod(PayMethod pm)
+    {
+        UserAccount u = pm.getUser();
+        String providedPm = (isEmpty(pm.getPayMethodName())) ?
+                Transaction.DEF_VALUES.get("PAY_METHOD") :
+                pm.getPayMethodName();
 
         //If transaction has provided pay method and it exists under this user
-        Optional<PayMethod> pmById = repo.findByUserIdAndPmId(u.getUserId(), t.getPayMethod().getPmId());
+        Optional<PayMethod> pmById = repo.findByUserIdAndPmId(u.getUserId(), pm.getPmId());
         Optional<PayMethod> pmByName = repo.findByUserIdAndPayMethod(u.getUserId(), providedPm);
         PayMethod newPayMethod = null;
         if(pmById.isPresent()) {
             return pmById.get(); //All good
         } else if(pmByName.isPresent()) {
-            t.setPayMethod(pmByName.get());
             return pmByName.get();
         } else {
-            newPayMethod = new PayMethod(u, providedPm);
-            repo.save(newPayMethod);
+            return repo.save(new PayMethod(u, providedPm));
         }
-
-        return newPayMethod;
+        //END IF ELSE
     }
 
+
 }
+//END CLASS PayMethodService

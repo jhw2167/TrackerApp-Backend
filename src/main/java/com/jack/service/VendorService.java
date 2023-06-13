@@ -25,27 +25,24 @@ public class VendorService
 {
 
 	/* State Variables */
-	
-	VendorRepo vr;
+
+	@Autowired
+	VendorRepo repo;
+	@Autowired
 	VendorNamesRepo vnr;
 	
 	//END STATE VARS
-	
-	@Autowired
-	VendorService(VendorRepo vendorRepo, VendorNamesRepo vendorMapperRepo) {
-		this.vr = vendorRepo;
-		this.vnr = vendorMapperRepo;
-	}
+
 	
 	/* UTILITY METHODS */
 	
 	//Get all vendors as list
 	public List<Vendor> getAllVendors() {
-		return vr.findAll();
+		return repo.findAll();
 	}
 	
 	public List<Vendor> searchVendors(String vendorName) {
-		return vr.findAllLikeVendorName("%" + vendorName + "%");	//adding % to SQL like query finds all partial matches
+		return repo.findAllLikeVendorName("%" + vendorName + "%");	//adding % to SQL like query finds all partial matches
 	}
 
 	public Optional<Vendor> checkVendorExists(String vendorName) {
@@ -72,8 +69,8 @@ public class VendorService
 	 *
 	 */
 	public Vendor saveVendor(final Vendor v) {
-		Optional<Vendor> searchedVendor = checkVendorExists(v.getVendor());
-		return (searchedVendor.isPresent()) ? searchedVendor.get() : vr.save(v);
+		Vendor searchedVendor = repo.findByUserUserIdAndVendorName(v.getUser(), v.getVendorName());
+		return (searchedVendor!=null) ? searchedVendor : repo.save(v);
 	}
 
 }

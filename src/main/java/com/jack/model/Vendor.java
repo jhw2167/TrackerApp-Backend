@@ -1,21 +1,17 @@
 package com.jack.model;
 
 
-import javax.annotation.Resource;
-
 //JPA Imports
 import javax.persistence.*;
 
+import com.jack.model.dto.TransactionDto;
 import com.jack.utility.General;
-import org.springframework.stereotype.Component;
 
 //Lombok Imports
 import lombok.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 //Project imports
-import com.jack.repository.*;
-
 
 
 @Data
@@ -24,11 +20,13 @@ public class Vendor {
 
 
 	@Id
-	private String vendor;
+	@Column(name = "vendor")
+	private String vendorName;
 
+	@ManyToOne
 	@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
-	@JsonProperty("userId")
-	private String userId;
+	@JsonProperty("userAccount")
+	private UserAccount user;
 	
 	@Column(columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
 	private double amount;
@@ -42,27 +40,30 @@ public class Vendor {
 	
 	/* CONSTRUCTORS */
 	public Vendor() {
-		super();		//spring needs default constructor
+		super();
 	}
 	
 	public Vendor(Vendor v) {
-		this(v.vendor, v.amount, v.category, v.isTypicallyIncome);
+		this(v.vendorName, v.amount, v.category, v.isTypicallyIncome);
+		setUser(v.getUser());
 	}
 
-	public Vendor(String vendorName) {
+	public Vendor(UserAccount u, String vendorName) {
 		this(vendorName, 0d, null, false);
+		setUser(u);
 	}
 
 	public Vendor(String v, Double a, String c, Boolean inc) {
 		super();
-		setVendor(v);
+		setVendorName(v);
 		setAmount(a);
 		setCategory(c);
 		setTypicallyIncome(inc);
 	}
 
-	public Vendor(Transaction t) {
+	public Vendor(UserAccount u, TransactionDto t) {
 		this(t.getVendor(), 0.d, t.getCategory(), t.isIncome());
+		setUser(u);
 	}
 
 	/* SETTERS */
@@ -71,10 +72,10 @@ public class Vendor {
 		return General.mergeHash(vendor.hashCode(), userId.hashCode());
 	}
 
-	public void setVendor(String v) {
+	public void setVendorName(String v) {
 		if(v==null || v.isEmpty())
 			v="UNKOWN";
-		this.vendor = v.replace("'", "").toUpperCase();
+		this.vendorName = v.replace("'", "").toUpperCase();
 	}
 
 	public void setCategory(String c) {
