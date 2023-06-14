@@ -69,7 +69,7 @@ public class VendorService
 	 *
 	 */
 	public Vendor saveVendor(final Vendor v) {
-		Vendor searchedVendor = repo.findByUserUserIdAndVendorName(v.getUser(), v.getVendorName());
+		Vendor searchedVendor = repo.findByUserUserIdAndVendorName(v.getUser().getUserId(), v.getVendorName());
 		return (searchedVendor!=null) ? searchedVendor : repo.save(v);
 	}
 

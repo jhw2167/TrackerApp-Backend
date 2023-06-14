@@ -149,15 +149,39 @@ public class Transaction {
 		setNotes(t.notes);
 	}
 
+	public Transaction(final TransactionDto t) {
+		super();
+		setTid(t.getTid());
+		setTrueId(t.getTrueId());
+		//setUser(t.getUser()); setSeperately
+		setPurchaseDate(t.getPurchaseDate());
+		setAmount(t.getAmount());
+
+		//setVendor(t.getVendorName()); sert seperat
+		setCategory(t.getCategory());
+		setBoughtFor(t.getBoughtFor());
+		// setPayMethodString(t.getPayMethodString());
+		//setPayMethod(t.getPayMethod());
+		setPayStatus(t.getPayStatus());
+		setIncome(t.isIncome());
+		setReimburses(t.getReimburses());
+		setPostedDate(t.getPostedDate());
+		setNotes(t.getNotes());
+	}
+
+
 	/*
 		-Create transaction from immature transaction submitted in POST calls
 		"Immature" transactions need their TIDs created
 	 */
-	public Transaction(final UserAccount u, final Transaction t, final long transOnDate) {
+	public Transaction(final TransactionDto t, final UserAccount u,
+					   final PayMethod pm, final Vendor v, final long transOnDate) {
 		this(t);
 		//System.out.println("My Constructor");
 		setUser(u);
-		settId(t.purchaseDate.toString(), transOnDate);
+		setPayMethod(pm);
+		setVendor(v);
+		settId(t.getPurchaseDate().toString(), transOnDate);
 		setTrueId(u.getUserId(), this.tid);
 	}
 

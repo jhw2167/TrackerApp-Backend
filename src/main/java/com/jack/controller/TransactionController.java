@@ -240,10 +240,10 @@ public class TransactionController {
 		try {
 
 			for (TransactionDto t : tx ) {
-				vs.saveVendor(new Vendor(user, t));
-				pms.savePayMethod(new PayMethod(user, t.getPayMethod()));
+				Vendor v = vs.saveVendor(new Vendor(user, t));
+				PayMethod pm = pms.savePayMethod(new PayMethod(user, t.getPayMethod()));
 
-				Transaction savableTransaction = new Transaction(user, t,
+				Transaction savableTransaction = new Transaction(t, user, pm, v,
 						ts.countByPurchaseDate(userId, t.getPurchaseDate())  );
 				try {
 					savedTransactions.add(ts.saveTransaction( savableTransaction ) );
