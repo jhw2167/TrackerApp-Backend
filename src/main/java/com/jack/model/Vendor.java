@@ -24,7 +24,7 @@ public class Vendor {
 	private String vendorName;
 
 	@ManyToOne
-	@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
 	@JsonProperty("userAccount")
 	private UserAccount user;
 	

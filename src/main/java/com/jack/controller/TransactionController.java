@@ -3,10 +3,7 @@ package com.jack.controller;
 
 //Spring Imports
 import com.jack.model.dto.TransactionDto;
-import com.jack.utility.DataError;
-import com.jack.utility.SuccessErrorMessage;
-import org.apache.catalina.mapper.Mapper;
-import org.hibernate.HibernateException;
+import com.jack.utility.HttpMultiStatusResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -15,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -228,47 +224,12 @@ public class TransactionController {
 	
 	//Post new transactions to the database - data send in will be transaction objects
 	@PostMapping
-	public ResponseEntity<SuccessErrorMessage> postTransactions(@PathVariable("userId") final String userId,
-												   @RequestBody final List<TransactionDto> tx)
+	public ResponseEntity<HttpMultiStatusResponse> postTransactions(@PathVariable("userId") final String userId,
+																	@RequestBody final List<TransactionDto> tx)
 	{
-		//Make sure user exists else exit
-		UserAccount user = us.getUserAccountById(userId);
-		HttpStatus status = HttpStatus.OK;
-		List<Transaction> savedTransactions = new ArrayList<>();
-		final List<DataError> errors = new ArrayList<>();
-
 		try {
-
-			for (TransactionDto t : tx ) {
-				Vendor v = vs.saveVendor(new Vendor(user, t));
-				PayMethod pm = pms.savePayMethod(new PayMethod(user, t.getPayMethod()));
-
-				Transaction savableTransaction = new Transaction(t, user, pm, v,
-						ts.countByPurchaseDate(userId, t.getPurchaseDate())  );
-				try {
-					savedTransactions.add(ts.saveTransaction( savableTransaction ) );
-
-				} catch (HibernateException e) {
-					DataError d = new DataError(savableTransaction, e.getLocalizedMessage());
-					errors.add(d);
-				}
-				catch (Exception e) {
-					DataError d = new DataError(savableTransaction, e.getLocalizedMessage());
-					errors.add(d);
-				}
-			} //END FOR
-
-			String savedMesssage = "Successfully saved transactions with the folowing tids: ";
-			List<Long> savedData = savedTransactions.stream().map(Transaction::getTid).collect(Collectors.toList());
-			SuccessErrorMessage response = new SuccessErrorMessage(savedMesssage, savedData);
-			/* Check for Errors */
-			if(!errors.isEmpty()) {
-				response.setErrorMessage("Error saving the following transactions: ");
-				response.setErrorData(errors);
-				status = HttpStatus.INTERNAL_SERVER_ERROR;
-			}
-
-			return new ResponseEntity<>(response, status);
+			HttpMultiStatusResponse response = ts.saveOrUpdateTransactions(userId, tx);
+			return new ResponseEntity<>(response, HttpStatus.MULTI_STATUS);
 
 		} catch (Exception e) {
 			throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -284,43 +245,16 @@ public class TransactionController {
 	
 	//Patch a list of transactions entry
 	@PatchMapping
-	public ResponseEntity<String> patchTransactions(@PathVariable("userId") final String userId,
+	public ResponseEntity<HttpMultiStatusResponse> patchTransactions(@PathVariable("userId") final String userId,
 			@RequestBody final List<TransactionDto> tx)
 	{
-		StringBuilder body = new StringBuilder("Patched Transactions: [\n");
-
-		UserAccount u = us.getUserAccountById(userId);
-		HttpStatus status = HttpStatus.OK;
-		List<Transaction> refined = new ArrayList<>();
 		try {
-			for (TransactionDto t : tx ) {
-				vs.saveVendor(new Vendor(u, t));
-				pms.savePayMethod(new PayMethod(u, t.getPayMethod()));
-				refined.add(ts.updateTransaction(t, u));
-			}
-		} catch(ResourceNotFoundException e) {
-			body = new StringBuilder(e.getMessage());
-			body.append("\n\nTransactions successfully patched: \n");
-			status = HttpStatus.BAD_REQUEST;
-		} catch(IllegalArgumentException e) {
-			body = new StringBuilder(e.getMessage());
-			body.append("\n\nTransactions successfully patched: \n");
-			status = HttpStatus.BAD_REQUEST;
-		}
+			HttpMultiStatusResponse response = ts.saveOrUpdateTransactions(userId, tx);
+			return new ResponseEntity<>(response, HttpStatus.MULTI_STATUS);
 
-		String openBrace = "[";
-		for(Transaction t : refined ) {
-			try {
-				body.append(openBrace); openBrace=","; //if multiple transactions, they will be seperated by commas, JSON format
-				body.append(MAPPER.writeValueAsString(t) + "\n");
-			} catch (JsonProcessingException e) {
-				System.out.println(e);
-				body.append("Error converting transaction to JSON with id: " + t.getTid());
-			}
+		} catch (Exception e) {
+			throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
-		body.append("]"); //Closing brace for JSON
-		ResponseEntity<String> rsp = new ResponseEntity<>(body.toString(), status);
-		return rsp;
 	}
 	
 	

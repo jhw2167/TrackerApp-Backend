@@ -8,17 +8,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 //Spring Imports
+import com.jack.model.dto.TransactionDto;
+import com.jack.utility.HttpUnitResponse;
+import com.jack.utility.HttpMultiStatusResponse;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 
 //Project imports
 import com.jack.repository.*;
 import com.jack.model.*;
+import org.springframework.web.client.HttpClientErrorException;
+import com.jack.service.UserAccountService;
+import com.jack.service.VendorService;
 
 /* Service class for transactions handels all BUSINESS logic and is called from the 
  * controller class
@@ -35,21 +45,15 @@ public class TransactionService
 	@Autowired
 	TransactionRepo repo;
 
-/*	@Autowired
-	TransactionKeyRepo keyRepo;*/
 
 	@Autowired
-	UserAccountRepo userRepo;
+	UserAccountService userService;
 
 	@Autowired
-	PayMethodRepo pmRepo;
-
-	/*@Autowired
-	PayMethodKeyRepo pmkRepo;
-	*/
+	PayMethodService payMethodService;
 
 	@Autowired
-	PayMethodService pmService;
+	VendorService vendorService;
 	
 	//END STATE VARS
 
@@ -156,8 +160,8 @@ public class TransactionService
 		return repo.save(tx);
 	}
 	
-	public Transaction updateTransaction(Transaction tx, UserAccount u) throws ResourceNotFoundException {
-		//System.out.println("Attempting to save: " + tx);
+	public Transaction updateTransaction(Transaction tx, UserAccount u) throws ResourceNotFoundException, IllegalArgumentException
+	{
 		setDefaultReimburses(tx);
 		if(!repo.existsById(tx.getTrueId()))
 			throw new ResourceNotFoundException("ERROR: No Transaction found with True ID: " + tx.getTrueId());
@@ -189,6 +193,64 @@ public class TransactionService
 			tx.setReimburses( 	this.getTransactionByID(u.getUserId(), 0L).getTrueId()	);//Each user has default transaction at tid==0
 		}
 	}
+
+    public HttpMultiStatusResponse saveOrUpdateTransactions(String userId, List<TransactionDto> tx) {
+
+		//Make sure user exists else exit
+		UserAccount user = userService.getUserAccountById(userId);
+		List<HttpUnitResponse> processedTransactions = new ArrayList<>();
+
+		try {
+
+			for (TransactionDto t : tx ) {
+				Vendor v = vendorService.saveVendor(new Vendor(user, t));
+				PayMethod pm = payMethodService.savePayMethod(new PayMethod(user, t.getPayMethod()));
+
+				Transaction savableTransaction = new Transaction(t, user, pm, v,
+						this.countByPurchaseDate(userId, t.getPurchaseDate())  );
+				HttpUnitResponse response = new HttpUnitResponse(savableTransaction, null,
+						"Transaction Processed Successfully", HttpStatus.OK);
+				try {
+					Transaction saved = null;
+
+					//if transaction is not new, update it
+					if(repo.existsById(savableTransaction.getTrueId()) ||
+							repo.findByUserUserIdAndTid(userId, savableTransaction.getTid()).isPresent())
+						 saved = this.updateTransaction(savableTransaction, user);
+					 else
+						 saved = this.saveTransaction( savableTransaction );
+
+					response.setData(null);
+					response.setId( saved.getTid() );
+
+				} catch (HibernateException e) {
+					response.setMessage(e.getMessage());
+					response.setStatus(HttpStatus.BAD_REQUEST);
+				} catch (ResourceNotFoundException e) {
+					response.setMessage(e.getMessage());
+					response.setStatus(HttpStatus.NOT_FOUND);
+				} catch (IllegalArgumentException e) {
+					response.setMessage(e.getMessage());
+					response.setStatus(HttpStatus.BAD_REQUEST);
+				} catch (DataIntegrityViolationException e) {
+					response.setMessage(e.getMessage());
+					response.setStatus(HttpStatus.CONFLICT);
+				} catch (Exception e) {
+					response.setMessage(e.getMessage());
+					response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+
+				processedTransactions.add(response);
+			} //END FOR
+
+			return new HttpMultiStatusResponse(processedTransactions,
+					"Transactions processed with multiple statuses");
+
+		} catch (Exception e) {
+			throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+
+    }
 
 	/*
 		SPECIAL TRANS KEY METHOD FOR ONE TIME KEY GENERATION

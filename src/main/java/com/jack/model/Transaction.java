@@ -57,7 +57,7 @@ public class Transaction {
 	@Id
 	@Column(name = "true_id", columnDefinition="NUMERIC PRIMARY KEY")
 	@JsonProperty("trueId")
-	private long trueId;
+	private Long trueId;
 
 	/* This addition prevents this table from being 3NF, as (tid, user_id) -> is a primary key,
 	however, it makes our code implementation and queries much easier */
@@ -69,7 +69,7 @@ public class Transaction {
 
 	@JsonProperty("tid")
 	@Column(name="t_id", columnDefinition="NUMERIC NOT NULL")
-	private long tid;
+	private Long tid;
 
 	@JsonProperty("purchaseDate")
 	@Column(name="purchase_date", columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
@@ -79,8 +79,9 @@ public class Transaction {
 	@Column(name="amount", columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
 	private double amount;
 
+	@OneToOne
 	@JsonProperty("vendor")
-	@Column(name="vendor", columnDefinition="VARCHAR(50) NOT NULL")	//references vendors
+	@JoinColumn(name="vendor", referencedColumnName = "vendor", columnDefinition="VARCHAR(50) NOT NULL")	//references vendors
 	private Vendor vendor;
 
 	@JsonProperty("category")
@@ -111,7 +112,7 @@ public class Transaction {
 
 	@JsonProperty("reimburses")
 	@Column(name="reimburses", columnDefinition="INTEGER REFERENCES transactions(t_id) DEFAULT 0")
-	private long reimburses;
+	private Long reimburses;
 
 	@JsonProperty("postedDate")
 	@Column(name="posted_date", columnDefinition="DATE NOT NULL DEFAULT CURRENT_DATE")
@@ -209,8 +210,10 @@ public class Transaction {
 	
 	//Setters
 
-	public void setTrueId(String userId, long tid) {
-		this.trueId = General.mergeHash(userId.hashCode(), new Long(tid).hashCode());
+	public void setTrueId(String userId, Long tid) {
+		this.trueId = Long.valueOf(
+				General.mergeHash(userId.hashCode(), tid.hashCode())
+		);
 		this.trueId = Math.abs(trueId);
 		System.out.println("Merged id: " + trueId);
 	}

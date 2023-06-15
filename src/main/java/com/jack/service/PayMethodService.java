@@ -43,9 +43,9 @@ public class PayMethodService {
                 pm.getPayMethodName();
 
         //If transaction has provided pay method and it exists under this user
-        Optional<PayMethod> pmById = repo.findByUserIdAndPmId(u.getUserId(), pm.getPmId());
-        Optional<PayMethod> pmByName = repo.findByUserIdAndPayMethod(u.getUserId(), providedPm);
-        PayMethod newPayMethod = null;
+        Optional<PayMethod> pmById = repo.findByUserUserIdAndPmId(u.getUserId(), pm.getPmId());
+        Optional<PayMethod> pmByName = repo.findByUserUserIdAndPayMethodName(u.getUserId(), providedPm);
+
         if(pmById.isPresent()) {
             return pmById.get(); //All good
         } else if(pmByName.isPresent()) {

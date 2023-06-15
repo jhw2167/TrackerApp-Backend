@@ -33,10 +33,10 @@ public class PayMethod {
 	@Id
 	@Column(name="pm_id", columnDefinition="NUMERIC")
 	@JsonProperty("pmId")
-	private long pmId;
+	private Long pmId;
 
 	@ManyToOne
-	@Column(name = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
 	@JsonProperty("userAccount")
 	private UserAccount user;
 
@@ -76,7 +76,7 @@ public class PayMethod {
 
 	public PayMethod(PayMethod pm) {
 		super();
-		setPmId(pm.pmId);
+		this.pmId=generatePmId(pm.payMethodName, pm.user.getUserId());
 		setPayMethodName(pm.payMethodName);
 		setInstitutionType(pm.institutionType);
 		setBalance(pm.balance);
@@ -87,22 +87,14 @@ public class PayMethod {
 	}
 
 
-	//For generating a new pm_id
-	public PayMethod(PayMethod pm, UserAccount u) {
-		this(pm);
-		this.pmId = generatePmId(pm.payMethodName, user.getUserId());
-	}
-
-	public PayMethod(String payMethod) {
-		setPayMethodName(payMethod);
-	}
 	public PayMethod(UserAccount u, String payMethod) {
 		this(u, payMethod, null);
 	}
 
-	public PayMethod(UserAccount u, String payMethod, String institutionType) {
-		setPmId(generatePmId(payMethod, u.getUserId()));
-		setPayMethodName(payMethod);
+	public PayMethod(UserAccount u, String payMethodName, String institutionType) {
+		this.pmId=generatePmId(payMethodName, u.getUserId());
+		setUser(u);
+		setPayMethodName(payMethodName);
 		setInstitutionType(institutionType);
 	}
 
@@ -116,10 +108,14 @@ public class PayMethod {
 	}
 
 	public void setInstitutionType(String instType) {
-		this.payMethodName = (instType==null || instType.isEmpty()) ? "SIMPLE" : instType;
+		this.institutionType = (instType==null || instType.isEmpty()) ? "SIMPLE" : instType;
 	}
 
 	private long generatePmId(String pay_method, String userId) {
 		return General.mergeHash(pay_method.hashCode(), userId.hashCode());
+	}
+
+	private void setPmId(long pmId) {
+		//nothing, this is a generated value
 	}
 }
