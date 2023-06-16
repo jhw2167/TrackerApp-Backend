@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 //Spring Imports
 import com.jack.model.dto.TransactionDto;
+import com.jack.model.dto.mapper.TransactionMapper;
 import com.jack.utility.HttpUnitResponse;
 import com.jack.utility.HttpMultiStatusResponse;
 import org.hibernate.HibernateException;
@@ -27,8 +27,6 @@ import org.springframework.stereotype.Service;
 import com.jack.repository.*;
 import com.jack.model.*;
 import org.springframework.web.client.HttpClientErrorException;
-import com.jack.service.UserAccountService;
-import com.jack.service.VendorService;
 
 /* Service class for transactions handels all BUSINESS logic and is called from the 
  * controller class
@@ -54,6 +52,9 @@ public class TransactionService
 
 	@Autowired
 	VendorService vendorService;
+
+	@Autowired
+	TransactionMapper dtoMapper;
 	
 	//END STATE VARS
 
@@ -106,7 +107,7 @@ public class TransactionService
 	}
 	
 	public List<Transaction> searchVendors(final String userId, String name) {
-		return repo.findAllByUserUserIdAndVendorLike(userId, "%" + name + "%");
+		return repo.findAllByUserUserIdAndVendorVendorNameLike(userId, "%" + name.toUpperCase() + "%");
 	}
 	
 	public long countByPurchaseDate(final String userId, LocalDate purchaseDate) {
@@ -175,12 +176,15 @@ public class TransactionService
 	}
 
 	//Delete Transaction by ID
-	public void deleteTransactionById(final String userId, final long tid) {
+	public HttpUnitResponse deleteTransactionById(final String userId, final long tid) {
 		Optional<Transaction> t = repo.findByUserUserIdAndTid(userId, tid);
 		if(!t.isPresent())
 			throw new ResourceNotFoundException("ERROR: No Transaction found with tid: " + tid);
 
+		TransactionDto dto = dtoMapper.toDto(t.get());
 		repo.deleteById(t.get().getTrueId());
+		return new HttpUnitResponse(dto, dto.getTid(),
+				"Transaction deleted successfully", HttpStatus.OK);
 	}
 
 	/* We make sure that the reimburses id is valid for this user, if not,
@@ -209,7 +213,7 @@ public class TransactionService
 				Transaction savableTransaction = new Transaction(t, user, pm, v,
 						this.countByPurchaseDate(userId, t.getPurchaseDate())  );
 				HttpUnitResponse response = new HttpUnitResponse(savableTransaction, null,
-						"Transaction Processed Successfully", HttpStatus.OK);
+						"Transaction Posted Successfully", HttpStatus.OK);
 				try {
 					Transaction saved = null;
 

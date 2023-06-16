@@ -78,7 +78,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	//find all that partially match name
 	//@Query(value = "SELECT * FROM :user_view_name t " +
 	//		"WHERE t.vendor LIKE UPPER(:name)", nativeQuery=true)
-	public List<Transaction> findAllByUserUserIdAndVendorLike(String userId, String vendor);
+	public List<Transaction> findAllByUserUserIdAndVendorVendorNameLike(String userId, String vendorName);
 
 	//#8
 	//Find income tuple:

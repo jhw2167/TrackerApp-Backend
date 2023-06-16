@@ -4,6 +4,7 @@ package com.jack.controller;
 //Spring Imports
 import com.jack.model.dto.TransactionDto;
 import com.jack.utility.HttpMultiStatusResponse;
+import com.jack.utility.HttpUnitResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -117,6 +118,9 @@ public class TransactionController {
 	public ResponseEntity<List<TransactionDto>> searchTransactionsByVendorName(@PathVariable("userId") final String userId,
 			@RequestParam final String name) {
 		List<Transaction> tx = ts.searchVendors(userId, name);
+		if(tx.isEmpty())
+			throw new ResourceNotFoundException("No transactions found for vendor name: " + name);
+
 		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
@@ -269,13 +273,10 @@ public class TransactionController {
 	 */
 	@DeleteMapping(value="/{tid}")
 	@ResponseBody
-	public ResponseEntity<String> deleteTransaction(@PathVariable("userId") final String userId,
+	public ResponseEntity<HttpUnitResponse> deleteTransaction(@PathVariable("userId") final String userId,
 													@PathVariable("tid") final Long tid) {
-		System.out.println("ID to delete:  " + tid);
-		ts.deleteTransactionById(userId, tid);
-		final String body = "Transaction with id: " + tid + " deleted";
-		ResponseEntity<String> rsp = new ResponseEntity<>(body, HttpStatus.OK);
-		return rsp;
+		HttpUnitResponse rsp = ts.deleteTransactionById(userId, tid);
+		return new ResponseEntity<>(rsp, rsp.getStatus());
 	}
 
 	

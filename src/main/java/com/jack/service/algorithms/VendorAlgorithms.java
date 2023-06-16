@@ -1,4 +1,4 @@
-package com.jack.service.algorithms.vendors;
+package com.jack.service.algorithms;
 
 //java imports
 import java.util.*;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public class AverageCost {
+public class VendorAlgorithms {
 
     @Autowired
     VendorRepo vr;

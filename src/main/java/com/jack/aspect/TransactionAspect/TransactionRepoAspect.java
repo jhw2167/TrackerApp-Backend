@@ -1,6 +1,7 @@
 package com.jack.aspect.TransactionAspect;
 
 //Spring Imports
+import com.jack.service.algorithms.VendorAlgorithms;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.jack.repository.TransactionRepo;
 import com.jack.service.UserAccountService;
 import com.jack.model.*;
+import com.jack.service.algorithms.*;
 
 
 /* REMEMBER TO ADD BEAN TO SPRING CONFIG CLASS */
@@ -30,7 +32,7 @@ public class TransactionRepoAspect {
     TransactionRepo repo;
 
     @Autowired
-    TransactionRepo vendorRepo;
+    VendorAlgorithms vendorAlgs;
 
 
     /*      CREATE VIEW FOR INCOME/EPENDITURE SUMMARY       */
@@ -146,8 +148,9 @@ public class TransactionRepoAspect {
         else
             logger.warn("triggerCalculateVendorAverageCostUpdate() encountered unfamiliar " +
                     "transaction update method, vendor average cost will not be updated");
-        //Vendor v = vendorRepo.getById(toUpdate.getVendor());
+        Vendor v = toUpdate.getVendor();
         Object results = joinPoint.proceed(joinPoint.getArgs());
+        vendorAlgs.calculateAverageCostOrIncomeByVendor(v);
 
         return results;
     }

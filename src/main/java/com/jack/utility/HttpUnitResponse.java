@@ -1,6 +1,7 @@
 package com.jack.utility;
 
 //Spring Imports
+import com.jack.model.dto.TransactionDto;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
@@ -26,4 +27,7 @@ public class HttpUnitResponse {
         setStatus(status);
     }
 
+    public HttpUnitResponse(TransactionDto dto, long tid, String message, HttpStatus status) {
+        this(dto, String.valueOf(tid), message, status);
+    }
 }
