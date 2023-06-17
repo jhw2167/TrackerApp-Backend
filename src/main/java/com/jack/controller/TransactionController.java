@@ -144,7 +144,7 @@ public class TransactionController {
 	 */
 	@GetMapping(params = {"start", "to"} )
 	@RequestMapping("/dates")
-	public ResponseEntity<List<TransactionDto>> getTransactionsPageanatedByDate(
+	public ResponseEntity<List<TransactionDto>> getTransactionsPageanatedByDate(HttpServletRequest request,
 			@PathVariable("userId") final String userId,
 			@RequestParam final String start,
 			@RequestParam final String to) {
