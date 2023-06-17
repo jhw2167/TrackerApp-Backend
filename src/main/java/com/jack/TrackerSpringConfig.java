@@ -20,11 +20,6 @@ public class TrackerSpringConfig {
         return new LoggerAspect();
     }
 
-    @Bean
-    public SpringFrameworkControllerInterceptAspect frameworkAspect() {
-        return new SpringFrameworkControllerInterceptAspect();
-    }
-
 
     /* Transaction */
 

@@ -65,7 +65,8 @@ public class LoggerAspect {
             if (args[CNTR_RQST_INDX] instanceof HttpServletRequest) {
                 HttpServletRequest request = ((HttpServletRequest) args[CNTR_RQST_INDX]);
                 String url = request.getRequestURL().toString();
-                logger.info("REQUEST: " + url);
+                String queryString = request.getQueryString();
+                logger.info("REQUEST: " + url + (queryString == null ? "" : "?" + queryString));
             }
 
             result = joinPoint.proceed();

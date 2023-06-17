@@ -32,7 +32,7 @@ public class TransactionControllerAspect {
     TransactionRepo tRepo;
 
 
-    @Pointcut("execution(* com.jack.controller.TransactionController.*(..)) && args(String, ..)")
+    @Pointcut("execution(* com.jack.controller.TransactionController.*(..)) && args(*, String, ..)")
     public void transactionControllerPointCut(){}
 
     @Pointcut("execution(* com.jack.controller.VendorController.*(..)) && args(String, ..)")
@@ -44,13 +44,13 @@ public class TransactionControllerAspect {
     @Around("transactionControllerPointCut() || vendorControllerPointCut()")
     private Object validateUserIdAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
-        //System.out.println("At join point with: " + args[0].toString());
+        //System.out.println("At join point with: " + args[CNTR_USRID_INDX].toString());
         if (args[CNTR_USRID_INDX] instanceof String) {
             args[CNTR_USRID_INDX] = ((String) args[CNTR_USRID_INDX]).toUpperCase();
             us.getUserAccountById((String) args[CNTR_USRID_INDX]);
         }
         
-        //System.out.println("At join point 2 with: " + args[0].toString());
+        //System.out.println("At join point 2 with: " + args[CNTR_USRID_INDX].toString());
         return joinPoint.proceed(args);
     }
 

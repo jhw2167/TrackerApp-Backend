@@ -71,7 +71,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 
 	//#6a
 	//find all transactions sorted between user_view_name and t_id OFFESET AND LIMIT
-	Page<Transaction> findByUserUserIdOrderByTidDesc(String userId, Pageable pageable);
+	List<Transaction> findAllByUserUserIdOrderByTidDesc(String userId, Pageable pageable);
 
 
 

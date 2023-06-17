@@ -188,7 +188,15 @@ $$language plpgsql
 
 ----
 
+SELECT * 
+FROM transactions t
+LEFT OUTER JOIN user_accounts useraccoun1_ ON t.user_id = useraccoun1_.user_id
+WHERE useraccoun1_.user_id = '20230303JACKHENRYWELSH@GMAIL.COM'
+ORDER BY t.t_id DESC
+OFFSET 30
+LIMIT 60
 
+SELECT * FROM TRANSACTIONS T WHERE T.USER_ID = "20230303JACKHENRYWELSH@GMAIL.COM"
 
 
 

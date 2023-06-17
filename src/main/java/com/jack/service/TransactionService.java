@@ -73,10 +73,10 @@ public class TransactionService
 	
 	
 	//Return Transactions pageable by start, end
-	public List<Transaction> getAllTransactionsPageableID(final String userId,
-												  int limit, int offset) {
-		Pageable pageable = PageRequest.of(offset, limit, Sort.by("tid").descending());
-		return repo.findByUserUserIdOrderByTidDesc(userId, pageable).getContent();
+	public List<Transaction> FindAllTransactionsPageableID(final String userId,
+														   int size, int page) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by("purchaseDate").descending());
+		return repo.findAllByUserUserIdOrderByTidDesc(userId, pageable);
 	}
 	
 	public List<Transaction> getAllTransactionsBetweenPurchaseDate(final String userId,

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 //Java Imports
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +20,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -164,8 +162,8 @@ public class TransactionController {
 	@GetMapping(params = {"limit", "offset"} )
 	@RequestMapping("/recent")
 	public ResponseEntity<List<TransactionDto>> getTransactionsPageanatedByRecent(HttpServletRequest request, @PathVariable("userId") final String userId,
-			@RequestParam final Integer limit, @RequestParam(required=false) final Integer offset) {
-		List<Transaction> tx = ts.getAllTransactionsPageableID(userId, limit, (offset != null) ? offset : 0);
+			@RequestParam final Integer size, @RequestParam(required=false) final Integer page) {
+		List<Transaction> tx = ts.FindAllTransactionsPageableID(userId, size, (page != null) ? page : 0);
 		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
