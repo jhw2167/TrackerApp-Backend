@@ -19,6 +19,8 @@ import com.jack.repository.TransactionRepo;
 @Aspect
 public class TransactionControllerAspect {
 
+    private int CNTR_USRID_INDX = 1;
+
     //Vars
     @Autowired
     UserAccountService us;
@@ -43,9 +45,9 @@ public class TransactionControllerAspect {
     private Object validateUserIdAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         //System.out.println("At join point with: " + args[0].toString());
-        if (args[0] instanceof String) {
-            args[0] = ((String) args[0]).toUpperCase();
-            us.getUserAccountById((String) args[0]);
+        if (args[CNTR_USRID_INDX] instanceof String) {
+            args[CNTR_USRID_INDX] = ((String) args[CNTR_USRID_INDX]).toUpperCase();
+            us.getUserAccountById((String) args[CNTR_USRID_INDX]);
         }
         
         //System.out.println("At join point 2 with: " + args[0].toString());

@@ -44,7 +44,7 @@ public class TransactionRepoAspect {
     public void transactionRepoWithStringArgsPointcut(){}
 
 
-    @Pointcut("execution(* com.jack.repository.TransactionRepo+.findIncomeAggregatedByCategoryAndBoughtFor(..)) ||" +
+    @Pointcut("execution(* com.jack.repository.TransactionRepo+.findIncomeAggregatedByVendorAndCategories(..)) ||" +
             " execution(* com.jack.repository.TransactionRepo+.findExpensesAggregatedByCategoryAndBoughtFor(..))")
     public void transactionRepoSummariesPointcut(){}
 

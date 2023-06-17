@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 //Spring Imports
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -70,7 +71,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 
 	//#6a
 	//find all transactions sorted between user_view_name and t_id OFFESET AND LIMIT
-	List<Transaction> findByUserUserIdOrderByTidDesc(String userId, Pageable pageable);
+	Page<Transaction> findByUserUserIdOrderByTidDesc(String userId, Pageable pageable);
 
 
 
@@ -99,16 +100,23 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 
 	//#10
 	//Find all categories in transactions table
-	public List<String> findDistinctCategoryByUserUserId(String userId);
+	@Query("SELECT DISTINCT t.category FROM Transaction t WHERE t.user.userId = :userId")
+	List<String> findDistinctCategoryByUserUserId(String userId);
 
 	//#11 Find and Group By Pay Method
-	public List<PayMethod> findDistinctPayMethodByUserUserId(String userId);
+	@Query("SELECT DISTINCT t.payMethod FROM Transaction t WHERE t.user.userId = :userId")
+	List<PayMethod> findDistinctPayMethodByUserUserId(String userId);
+
 
 	//#12 Find and Group By Bought For
-	public List<String> findDistinctBoughtForByUserUserId(String userId);
+	@Query("SELECT DISTINCT t.boughtFor FROM Transaction t WHERE t.user.userId = :userId GROUP BY t.boughtFor")
+	List<String> findDistinctBoughtForByUserUserId(String userId);
+
 
 	//#13 Find and Group By Pay status
-	public List<String> findDistinctPayStatusByUserUserId(String userId);
+	@Query("SELECT DISTINCT t.payStatus FROM Transaction t WHERE t.user.userId = :userId GROUP BY t.payStatus")
+	List<String> findDistinctPayStatusByUserUserId(String userId);
+
 
 	//#14 Find by userId and TrueId
 	public Optional<Transaction> findByUserUserIdAndTrueId(String userId, long trueId);

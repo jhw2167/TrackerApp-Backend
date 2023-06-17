@@ -12,6 +12,9 @@ import org.aspectj.lang.annotation.Pointcut;
 //Loggers
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 //logging
@@ -22,6 +25,7 @@ import org.slf4j.LoggerFactory;
 public class LoggerAspect {
 
     //Vars
+    private int CNTR_RQST_INDX = 0;
 
     //CONTROLLER LOGGING
     @Pointcut("within(com.jack.controller..*)")
@@ -55,7 +59,17 @@ public class LoggerAspect {
 
         Object result = null;
         try {
+
+            Object[] args = joinPoint.getArgs();
+            //System.out.println("At join point with: " + args[0].toString());
+            if (args[CNTR_RQST_INDX] instanceof HttpServletRequest) {
+                HttpServletRequest request = ((HttpServletRequest) args[CNTR_RQST_INDX]);
+                String url = request.getRequestURL().toString();
+                logger.info("REQUEST: " + url);
+            }
+
             result = joinPoint.proceed();
+
         } catch (JsonParseException ex) {
             logger.error("JSONParseException Emitted from Controller " + joinPoint.getSignature().getName() +"\n"
             + ex.getMessage());

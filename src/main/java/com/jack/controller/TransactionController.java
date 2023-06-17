@@ -2,9 +2,7 @@ package com.jack.controller;
 
 
 //Spring Imports
-import com.jack.model.dto.TransactionDto;
-import com.jack.utility.HttpMultiStatusResponse;
-import com.jack.utility.HttpUnitResponse;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -28,9 +26,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 //Project Imports
+import com.jack.model.dto.TransactionDto;
 import com.jack.model.*;
 import com.jack.service.*;
 import com.jack.model.dto.mapper.TransactionMapper;
+import com.jack.utility.HttpMultiStatusResponse;
+import com.jack.utility.HttpUnitResponse;
 
 
 
@@ -79,43 +80,48 @@ public class TransactionController {
 //##################################################################
 	
 	//Constructor Injection
-	
-	
+
+
 	/* Utility Methods */
+
 	/**
-	 *	Get all transaction by userId and tid
+	 * Get all transaction by userId and tid
+	 *
 	 * @return ResponseEntity<TransactionDto>
 	 */
-	@RequestMapping(value="/{tid}", method=RequestMethod.GET)
-	public ResponseEntity<TransactionDto> getTransactionByID(@PathVariable("userId") final String userId, @PathVariable("tid") final long tId) {
+	@RequestMapping(value = "/{tid}", method = RequestMethod.GET)
+	public ResponseEntity<TransactionDto> getTransactionByID(HttpServletRequest request,
+															 @PathVariable("userId") final String userId,
+															 @PathVariable("tid") final long tId) {
 		return new ResponseEntity<>(
-				transactionMapper.toDto( ts.getTransactionByID(userId, tId) ) ,
+				transactionMapper.toDto(ts.getTransactionByID(userId, tId)),
 				HttpStatus.OK);
 	}
-	//END GET TRANSACTION BY ID
+// END GET TRANSACTION BY ID
+
 
 
 	/**
-	 *	Get all transactions, default sorted by date, descending (most recent to oldest) 
-	 * 
+	 *	Get all transactions, default sorted by date, descending (most recent to oldest)
+	 *
 	 * @return ResponseEntity<List<TransactionDto>>
 	 */
 	@GetMapping
 	//basic /transactions
-	public ResponseEntity<List<TransactionDto>> getUserTransactions(@PathVariable("userId") final String userId) {
+	public ResponseEntity<List<TransactionDto>> getUserTransactions(HttpServletRequest request, @PathVariable("userId") final String userId) {
 		List<Transaction> tx = ts.getAllUserTransactions(userId);
 		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	//END GET TRANSACTIONS
-	
-	
+
+
 	//Get vendors by searching vendor nam
 	/**
 	 * @return ResponseEntity<List<Vendor>>
 	 */
 	@RequestMapping(value="/query", params = {"name"}, method=RequestMethod.GET)
-	public ResponseEntity<List<TransactionDto>> searchTransactionsByVendorName(@PathVariable("userId") final String userId,
+	public ResponseEntity<List<TransactionDto>> searchTransactionsByVendorName(HttpServletRequest request, @PathVariable("userId") final String userId,
 			@RequestParam final String name) {
 		List<Transaction> tx = ts.searchVendors(userId, name);
 		if(tx.isEmpty())
@@ -127,13 +133,13 @@ public class TransactionController {
 	//END GET VENDOR SEARCH
 
 	@RequestMapping(value="/updateKeys", method=RequestMethod.POST)
-	public ResponseEntity postTransKeys(@PathVariable("userId") final String userId) {
+	public ResponseEntity postTransKeys(HttpServletRequest request, @PathVariable("userId") final String userId) {
 		// **TURNED OFF**
 		//ts.postTransKeys(userId);
 		//ts.postPmKeys(userId.toUpperCase());
 		return new ResponseEntity<String>("NOT IMPLEMENTED - ENABLE IN SOURCE", HttpStatus.BAD_REQUEST);
 	}
-	
+
 	//Get Transactions pageanated from params [start-end)
 	/**
 	 * @return ResponseEntity<List<TransactionDto>>
@@ -149,86 +155,86 @@ public class TransactionController {
 		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
-	
-	
+
+
 	//Get Transactions pageanated from params [offset-limit)
 	/**
 	 * @return ResponseEntity<List<TransactionDto>>
 	 */
 	@GetMapping(params = {"limit", "offset"} )
 	@RequestMapping("/recent")
-	public ResponseEntity<List<TransactionDto>> getTransactionsPageanatedByDate(@PathVariable("userId") final String userId,
+	public ResponseEntity<List<TransactionDto>> getTransactionsPageanatedByRecent(HttpServletRequest request, @PathVariable("userId") final String userId,
 			@RequestParam final Integer limit, @RequestParam(required=false) final Integer offset) {
 		List<Transaction> tx = ts.getAllTransactionsPageableID(userId, limit, (offset != null) ? offset : 0);
 		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
-	
-	
-	
+
+
+
 	@GetMapping(params = {"start", "to"} )
 	@RequestMapping("/income")
-	public ResponseEntity<List<SummaryTuple>> getIncomeSummary(@PathVariable("userId") final String userId,
+	public ResponseEntity<List<SummaryTuple>> getIncomeSummary(HttpServletRequest request, @PathVariable("userId") final String userId,
 										   @RequestParam final String start, @RequestParam final String to) {
 		List<SummaryTuple> tx = ts.getIncomeAggregatedInDateRange(userId,
 				LocalDate.parse(start), LocalDate.parse(to)) ;
 		return new ResponseEntity<List<SummaryTuple>>(tx, HttpStatus.OK);
 	}
 	//END GET INCOME SUMMARY
-	
-	
+
+
 	@GetMapping(params = {"start", "to"} )
 	@RequestMapping("/expenses")
-	public ResponseEntity<List<SummaryTuple>> getExpenseSummary(@PathVariable("userId") final String userId,
+	public ResponseEntity<List<SummaryTuple>> getExpenseSummary(HttpServletRequest request, @PathVariable("userId") final String userId,
 											@RequestParam final String start, @RequestParam final String to) {
 		List<SummaryTuple> tx = ts.getExpensesAggregatedInDateRange(userId,
 				LocalDate.parse(start), LocalDate.parse(to)) ;
 		return new ResponseEntity<List<SummaryTuple>>(tx, HttpStatus.OK);
 	}
 	//END GET INCOME SUMMARY
-	
+
 	@GetMapping
 	@RequestMapping("/categories")
-	public ResponseEntity<List<String>> getCategories(@PathVariable("userId") final String userId) {
+	public ResponseEntity<List<String>> getCategories(HttpServletRequest request, @PathVariable("userId") final String userId) {
 		List<String> cats = ts.getAllCategories(userId);
 		return new ResponseEntity<List<String>>(cats, HttpStatus.OK);
 	}
 	//END GET Categories
-	
+
 	@GetMapping
 	@RequestMapping("/payMethods")
-	public ResponseEntity<List<PayMethod>> getPayMethods(@PathVariable("userId") final String userId) {
+	public ResponseEntity<List<PayMethod>> getPayMethods(HttpServletRequest request, @PathVariable("userId") final String userId) {
 		List<PayMethod> vals = ts.getPayMethods(userId);
 		return new ResponseEntity<>(vals, HttpStatus.OK);
 	}
 	//END GET Categories
-	
-	
+
+
 	@GetMapping
 	@RequestMapping("/boughtFor")
-	public ResponseEntity<List<String>> getBoughtFor(@PathVariable("userId") final String userId) {
+	public ResponseEntity<List<String>> getBoughtFor(HttpServletRequest request, @PathVariable("userId") final String userId) {
 		List<String> vals = ts.getBoughtFor(userId);
 		return new ResponseEntity<List<String>>(vals, HttpStatus.OK);
 	}
 	//END GET Categories
-	
-	
+
+
 	@GetMapping
 	@RequestMapping("/payStatus")
-	public ResponseEntity<List<String>> getPayStatus(@PathVariable("userId") final String userId) {
+	public ResponseEntity<List<String>> getPayStatus(HttpServletRequest request, @PathVariable("userId") final String userId) {
 		List<String> vals = ts.getPayStatus(userId);
 		return new ResponseEntity<List<String>>(vals, HttpStatus.OK);
 	}
 	//END GET Categories
-	
-	
+
+
 	//END GET METHODS
-	
+
 		/* POST METHODS */
-	
+
 	//Post new transactions to the database - data send in will be transaction objects
 	@PostMapping
-	public ResponseEntity<HttpMultiStatusResponse> postTransactions(@PathVariable("userId") final String userId,
+	public ResponseEntity<HttpMultiStatusResponse> postTransactions(HttpServletRequest request, @PathVariable("userId") final String userId,
 																	@RequestBody final List<TransactionDto> tx)
 	{
 		try {
@@ -240,16 +246,16 @@ public class TransactionController {
 		}
 
 	}
-	
-	
-	
+
+
+
 	/* PUT METHODS */
-	
+
 	/* PATCH METHODS */
-	
+
 	//Patch a list of transactions entry
 	@PatchMapping
-	public ResponseEntity<HttpMultiStatusResponse> patchTransactions(@PathVariable("userId") final String userId,
+	public ResponseEntity<HttpMultiStatusResponse> patchTransactions(HttpServletRequest request, @PathVariable("userId") final String userId,
 			@RequestBody final List<TransactionDto> tx)
 	{
 		try {
@@ -260,51 +266,36 @@ public class TransactionController {
 			throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 	/* DELETE METHODS */
-	
+
 	/*	Delete transaction with existing ID from the database
-	 * 
+	 *
 	 * 	EXCEPTIONS:
 	 * 		- NoSuchIDException
 	 */
 	@DeleteMapping(value="/{tid}")
 	@ResponseBody
-	public ResponseEntity<HttpUnitResponse> deleteTransaction(@PathVariable("userId") final String userId,
+	public ResponseEntity<HttpUnitResponse> deleteTransaction(HttpServletRequest request, @PathVariable("userId") final String userId,
 													@PathVariable("tid") final Long tid) {
 		HttpUnitResponse rsp = ts.deleteTransactionById(userId, tid);
 		return new ResponseEntity<>(rsp, rsp.getStatus());
 	}
 
-	
+
 	/*
 	 * Non-restful, need a method for mass deletion in case of impropper additions
-	 * 
+	 *
 	 */
 	@PatchMapping(value="/deleteAll")
-	public ResponseEntity<String> deleteTransactions(@PathVariable("userId") final String userId,
+	public ResponseEntity<String> deleteTransactions(HttpServletRequest request, @PathVariable("userId") final String userId,
 													 @RequestBody final List<Long> tids)
 	{
-		HttpStatus status = HttpStatus.OK;
-
-		StringBuilder s = new StringBuilder();
-		for(Long tid : tids)
-		{
-			try {
-				s.append( deleteTransaction(userId, tid).getBody() );
-			} catch(ResourceNotFoundException e) {
-				s.append("Error deleting tid " + tid + ", tid not found");
-				status = HttpStatus.BAD_REQUEST;
-			} catch (Exception e) {
-				s.append("Error deleting tid " + tid + ", may not exist");
-				status = HttpStatus.BAD_REQUEST;
-			}
-			s.append("\n");
-		}
-		ResponseEntity<String> rsp = new ResponseEntity<>(s.toString(), status);
+		//TODO: Implement
+		ResponseEntity<String> rsp = new ResponseEntity<>("NOT IMPLEMENTED", HttpStatus.NOT_IMPLEMENTED);
 		return rsp;
 	}
 }

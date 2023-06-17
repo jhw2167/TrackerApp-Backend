@@ -14,15 +14,24 @@ import com.jack.aspect.*;
 @EnableAspectJAutoProxy(proxyTargetClass=true)
 public class TrackerSpringConfig {
 
-    @Bean
-    public TransactionControllerAspect transactionControllerAspect() {
-        return new TransactionControllerAspect();
-    }
+    /* General */
     @Bean
     public LoggerAspect loggerAspect() {
         return new LoggerAspect();
     }
 
+    @Bean
+    public SpringFrameworkControllerInterceptAspect frameworkAspect() {
+        return new SpringFrameworkControllerInterceptAspect();
+    }
+
+
+    /* Transaction */
+
+    @Bean
+    public TransactionControllerAspect transactionControllerAspect() {
+        return new TransactionControllerAspect();
+    }
     @Bean
     public TransactionRepoAspect transactionRepoAspect() {
         return new TransactionRepoAspect();
