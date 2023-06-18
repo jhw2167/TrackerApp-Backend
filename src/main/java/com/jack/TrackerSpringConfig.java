@@ -16,9 +16,7 @@ public class TrackerSpringConfig {
 
     /* General */
     @Bean
-    public LoggerAspect loggerAspect() {
-        return new LoggerAspect();
-    }
+    public LoggerAspect loggerAspect() { return new LoggerAspect(); }
 
 
     /* Transaction */

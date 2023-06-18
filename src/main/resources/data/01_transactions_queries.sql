@@ -164,19 +164,18 @@ EXECUTE format('CREATE VIEW user_transactions AS (
 	AND T.purchase_date < %3$L)', user_view_name, start_date, end_date);
 
 	-- RUN QUERY
-	RETURN QUERY ( SELECT c1 as aggregateCol, SUM(sum1) / COUNT(BOUGHT_FOR) as value,
-				STRING_AGG(BOUGHT_FOR, '/') as categories
-	FROM
-	( SELECT CATEGORY AS c1, SUM(amount) AS sum1
-	FROM user_transactions t1
-	WHERE t1.IS_INCOME=income
-	GROUP BY t1.CATEGORY ) AS a
-	INNER JOIN
-	(
-	SELECT DISTINCT t2.CATEGORY AS c2, t2.BOUGHT_FOR
-	FROM user_transactions t2
-	WHERE t2.IS_INCOME=income
-	) b ON a.c1=b.c2 GROUP BY c1 ORDER BY value DESC);
+ RETURN QUERY (
+        SELECT c1 AS aggregateCol, SUM(sum1) / COUNT(GROUPED_COL) AS value,
+            STRING_AGG(GROUPED_COL, '/') AS categories
+        FROM
+            (SELECT CATEGORY AS c1, SUM(amount) AS sum1,
+                CASE WHEN income THEN t1.VENDOR ELSE t1.BOUGHT_FOR END AS GROUPED_COL
+            FROM user_transactions t1
+            WHERE t1.IS_INCOME = income
+            GROUP BY t1.CATEGORY, GROUPED_COL) AS a
+        GROUP BY c1
+        ORDER BY value DESC
+    );
 
 	
 	-- DROP VIEW
@@ -193,8 +192,9 @@ FROM transactions t
 LEFT OUTER JOIN user_accounts useraccoun1_ ON t.user_id = useraccoun1_.user_id
 WHERE useraccoun1_.user_id = '20230303JACKHENRYWELSH@GMAIL.COM'
 ORDER BY t.t_id DESC
-OFFSET 30
 LIMIT 60
+OFFSET 30
+
 
 SELECT * FROM TRANSACTIONS T WHERE T.USER_ID = "20230303JACKHENRYWELSH@GMAIL.COM"
 

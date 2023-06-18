@@ -26,3 +26,4 @@ hs_err_pid*
 *.properties
 target/*
 tracker_db/*
+.idea/
