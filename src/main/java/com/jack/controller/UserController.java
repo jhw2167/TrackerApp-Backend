@@ -3,15 +3,13 @@ package com.jack.controller;
 
 //Spring Imports
 
-import com.jack.model.UserAccount;
-import com.jack.model.Vendor;
-import com.jack.service.TransactionService;
-import com.jack.service.UserAccountService;
-import com.jack.service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.jack.model.UserAccount;
+import com.jack.service.UserAccountService;
 
 import java.util.List;
 
@@ -38,10 +36,16 @@ public class UserController {
 
 
 	/* Utility Methods */
+
+	/* GET METHODS */
 	public ResponseEntity<UserAccount> getUserDetails(@PathVariable("userId") String userId) {
 		return new ResponseEntity<UserAccount>(us.getUserAccountById(userId), HttpStatus.OK);
 	}
-	
+
+	/* POST METHODS */
+
+
+
 	/* PUT METHODS */
 	
 	/* PATCH METHODS */
