@@ -78,10 +78,11 @@ public class TransactionService
 		Pageable pageable = PageRequest.of(page, size, Sort.by("purchaseDate").descending());
 		return repo.findAllByUserUserIdOrderByTidDesc(userId, pageable);
 	}
-	
+
+	/* Minus 1 day from end so it is not inclusive of the end date */
 	public List<Transaction> getAllTransactionsBetweenPurchaseDate(final String userId,
 																   LocalDate from, LocalDate to) {
-		return repo.findByUserUserIdAndPurchaseDateBetweenOrderByPurchaseDateDesc(userId, from, to);
+		return repo.findByUserUserIdAndPurchaseDateBetweenOrderByPurchaseDateDesc(userId, from, to.minusDays(1L));
 	}
 	
 	public List<Transaction> getAllTransactionsByPurchaseDate(final String userId,

@@ -22,7 +22,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 @Component
 public class requestThrottleFilter implements Filter {
 
-    private int MAX_REQUESTS_PER_SECOND = 10; //or whatever you want it to be
+    private int MAX_REQUESTS_PER_SECOND = 50; //or whatever you want it to be
 
     private LoadingCache<String, Integer> requestCountsPerIpAddress;
 

@@ -56,7 +56,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 	List<Transaction> findByUserUserIdOrderByPurchaseDateDesc(String userId);
 
 	//#3
-	//FindAll between dates sorted by date YYYY-MM-DD format NOT INCLUSIVE TO END DATE
+	//FindAll between dates sorted by date YYYY-MM-DD format inclusive of end date
 	List<Transaction> findByUserUserIdAndPurchaseDateBetweenOrderByPurchaseDateDesc(
 			String userId, LocalDate from, LocalDate to);
 
