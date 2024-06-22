@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import com.jack.model.*;
 import com.jack.service.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 //
 
@@ -33,7 +35,7 @@ import com.jack.service.*;
 
 //Combines @Controller and @ResponseBody annotations for a restful project
 @RestController
-@RequestMapping("/transactions/vendors")
+@RequestMapping("/finances/users/{userId}/vendors")
 public class VendorController {
 	
 	
@@ -57,43 +59,44 @@ public class VendorController {
 	
 	
 	/*
-	 *		/transactions/vendor enpoints 
+	 *		 enpoints
 	 *		GET and POST information on vendors for POST endpoint autofill
 	 */
 	
 	
-	/**
-	 *	Get all transactions, default sorted by date, descending (most recent to oldest) 
-	 * 
-	 * @return ResponseEntity<List<Transaction>>
-	 */
 
-	
-	//basic /transactions
-	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<List<Vendor>> getVendors() {
-		return new ResponseEntity<List<Vendor>>(vs.getAllVendors(), HttpStatus.OK);
-	}	
-	//END GET ALL VENDORS
-	
-	
-	//Get vendors by searching vendor nam
+
 	/**
+	 *	Get all vendors by user
+	 *
 	 * @return ResponseEntity<List<Vendor>>
 	 */
+	
+	//basic /transactions
+	@RequestMapping(value="", method=RequestMethod.GET)
+	public ResponseEntity<List<Vendor>> getAllVendors(HttpServletRequest request,
+													  @PathVariable("userId") final String userId)
+	{
+		return new ResponseEntity<List<Vendor>>(vs.getAllVendors(userId), HttpStatus.OK);
+	}	
+	//END GET ALL VENDORS
+
+
 	@RequestMapping(value="/query", params = {"name"}, method=RequestMethod.GET)
-	public ResponseEntity<List<Vendor>> searchVendorsByName(@RequestParam final String name) {
-		return new ResponseEntity<>(vs.searchVendors(name), HttpStatus.OK);
+	public ResponseEntity<List<Vendor>> searchVendorsByName(HttpServletRequest request,
+													@PathVariable("userId") final String userId,
+													@RequestParam final String name)
+	{
+		return new ResponseEntity<>(vs.searchVendors(userId, name), HttpStatus.OK);
 	}
 	//END GET VENDOR SEARCH
 	
-	
-	//Get vendors by searching vendor nam
-	/**
-	 * @return ResponseEntity<Vendor>
-	 */
+
 	@RequestMapping(value="/query", params = {"id", "cc"}, method=RequestMethod.GET)
-	public ResponseEntity<Vendor> getVendorByID(@RequestParam final String id) {
+	public ResponseEntity<Vendor> getVendorByID( @PathVariable("userId") final String userId,
+			@RequestParam final String cc,
+			@RequestParam final String id)
+	{
 		return new ResponseEntity<>(vs.getVendorByID(id), HttpStatus.OK);
 	}
 	//END GET VENDOR SEARCH BY ID
@@ -101,7 +104,9 @@ public class VendorController {
 	/* POST METHODS */
 	
 	@PostMapping
-	public ResponseEntity<Vendor> postTransactions(@RequestBody final Vendor vm) {
+	public ResponseEntity<Vendor> postTransactions(@PathVariable("userId") final String userId,
+												   @RequestBody final Vendor vm) {
+
 		Vendor o = null;
 		try {
 			o = vs.saveVendor(vm);

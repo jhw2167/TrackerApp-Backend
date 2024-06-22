@@ -27,6 +27,9 @@ public interface VendorRepo extends JpaRepository<Vendor, Long>
 	
 	//simple find all transactions
 	public List<Vendor> findAll();
+
+	//Find all vendors used by user
+	public List<Vendor> findAllByUserUserId(String userId);
 	
 	//finds vendor object by exact match on string name
 	public Vendor findByVendorName(String vendorName);
@@ -36,5 +39,10 @@ public interface VendorRepo extends JpaRepository<Vendor, Long>
 	//find all that partially match name
 	@Query(value="SELECT * FROM VENDORS v WHERE v.vendor LIKE UPPER(:name)", nativeQuery=true)
 	public List<Vendor> findAllLikeVendorName(@Param("name") String name);
+
+	//Same as above but also match string userId
+	@Query(value="SELECT * FROM VENDORS v WHERE v.vendor LIKE UPPER(:name) AND v.user_id = :userId", nativeQuery=true)
+	public List<Vendor> findAllByUserUserIdLikeVendorName(@Param("userId") String userId, @Param("name") String name);
+
 	
 }

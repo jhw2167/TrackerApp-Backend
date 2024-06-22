@@ -5,15 +5,17 @@ package com.jack.controller;
 
 import com.jack.model.Transaction;
 import com.jack.model.UserAccount;
+import com.jack.model.Vendor;
 import com.jack.service.TransactionService;
 import com.jack.service.UserAccountService;
+import com.jack.service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 //
@@ -33,7 +35,10 @@ public class TableController {
 
 	/* State Variables */
 	@Autowired
-	TransactionService ts;
+	TransactionService ts;		//autowired with spring
+
+	@Autowired
+	VendorService vs;			//auto
 
 
 	/* Utility Methods */
@@ -43,6 +48,45 @@ public class TableController {
 	public ResponseEntity<Transaction> getTransactionByTrueId(@PathVariable("trueId") final long id) {
 		return new ResponseEntity<Transaction>(ts.getTransactionByTrueId(id), HttpStatus.OK);
 	}
+
+	/*********************
+			VENDORS
+	 ********************/
+
+	/**
+	 *	Get all vendors
+	 *
+	 * @return ResponseEntity<List<Vendor>>
+	 */
+	@RequestMapping(value="vendors", method=RequestMethod.GET)
+	public ResponseEntity<List<Vendor>> getAllVendors(HttpServletRequest request)
+	{
+		return new ResponseEntity<List<Vendor>>(vs.getAllVendors(), HttpStatus.OK);
+	}
+
+	//Get vendors by searching vendor name
+	/**
+	 * @return ResponseEntity<List<Vendor>>
+	 */
+	@RequestMapping(value="vendors/query", params = {"name"}, method=RequestMethod.GET)
+	public ResponseEntity<List<Vendor>> searchVendorsByName(HttpServletRequest request,
+															@RequestParam final String name)
+	{
+		return new ResponseEntity<>(vs.searchVendors(name), HttpStatus.OK);
+	}
+
+	//Get vendors by searching vendor nam
+	/**
+	 * @return ResponseEntity<Vendor>
+	 */
+	@RequestMapping(value="vendors/query", params = {"id", "cc"}, method=RequestMethod.GET)
+	public ResponseEntity<Vendor> getVendorByID( @RequestParam final String id,
+												 @RequestParam final String cc)
+	{
+		return new ResponseEntity<>(vs.getVendorByID(id), HttpStatus.OK);
+	}
+
+
 	/* PUT METHODS */
 	
 	/* PATCH METHODS */

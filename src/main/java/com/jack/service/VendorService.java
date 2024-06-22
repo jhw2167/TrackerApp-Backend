@@ -4,6 +4,7 @@ package com.jack.service;
 import java.util.List;
 import java.util.Optional;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,13 +37,20 @@ public class VendorService
 	
 	/* UTILITY METHODS */
 	
-	//Get all vendors as list
+	//Get all vendors by userId as list
 	public List<Vendor> getAllVendors() {
 		return repo.findAll();
+	}
+	public List<Vendor> getAllVendors(String userId) {
+		return repo.findAllByUserUserId(userId);
 	}
 	
 	public List<Vendor> searchVendors(String vendorName) {
 		return repo.findAllLikeVendorName("%" + vendorName + "%");	//adding % to SQL like query finds all partial matches
+	}
+
+	public List<Vendor> searchVendors(String userId, String vendorName) {
+		return repo.findAllByUserUserIdLikeVendorName(userId,"%" + vendorName + "%");	//adding % to SQL like query finds all partial matches
 	}
 
 	public Optional<Vendor> checkVendorExists(String vendorName) {

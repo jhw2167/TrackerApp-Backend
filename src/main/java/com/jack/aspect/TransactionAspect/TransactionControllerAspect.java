@@ -32,10 +32,10 @@ public class TransactionControllerAspect {
     TransactionRepo tRepo;
 
 
-    @Pointcut("execution(* com.jack.controller.TransactionController.*(..)) && args(*, String, ..)")
+    @Pointcut("execution(* com.jack.controller.TransactionController.*(..))")
     public void transactionControllerPointCut(){}
 
-    @Pointcut("execution(* com.jack.controller.VendorController.*(..)) && args(String, ..)")
+    @Pointcut("execution(* com.jack.controller.VendorController.*(..))")
     public void vendorControllerPointCut(){}
 
     /*          ADVICE         */

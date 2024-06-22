@@ -3,6 +3,7 @@ package com.jack.model;
 
 //JPA Imports
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jack.utility.General;
 import lombok.Data;
@@ -37,7 +38,7 @@ public class PayMethod {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
-	@JsonProperty("userAccount")
+	@JsonIgnore
 	private UserAccount user;
 
 	@JsonProperty("payMethod")

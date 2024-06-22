@@ -4,6 +4,7 @@ package com.jack.model;
 //JPA Imports
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jack.model.dto.TransactionDto;
 import com.jack.utility.General;
 
@@ -25,7 +26,7 @@ public class Vendor {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition="VARCHAR NOT NULL DEFAULT '20230303JACKHENRYWELSH@GMAIL.COM'")
-	@JsonProperty("userAccount")
+	@JsonIgnore
 	private UserAccount user;
 	
 	@Column(columnDefinition="NUMERIC(10, 2) NOT NULL DEFAULT '0' CHECK (amount>=0)")
