@@ -1,4 +1,4 @@
-package com.jack.aspect.TransactionAspect;
+package com.jack.aspect.transactionaspect;
 
 //Spring Imports
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 //Project Imports
-import com.jack.model.Transaction;
 import com.jack.service.TransactionService;
 import com.jack.service.UserAccountService;
 import com.jack.repository.TransactionRepo;

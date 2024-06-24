@@ -1,4 +1,4 @@
-package com.jack.aspect.TransactionAspect;
+package com.jack.aspect.transactionaspect;
 
 //Spring Imports
 import com.jack.service.algorithms.VendorAlgorithms;
@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import com.jack.repository.TransactionRepo;
 import com.jack.service.UserAccountService;
 import com.jack.model.*;
-import com.jack.service.algorithms.*;
 
 
 /* REMEMBER TO ADD BEAN TO SPRING CONFIG CLASS */

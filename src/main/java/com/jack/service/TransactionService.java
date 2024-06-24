@@ -2,6 +2,7 @@ package com.jack.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 //Java Imports
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 //Spring Imports
+import com.jack.TrackerSpringProperties;
 import com.jack.model.dto.TransactionDto;
 import com.jack.model.dto.mapper.TransactionMapper;
 import com.jack.utility.HttpUnitResponse;
@@ -35,10 +37,11 @@ import org.springframework.web.client.HttpClientErrorException;
  */
 
 @Service
-public class TransactionService 
-{
+public class TransactionService {
 
 	/* State Variables */
+	@Autowired
+	TrackerSpringProperties properties;
 
 	@Autowired
 	TransactionRepo repo;
@@ -55,45 +58,79 @@ public class TransactionService
 
 	@Autowired
 	TransactionMapper dtoMapper;
-	
+
 	//END STATE VARS
 
 	/* UTILITY METHODS */
-	
+
 	//Return all transactions, unsorted
 	public List<Transaction> getAllUserTransactions(final String userId) {
 		return repo.findAllByUserUserId(userId);
 	}
-	
-	
+
+
 	//Return all Transactions sorted
 	public List<Transaction> getAllTransactonsSorted(final String userId) {
 		return repo.findByUserUserIdOrderByPurchaseDateDesc(userId);
 	}
-	
-	
+
+
 	//Return Transactions pageable by start, end
-	public List<Transaction> FindAllTransactionsPageableID(final String userId,
+	public List<Transaction> findAllTransactionsPageableID(final String userId,
 														   int size, int page) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by("purchaseDate").descending());
 		return repo.findAllByUserUserIdOrderByTidDesc(userId, pageable);
 	}
 
+	public List<Transaction> getAllTransactionsQueryDates(final String userId, String start, String to, String on) {
+
+		LocalDate startD = null;
+		LocalDate toD = null;
+		LocalDate onD = null;
+		String errorDate = "start";
+		try {
+			if (start == null && to == null && on == null)
+				throw new Exception();
+			startD = (start != null) ? LocalDate.parse(start) : null;
+
+			errorDate = "to";
+			toD = (to != null) ? LocalDate.parse(to) : LocalDate.now();
+
+			errorDate = "on";
+			onD = (on != null) ? LocalDate.parse(on) : null;
+		} catch (DateTimeParseException dtpe) {
+			String error = "Error parsing date format for query parameter: "
+					+ errorDate + " format must be YYYY-MM-DD";
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, error);
+		} catch (Exception e) {
+			String error = "Error parsing dates for query: use /dates?(start, to, on)=YYYY-MM-DD";
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, error);
+		}
+
+		//Now get the transactions
+		List<Transaction> tx = new ArrayList<>();
+		if (onD != null)
+			tx = getAllTransactionsOnPurchaseDate(userId, onD);
+		else
+			tx = getAllTransactionsBetweenPurchaseDate(userId, startD, toD);
+
+		return tx;
+	}
+
 	/* Minus 1 day from end so it is not inclusive of the end date */
-	public List<Transaction> getAllTransactionsBetweenPurchaseDate(final String userId,
-																   LocalDate from, LocalDate to) {
+	public List<Transaction> getAllTransactionsBetweenPurchaseDate(final String userId, LocalDate from, LocalDate to) {
 		return repo.findByUserUserIdAndPurchaseDateBetweenOrderByPurchaseDateDesc(userId, from, to.minusDays(1L));
 	}
-	
-	public List<Transaction> getAllTransactionsByPurchaseDate(final String userId,
-															  LocalDate purchaseDate) {
-		return repo.findByUserUserIdAndPurchaseDate(userId, purchaseDate);
+
+	public List<Transaction> getAllTransactionsOnPurchaseDate(final String userId, LocalDate from) {
+		return repo.findByUserUserIdAndPurchaseDateOrderByTidAsc(userId, from);
 	}
-	
+
+
 	public Transaction getTransactionByID(final String userId, final Long tId) throws ResourceNotFoundException {
 		Optional<Transaction> t = repo.findByUserUserIdAndTid(userId, tId);
 
-		if(t.isPresent())
+		if (t.isPresent())
 			return t.get();
 		else
 			throw new ResourceNotFoundException(String.format("Could not find transaction: %s under user: %s", tId, userId));
@@ -101,75 +138,90 @@ public class TransactionService
 
 	public Transaction getTransactionByTrueId(final Long trueId) throws ResourceNotFoundException {
 		Optional<Transaction> t = repo.findById(trueId);
-		if(t.isPresent())
+		if (t.isPresent())
 			return t.get();
 		else
 			throw new ResourceNotFoundException(String.format("Could not find transaction with id: %s", trueId));
 	}
-	
+
 	public List<Transaction> searchVendors(final String userId, String name) {
 		return repo.findAllByUserUserIdAndVendorVendorNameLike(userId, "%" + name.toUpperCase() + "%");
 	}
-	
+
 	public long countByPurchaseDate(final String userId, LocalDate purchaseDate) {
-		/*return repo.countByPurchaseDate(userId, purchaseDate);*/
 		return repo.countByUserUserIdAndPurchaseDate(userId, purchaseDate);
 	}
-	
+
+	public long findNextAvailibleTid(final String userId, LocalDate purchaseDate) {
+
+		//Find greatest tid greater than min and less than max
+		List<Transaction> t = repo.findByUserUserIdAndPurchaseDateOrderByTidAsc(userId, purchaseDate);
+
+		if (t.isEmpty())
+			return Transaction.generateTid(purchaseDate.toString(), 0);
+		else
+			return t.get(t.size()-1).getTid() + 1;
+	}
+
 	/* SIMPLE GETS FOR COL VALUES*/
 	public List<String> getAllCategories(final String userId) {
 		return repo.findDistinctCategoryByUserUserId(userId);
 	}
-	
+
 	public List<PayMethod> getPayMethods(final String userId) {
 		return repo.findDistinctPayMethodByUserUserId(userId);
 	}
-	
+
 	public List<String> getBoughtFor(final String userId) {
 		return repo.findDistinctBoughtForByUserUserId(userId);
 	}
-	
+
 	public List<String> getPayStatus(final String userId) {
 		return repo.findDistinctPayStatusByUserUserId(userId);
 	}
 
-	
-	final String col1 = "aggregateCol"; final String col2 = "value"; final String col3 = "categories";  
+
+	final String col1 = "aggregateCol";
+	final String col2 = "value";
+	final String col3 = "categories";
+
 	//Get income summary aggregated by vendor (source) and categories
 	public List<SummaryTuple> getIncomeAggregatedInDateRange(final String userId,
-													 LocalDate from, LocalDate to) {
+															 LocalDate from, LocalDate to) {
 		List<Map<String, Object>> data = repo.findIncomeAggregatedByVendorAndCategories(userId, from, to);
 		List<SummaryTuple> summary = new ArrayList<>();
-		data.forEach((o) -> summary.add(new SummaryTuple( (String) o.get(col1), 
+		data.forEach((o) -> summary.add(new SummaryTuple((String) o.get(col1),
 				(BigDecimal) o.get(col2), (String) o.get(col3))));
 		return summary;
 	}
-	
+
 	public List<SummaryTuple> getExpensesAggregatedInDateRange(final String userId,
-													   LocalDate from, LocalDate to) {
+															   LocalDate from, LocalDate to) {
 		List<Map<String, Object>> data = repo.findExpensesAggregatedByCategoryAndBoughtFor(userId, from, to);
 		List<SummaryTuple> summary = new ArrayList<>();
-		data.forEach((o) -> summary.add(new SummaryTuple( (String) o.get(col1), 
+		data.forEach((o) -> summary.add(new SummaryTuple((String) o.get(col1),
 				(BigDecimal) o.get(col2), (String) o.get(col3))));
 		return summary;
 	}
-	
+
 	//########### END GET METHODS ############
-	
+
 	//Save Data
 	public Transaction saveTransaction(Transaction tx) {
-		setDefaultReimburses(tx);
+		setReimbursesFieldForRefundTransactions(tx);
 		return repo.save(tx);
 	}
-	
-	public Transaction updateTransaction(Transaction tx, UserAccount u) throws ResourceNotFoundException, IllegalArgumentException
-	{
-		setDefaultReimburses(tx);
-		if(!repo.existsById(tx.getTrueId()))
+
+	public Transaction updateTransaction(Transaction tx, UserAccount u) throws ResourceNotFoundException, IllegalArgumentException {
+		if (tx.getTid() == 0)
+			throw new IllegalArgumentException("ERROR: Attempt to update transaction with tid=0 rejected");
+
+		setReimbursesFieldForRefundTransactions(tx);
+		if (!repo.existsById(tx.getTrueId()))
 			throw new ResourceNotFoundException("ERROR: No Transaction found with True ID: " + tx.getTrueId());
 
 		Transaction oldTrans = repo.findByTrueId(tx.getTrueId());
-		if(!Transaction.compareIds(tx, oldTrans))
+		if (!Transaction.compareIds(tx, oldTrans))
 			throw new IllegalArgumentException(String.format("ERROR: You may not change the tid or the trueId in a PATCH call" +
 					" for transaction in database as tid: %s, trueId: %s", oldTrans.getTid(), oldTrans.getTrueId()));
 
@@ -179,7 +231,7 @@ public class TransactionService
 	//Delete Transaction by ID
 	public HttpUnitResponse deleteTransactionById(final String userId, final long tid) {
 		Optional<Transaction> t = repo.findByUserUserIdAndTid(userId, tid);
-		if(!t.isPresent())
+		if (!t.isPresent())
 			throw new ResourceNotFoundException("ERROR: No Transaction found with tid: " + tid);
 
 		TransactionDto dto = dtoMapper.toDto(t.get());
@@ -191,15 +243,33 @@ public class TransactionService
 	/* We make sure that the reimburses id is valid for this user, if not,
 	it defaults to (userId, tid=0), the default base transaction in each user's account
 	 */
-	public void setDefaultReimburses(Transaction tx) {
+	public void setReimbursesFieldForRefundTransactions(Transaction tx) {
 		UserAccount u = tx.getUser();
-		Optional<Transaction> reimbTrans = repo.findByUserUserIdAndTrueId(u.getUserId(), tx.getReimburses());
-		if (!reimbTrans.isPresent()) {
-			tx.setReimburses( 	this.getTransactionByID(u.getUserId(), 0L).getTrueId()	);//Each user has default transaction at tid==0
+		Optional<Transaction> searchByTrueId = repo.findByUserUserIdAndTrueId(u.getUserId(), tx.getReimburses());
+		Optional<Transaction> searchByTid = repo.findByUserUserIdAndTrueId(u.getUserId(), tx.getReimburses());
+
+		if (searchByTrueId.isPresent()) {
+			tx.setReimburses(searchByTrueId.get().getTrueId());
+		} else if (searchByTid.isPresent()) {
+			tx.setReimburses(searchByTid.get().getTrueId());
+		} else {
+			tx.setReimburses(repo.findByUserUserIdAndTid( properties.get("database.constants.baseUserId"), 0L).get().getTrueId());
 		}
 	}
 
-    public HttpMultiStatusResponse saveOrUpdateTransactions(String userId, List<TransactionDto> tx) {
+	/*
+	   Description:
+	   1. Define user account and list of completed processed transactions
+	   2. For Each transaction
+	   		3. Acquire or create new vendor and Pay Method as necessary
+	   		4. Create a new HttpUnitResponse object to return data for failed or successful load
+	   		5. Check if transaction exists by user and tid
+	   		6. If transaction exists, update it, else save it
+	   		7. Add the transaction id to the response object
+
+	 */
+
+	public HttpMultiStatusResponse saveOrUpdateTransactions(String userId, List<TransactionDto> tx, String httpverb) {
 
 		//Make sure user exists else exit
 		UserAccount user = userService.getUserAccountById(userId);
@@ -207,26 +277,36 @@ public class TransactionService
 
 		try {
 
-			for (TransactionDto t : tx ) {
+			for (TransactionDto t : tx) {
 				Vendor v = vendorService.saveVendor(new Vendor(user, t));
 				PayMethod pm = payMethodService.savePayMethod(new PayMethod(user, t.getPayMethod()));
 
-				Transaction savableTransaction = new Transaction(t, user, pm, v,
-						this.countByPurchaseDate(userId, t.getPurchaseDate())  );
-				HttpUnitResponse response = new HttpUnitResponse(savableTransaction, null,
+				t.setUserId(userId);
+				HttpUnitResponse response = new HttpUnitResponse(t, null,
 						"Transaction Posted Successfully", HttpStatus.OK);
 				try {
+
 					Transaction saved = null;
 
-					//if transaction is not new, update it
-					if(repo.existsById(savableTransaction.getTrueId()) ||
-							repo.findByUserUserIdAndTid(userId, savableTransaction.getTid()).isPresent())
-						 saved = this.updateTransaction(savableTransaction, user);
-					 else
-						 saved = this.saveTransaction( savableTransaction );
+					if( httpverb.equals("PATCH")  )
+					{
+						Optional<Transaction> savableTransaction = repo.findByUserUserIdAndTid(userId, t.getTid());
+						if (savableTransaction.isPresent()) {
+							saved = this.updateTransaction(new Transaction(t), user);
+							response.setStatus(HttpStatus.OK);
+						} else {
+							String error = String.format("ERROR: Could not find transaction with tid: %s", t.getTid(), userId);
+							throw new ResourceNotFoundException(error);
+						}
+					}
+					else if( httpverb.equals("POST") )
+					{
+						long tid = findNextAvailibleTid(userId, t.getPurchaseDate());
+						saved = this.saveTransaction(new Transaction(t, user, pm, v, tid));
+						response.setStatus(HttpStatus.CREATED);
+					}
 
-					response.setData(null);
-					response.setId( saved.getTid() );
+					response.setId(saved.getTid());
 
 				} catch (HibernateException e) {
 					response.setMessage(e.getMessage());
@@ -255,51 +335,6 @@ public class TransactionService
 			throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 
-    }
-
-	/*
-		SPECIAL TRANS KEY METHOD FOR ONE TIME KEY GENERATION
-    	WHEN SWITCHING TO USER ACCOUNT INTEGRATION
- 	//* /
-	public void postTransKeys(String userId) {
-		List<Transaction> allTrans = repo.findAll();
-		Optional<UserAccount> u = userRepo.findByUserUserId(userId);
-
-		if (!u.isPresent())
-			return;
-
-		for (Transaction t : allTrans) {
-			t.setTrueId(u.get().getUserId(), t.getTId());
-			repo.save(t);
-		} //END FOR
 	}
-*/
-	/*
-		@deprecated Old method for refactoring tables, this one for pay method tables redo
-
-	public void postPmKeys(String userId) {
-		List<Transaction> allTrans = repo.findAllByUserUserId(userId);
-		Optional<UserAccount> u = userRepo.findByUserUserId(userId);
-
-		if (!u.isPresent())
-			return;
-
-		for (Transaction t : allTrans) {
-			long pmId = 0;
-			if(t.getPayMethod() != 0) {
-				pmId = t.getPayMethod();
-			} //else if (pmRepo.findByMethodName(userId, t.getPayMethodString()).isPresent()) {
-				//pmId = pmRepo.findByMethodName(userId, t.getPayMethodString()).get().getPmId();
-				//return; }
-			else {
-				pmId = pmService.savePayMethod(t, u.get()).getPmId();
-			}
-			t.setPayMethod(pmId);
-			repo.save(t);
-		} //END FOR
-
-	}
-	*/
-
 }
-//END CLASS TRANSACTIONSERVICE
+///END CLASS TRANSACTIONSERVICE

@@ -33,6 +33,7 @@ public class TransactionDto {
     private String boughtFor;
     private String payMethod;
     private String payStatus;
+    @JsonProperty("isIncome")
     private boolean isIncome;
     private long reimburses;
     private LocalDate postedDate;

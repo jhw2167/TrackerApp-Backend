@@ -180,7 +180,11 @@ SELECT * FROM TRANSACTION_KEYS TK
 SELECT * FROM TRANSACTIONS T ORDER BY T_ID 
 UPDATE TRANSACTIONS 
 SET REIMBURSES=500730621 WHERE REIMBURSES=0;
+
+UPDATE TRANSACTIONS SET USER_ID "COMMON" WHERE T_ID=0;
  
+SELECT * FROM TRANSACTIONS T WHERE T.T_ID=0;
+
 
  ALTER TABLE TRANSACTIONS ADD FOREIGN KEY 
 (reimburses) REFERENCES transactions(true_id);
@@ -213,10 +217,10 @@ ALTER TABLE TRANSACTIONS DROP CONSTRAINT "transactions_pay_method_fkey";
 DROP TABLE IF EXISTS user_accounts
 CREATE TABLE user_accounts (
 u_id VARCHAR not null, auth_token VARCHAR,
-created_date VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE,
-deactivated_date VARCHAR(12), 
+created_date DATE NOT NULL DEFAULT CURRENT_DATE,
+deactivated_date DATE NOT NULL DEFAULT NULL, 
 email VARCHAR UNIQUE NOT NULL,
-last_login_date VARCHAR(12) NOT NULL DEFAULT CURRENT_DATE,
+last_login_date DATE NOT NULL DEFAULT CURRENT_DATE,
 password VARCHAR NOT NULL,
 primary key (u_id)
 )
@@ -226,13 +230,29 @@ INSERT INTO USER_ACCOUNTS (user_id, email, password_) VALUES ('20230303JackHenry
 ALTER TABLE USER_ACCOUNTS
 RENAME COLUMN u_id TO user_id;
 
-SELECT * FROM USER_ACCOUNTS; 
+SELECT * FROM USER_ACCOUNTS;
 DROP TABLE USER_ACCOUNTS;
+
+
+-- 3. Create a Temporary Column
+ALTER TABLE USER_ACCOUNTS ADD COLUMN temp_date DATE;
+
+-- 4. Update the Temporary Column
+UPDATE USER_ACCOUNTS U SET temp_date = TO_DATE( U.LAST_LOGIN_DATE , '%Y-%m-%d');
+
+-- 5. Drop the Original Column
+ALTER TABLE USER_ACCOUNTS DROP COLUMN created_date;
+ALTER TABLE USER_ACCOUNTS DROP COLUMN DEACTIVATED_DATE;
+ALTER TABLE USER_ACCOUNTS DROP COLUMN LAST_LOGIN_DATE ;
+ALTER TABLE USER_ACCOUNTS DROP COLUMN temp_date ;
+
+
 
 alter table transactions add column user_id VARCHAR not NULL DEFAULT '20230303JackHenryWelsh@gmail.com'
 alter table transactions add constraint FKp4k31sc1tp36lh34mk6f8x3b3 foreign key (user_id) references user_accounts
 
-alter table transactions DROP column user_id 
+alter table transactions DROP column user_id
+
 
 SELECT * FROM transactions
 SELECT * FROM PAY_METHODS PM 

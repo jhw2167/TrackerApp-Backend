@@ -3,10 +3,13 @@ package com.jack.controller;
 
 //Spring Imports
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 //Java Imports
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -142,15 +145,17 @@ public class TransactionController {
 	/**
 	 * @return ResponseEntity<List<TransactionDto>>
 	 */
-	@GetMapping(params = {"start", "to"} )
+	@GetMapping(params = {"start", "to", "on"} )
 	@RequestMapping("/dates")
 	public ResponseEntity<List<TransactionDto>> getTransactionsPageanatedByDate(HttpServletRequest request,
 			@PathVariable("userId") final String userId,
-			@RequestParam final String start,
-			@RequestParam final String to) {
-		List<Transaction> tx = ts.getAllTransactionsBetweenPurchaseDate(userId,
-				LocalDate.parse(start), LocalDate.parse(to));
+			@RequestParam(required = false) final String start,
+			@RequestParam(required = false) final String to,
+			@RequestParam(required = false) final String on) {
+
+		List<Transaction> tx = ts.getAllTransactionsQueryDates(userId, start, to, on);
 		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
+
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 
@@ -163,7 +168,7 @@ public class TransactionController {
 	@RequestMapping("/recent")
 	public ResponseEntity<List<TransactionDto>> getTransactionsPageanatedByRecent(HttpServletRequest request, @PathVariable("userId") final String userId,
 			@RequestParam final Integer size, @RequestParam(required=false) final Integer page) {
-		List<Transaction> tx = ts.FindAllTransactionsPageableID(userId, size, (page != null) ? page : 0);
+		List<Transaction> tx = ts.findAllTransactionsPageableID(userId, size, (page != null) ? page : 0);
 		List<TransactionDto> dtos = tx.stream().map(transactionMapper::toDto).collect(Collectors.toList());
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
@@ -236,7 +241,7 @@ public class TransactionController {
 																	@RequestBody final List<TransactionDto> tx)
 	{
 		try {
-			HttpMultiStatusResponse response = ts.saveOrUpdateTransactions(userId, tx);
+			HttpMultiStatusResponse response = ts.saveOrUpdateTransactions(userId, tx, "POST");
 			return new ResponseEntity<>(response, HttpStatus.MULTI_STATUS);
 
 		} catch (Exception e) {
@@ -253,11 +258,12 @@ public class TransactionController {
 
 	//Patch a list of transactions entry
 	@PatchMapping
-	public ResponseEntity<HttpMultiStatusResponse> patchTransactions(HttpServletRequest request, @PathVariable("userId") final String userId,
-			@RequestBody final List<TransactionDto> tx)
+	public ResponseEntity<HttpMultiStatusResponse> patchTransactions(HttpServletRequest request,
+																	 @PathVariable("userId") final String userId,
+																	 @RequestBody final List<TransactionDto> tx)
 	{
 		try {
-			HttpMultiStatusResponse response = ts.saveOrUpdateTransactions(userId, tx);
+			HttpMultiStatusResponse response = ts.saveOrUpdateTransactions(userId, tx, "PATCH");
 			return new ResponseEntity<>(response, HttpStatus.MULTI_STATUS);
 
 		} catch (Exception e) {

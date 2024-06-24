@@ -3,6 +3,7 @@ package com.jack.controller;
 
 //Spring Imports
 
+import com.jack.model.dto.UserAccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.jack.model.UserAccount;
 import com.jack.service.UserAccountService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -26,7 +28,7 @@ import java.util.List;
 
 //Combines @Controller and @ResponseBody annotations for a restful project
 @RestController
-@RequestMapping("/finances/users/{userId}")
+@RequestMapping("/finances/users")
 public class UserController {
 
 
@@ -38,12 +40,19 @@ public class UserController {
 	/* Utility Methods */
 
 	/* GET METHODS */
-	public ResponseEntity<UserAccount> getUserDetails(@PathVariable("userId") String userId) {
+	@GetMapping("/{userId}")
+	public ResponseEntity<UserAccount> getUserDetails(HttpServletRequest request,
+													  @PathVariable("userId") String userId) {
 		return new ResponseEntity<UserAccount>(us.getUserAccountById(userId), HttpStatus.OK);
 	}
 
 	/* POST METHODS */
-
+	@PostMapping
+	public ResponseEntity<UserAccountDto> createUser(HttpServletRequest request,
+												  @RequestBody UserAccountDto user) {
+		UserAccount u = us.createUserAccount(user);
+		return new ResponseEntity<UserAccountDto>( new UserAccountDto(u), HttpStatus.CREATED);
+	}
 
 
 	/* PUT METHODS */

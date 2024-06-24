@@ -53,7 +53,7 @@ public class ExceptionHandlingControllerAdvice {
 
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleNotFound(Exception ex) {
+    public ResponseEntity<String> handleGeneralException(Exception ex) {
         return response("General Exception", ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

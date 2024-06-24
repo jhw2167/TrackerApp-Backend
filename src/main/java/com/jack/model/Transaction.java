@@ -52,6 +52,7 @@ public class Transaction {
 		put("BOUGHT_FOR", "PERSONAL");
 	}};
 
+
 	/* PERSISTED  STATE VARIABLES */
 
 	@Id
@@ -106,8 +107,8 @@ public class Transaction {
 	@Column(name="pay_status", columnDefinition="VARCHAR(20) NOT NULL DEFAULT 'COMPLETE'")
 	private String payStatus;
 
-	@JsonProperty("income")
 	@Column(name="is_income", columnDefinition="BOOLEAN DEFAULT FALSE")
+	@JsonProperty("isIncome")
 	private boolean isIncome;
 
 	@JsonProperty("reimburses")
@@ -170,20 +171,9 @@ public class Transaction {
 		setNotes(t.getNotes());
 	}
 
-
-	/*
-		-Create transaction from immature transaction submitted in POST calls
-		"Immature" transactions need their TIDs created
-	 */
-	public Transaction(final TransactionDto t, final UserAccount u,
-					   final PayMethod pm, final Vendor v, final long transOnDate) {
+	public Transaction( final TransactionDto t, final Long tid ) {
 		this(t);
-		//System.out.println("My Constructor");
-		setUser(u);
-		setPayMethod(pm);
-		setVendor(v);
-		settId(t.getPurchaseDate().toString(), transOnDate);
-		setTrueId(u.getUserId(), this.tid);
+		setTid(tid);
 	}
 
 	public Transaction(final TransactionDto t, final UserAccount u, final PayMethod pm, final Vendor v)
@@ -205,6 +195,21 @@ public class Transaction {
 		setNotes(t.getNotes());
 	}
 
+	/*
+    -Create transaction from immature transaction submitted in POST calls
+    "Immature" transactions need their TIDs created
+ */
+	public Transaction(final TransactionDto t, final UserAccount u, final PayMethod pm, final Vendor v,
+					   final long calculatedTid) {
+		this(t);
+		//System.out.println("My Constructor");
+		setUser(u);
+		setPayMethod(pm);
+		setVendor(v);
+		setTid(calculatedTid);
+		setTrueId(u.getUserId(), this.tid);
+	}
+
 	/* END CONSTRUCTORS */
 
 	
@@ -215,19 +220,13 @@ public class Transaction {
 				General.mergeHash(userId.hashCode(), tid.hashCode())
 		);
 		this.trueId = Math.abs(trueId);
-		System.out.println("Merged id: " + trueId);
+		//System.out.println("Merged id: " + trueId);
 	}
 	public void setTid(long tid) {
 		this.tid = tid;
 	}
 	public void settId(String _purchaseDate, long transOnDate) {
-		//parse date string into coherent string
-		String date = _purchaseDate.replace("-", "");
-		
-		//add above result, buffered by "000"
-		String id = date + String.format("%03d", transOnDate);
-		this.tid = Long.parseLong(id);
-		//System.out.println("Set id is: " + tId);
+		this.tid = generateTid(_purchaseDate, transOnDate);
 	}
 
 	/*
@@ -267,6 +266,17 @@ public class Transaction {
 	public static boolean compareIds(Transaction a, Transaction b) {
 		return (a.trueId==b.trueId) && (a.tid ==b.tid);
 	}
+
+	public static long generateTid(String _purchaseDate, long transOnDate) {
+		//parse date string into coherent string
+		String date = _purchaseDate.replace("-", "");
+
+		//add above result, buffered by "000"
+		String id = date + String.format("%03d", transOnDate);
+		return Long.parseLong(id);
+		//System.out.println("Set id is: " + tId);
+	}
+
 
 	/* Overrides */
 

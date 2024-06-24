@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Optional;
 
 //Spring Imports
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -62,7 +61,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 
 	//#4
 	//findAll transactions with matching purchaseDate
-	List<Transaction> findByUserUserIdAndPurchaseDate(String userId, LocalDate purchaseDate);
+	List<Transaction> findByUserUserIdAndPurchaseDateOrderByTidAsc(String userId, LocalDate purchaseDate);
 
 	//#5
 	//count transactions with matching purchaseDate
@@ -126,4 +125,9 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long>
 
 	//#16 Find all transactions having given vendor
 	List<Transaction> findAllByVendor(Vendor v);
+
+	//#17 Find Next availible tid for transaction on a given date
+	Optional<Transaction> findFirstByUserUserIdAndTidBetweenOrderByTidDesc(String userId, long min, long max);
+
+
 }

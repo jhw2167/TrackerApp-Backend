@@ -1,8 +1,9 @@
 package com.jack;
 
 //Spring Imports
-import com.jack.aspect.TransactionAspect.TransactionControllerAspect;
-import com.jack.aspect.TransactionAspect.TransactionRepoAspect;
+import com.jack.aspect.transactionaspect.TransactionControllerAspect;
+import com.jack.aspect.transactionaspect.TransactionRepoAspect;
+import com.jack.aspect.useraspect.UserControllerAspect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -28,5 +29,11 @@ public class TrackerSpringConfig {
     @Bean
     public TransactionRepoAspect transactionRepoAspect() {
         return new TransactionRepoAspect();
+    }
+
+    /* User */
+    @Bean
+    public UserControllerAspect userControllerAspect() {
+        return new UserControllerAspect();
     }
 }

@@ -1,13 +1,8 @@
-package com.jack.aspect.VendorAspect;
+package com.jack.aspect.vendoraspect;
 
 //Spring Imports
 
-import com.jack.repository.TransactionRepo;
-import com.jack.service.TransactionService;
 import com.jack.service.UserAccountService;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
