@@ -18,9 +18,9 @@ import org.springframework.web.client.HttpServerErrorException;
 public class ExceptionHandlingControllerAdvice {
 
     /* UTILITY AND BASE METHODS */
-    private static String createJson(String message, String reason) {
-        return "{\"error\" : \"" + message + "\"," +
-                "\"reason\" : \"" + reason  + "\"}";
+    public static String createJson(String error, String message) {
+        return "{\"error\" : \"" + error + "\"," +
+                "\"message\" : \"" + message  + "\"}";
     }
 
     private static ResponseEntity<String> response(String message, String reason, HttpStatus httpStatus) {

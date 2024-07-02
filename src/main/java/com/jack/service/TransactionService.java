@@ -128,6 +128,11 @@ public class TransactionService {
 
 
 	public Transaction getTransactionByID(final String userId, final Long tId) throws ResourceNotFoundException {
+
+		//find the transaciton with userName = common
+		if( tId == 0)
+			return repo.findByUserUserIdAndTid( properties.get("database.constants.baseUserId"), 0).get();
+
 		Optional<Transaction> t = repo.findByUserUserIdAndTid(userId, tId);
 
 		if (t.isPresent())
