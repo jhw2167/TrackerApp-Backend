@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  */
 
 @RestController
-@RequestMapping("/server")
+@RequestMapping("api/finances/server")
 public class ServerController
 {
         /* State Variables */
@@ -35,6 +35,27 @@ public class ServerController
         TrackerSpringProperties properties;
 
         /* Constructor */
+
+
+    //END CONSTRUCTOR
+
+    /* HEALTHCHECK
+        *  GET /server/healthcheck - returns a 200 OK status if the server is running
+     */
+
+    @GetMapping("/healthcheck")
+    public ResponseEntity<HttpUnitResponse> healthCheck(HttpServletRequest request)
+    {
+        try {
+            Map<String, String> healthCheck = new HashMap<>();
+            healthCheck.put("status", "200 OK");
+            HttpUnitResponse rsp = new HttpUnitResponse(healthCheck, HttpStatus.OK);
+            rsp.setMessage("Server is running");
+            return new ResponseEntity<>(rsp, rsp.getStatus());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
        /*
         *  GET /server/config - returns the server configuration for the frontend

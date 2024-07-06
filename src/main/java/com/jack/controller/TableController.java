@@ -29,7 +29,7 @@ import java.util.List;
 
 //Combines @Controller and @ResponseBody annotations for a restful project
 @RestController
-@RequestMapping("/finances/tables")
+@RequestMapping("api/finances/tables")
 public class TableController {
 
 
@@ -40,6 +40,9 @@ public class TableController {
 	@Autowired
 	VendorService vs;			//auto
 
+	@Autowired
+	UserAccountService us;
+
 
 	/* Utility Methods */
 
@@ -47,6 +50,20 @@ public class TableController {
 	@RequestMapping(value="/transactions/{trueId}", method= RequestMethod.GET)
 	public ResponseEntity<Transaction> getTransactionByTrueId(@PathVariable("trueId") final long id) {
 		return new ResponseEntity<Transaction>(ts.getTransactionByTrueId(id), HttpStatus.OK);
+	}
+
+	/*********************
+	 		ACCOUNTS
+	 ********************/
+
+	//Method to get all active accounts
+	/**
+	 * @return ResponseEntity<List<UserAccount>>
+	 */
+	@RequestMapping(value="users", method=RequestMethod.GET)
+	public ResponseEntity<List<UserAccount>> getAllUsers(HttpServletRequest request)
+	{
+		return new ResponseEntity<List<UserAccount>>(us.getAllUserAccounts(), HttpStatus.OK);
 	}
 
 	/*********************

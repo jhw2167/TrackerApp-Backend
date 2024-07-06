@@ -18,7 +18,7 @@ import com.jack.utility.HttpUnitResponse;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/finances/plaid")
+@RequestMapping("api/finances/plaid")
 public class PlaidController {
 
 	@Autowired

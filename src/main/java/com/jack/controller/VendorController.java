@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 
 //Combines @Controller and @ResponseBody annotations for a restful project
 @RestController
-@RequestMapping("/finances/users/{userId}/vendors")
+@RequestMapping("api/finances/users/{userId}/vendors")
 public class VendorController {
 	
 	

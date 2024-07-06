@@ -1,6 +1,7 @@
 package com.jack.service;
 
 //Java Imports
+import java.util.List;
 import java.util.Optional;
 
 //Spring imports
@@ -27,6 +28,10 @@ public class UserAccountService {
             return repo.findById(userId).get();
         else
             throw new ResourceNotFoundException(String.format("No user account found with id: %s", userId));
+    }
+
+    public List<UserAccount> getAllUserAccounts() {
+        return repo.findAll();
     }
 
     public UserAccount createUserAccount(UserAccountDto user) {

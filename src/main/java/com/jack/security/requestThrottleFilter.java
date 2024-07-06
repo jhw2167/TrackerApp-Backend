@@ -12,8 +12,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jack.TrackerSpringProperties;
 import com.jack.controller.ExceptionHandlingControllerAdvice;
 import com.jack.utility.HttpUnitResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -25,15 +27,24 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 @Component
 public class requestThrottleFilter implements Filter {
 
+    TrackerSpringProperties properties;
+
     private int MAX_REQUESTS_PER_SECOND = 30; //or whatever you want it to be
     private int MAX_POST_REQUESTS_PER_HOUR = 10;
+    private Boolean DISABLE_POST_REQUESTS = false;
 
     private LoadingCache<String, Integer> mapRequestCountsByIpAddress;
     private LoadingCache<String, Integer> mapPostRequestCountsByIpAddress;
 
-    public requestThrottleFilter()
+    @Autowired
+    public requestThrottleFilter(TrackerSpringProperties properties)
     {
       super();
+      this.properties = properties;
+      final String BASE = "spring.requestThrottleFilter.";
+      MAX_REQUESTS_PER_SECOND = Integer.parseInt(properties.get(BASE + "maxTotalRequestsPerSecond"));
+      MAX_POST_REQUESTS_PER_HOUR = Integer.parseInt(properties.get(BASE + "maxPostRequestsPerHour"));
+      DISABLE_POST_REQUESTS = Boolean.parseBoolean(properties.get(BASE + "disablePostRequests"));
       /*
           Description: CacheLoader is a "functional interface" which is a fancy way of dressing up a lambda
           function that serves as the default loader for the cache.
@@ -42,7 +53,7 @@ public class requestThrottleFilter implements Filter {
         public Integer load(String key) { return 0; }
       };
 
-      mapRequestCountsByIpAddress = Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build(basicLoader);
+      mapRequestCountsByIpAddress = Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.SECONDS).build(basicLoader);
       mapPostRequestCountsByIpAddress = Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).build(basicLoader);
 
     }
@@ -67,7 +78,11 @@ public class requestThrottleFilter implements Filter {
 
         if( httpServletRequest.getMethod().equals("POST") )
         {
-            if(isMaximumPostRequestsPerHourExceeded(clientIpAddress))
+            if(DISABLE_POST_REQUESTS)
+            {
+                errorMesssage = "POST Requests currently disabled by backend server.";
+            }
+            else if(isMaximumPostRequestsPerHourExceeded(clientIpAddress))
             {
                 errorMesssage = String.format("Demo may not submit more than %d POST requests per hour.", MAX_POST_REQUESTS_PER_HOUR);
             }

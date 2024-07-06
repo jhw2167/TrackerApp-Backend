@@ -1,5 +1,6 @@
 -- SQL file for triggers on finances DB
 
+\sudo psql -U postgres -h localhost -d tracker < backup-2024-06-28
 
 -- Select Useful Vendor information 
 

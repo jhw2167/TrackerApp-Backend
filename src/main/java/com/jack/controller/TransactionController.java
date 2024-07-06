@@ -48,7 +48,7 @@ import com.jack.utility.HttpUnitResponse;
 
 //Combines @Controller and @ResponseBody annotations for a restful project
 @RestController
-@RequestMapping("/finances/users/{userId}/transactions")
+@RequestMapping("api/finances/users/{userId}/transactions")
 public class TransactionController {
 	
 	
